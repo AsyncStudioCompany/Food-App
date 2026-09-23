@@ -1,6 +1,6 @@
 import { decryptJson, encryptJson, type SealedBox } from '../crypto/vault'
 import { getKey, keystoreAvailable, setKey } from '../crypto/keystore'
-import { getState, onSavedChange, replaceSaved, savedOf, type SavedState } from './store'
+import { getState, onSavedChange, replaceSaved, savedOf, type PartialSaved, type SavedState } from './store'
 
 /**
  * Data saved on the device, encrypted (AES-GCM) with a device key kept non-extractable in IndexedDB.
@@ -35,8 +35,8 @@ export async function initLocalData(): Promise<void> {
     deviceKey = await loadDeviceKey()
     const raw = localStorage.getItem(BLOB_KEY)
     const legacy = localStorage.getItem(LEGACY_KEY)
-    if (raw) replaceSaved(await decryptJson<Partial<SavedState>>(deviceKey, JSON.parse(raw) as SealedBox), 'local')
-    else if (legacy) replaceSaved(JSON.parse(legacy) as Partial<SavedState>, 'local')
+    if (raw) replaceSaved(await decryptJson<PartialSaved>(deviceKey, JSON.parse(raw) as SealedBox), 'local')
+    else if (legacy) replaceSaved(JSON.parse(legacy) as PartialSaved, 'local')
   } catch {
     // Unreadable data (key lost with the browser data): start fresh rather than crash.
   }

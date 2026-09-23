@@ -1,5 +1,6 @@
 import { isEligible, recipeTraits } from './diet.ts'
 import { daysLeft, isSoon } from './expiry.ts'
+import { goalBonus, recipeNutrition, type Nutrition } from './nutrition.ts'
 import { round2, toBase } from './units.ts'
 import type { Fridge, Ingredient, Prefs, Recipe } from './types.ts'
 
@@ -24,6 +25,8 @@ export interface Evaluation {
   /** Items that are in the fridge and expire soon: cooking this saves them. */
   saving: EvaluatedItem[]
   favoriteCuisine: boolean
+  /** Estimated per portion. */
+  nutrition: Nutrition
   score: number
 }
 
@@ -52,9 +55,10 @@ export function evaluate(recipe: Recipe, portions: number, ctx: MatchContext): E
   const missing = items.filter((i) => i.status !== 'ok')
   const saving = items.filter((i) => i.status !== 'missing' && isSoon(i.days))
   const favoriteCuisine = ctx.prefs.cuisines.includes(recipe.cuisine)
-  // Doable first, then fewer missing, favorite cuisines, soon-to-expire food, and quicker recipes.
-  const score = -missing.length * 100 + (favoriteCuisine ? 20 : 0) + saving.length * 15 - recipe.minutes / 5
-  return { recipe, items, missing, saving, favoriteCuisine, score }
+  const nutrition = recipeNutrition(recipe, ctx.byId)
+  // Doable first, then fewer missing, favorite cuisines, soon-to-expire food, the goal, and quicker recipes.
+  const score = -missing.length * 100 + (favoriteCuisine ? 20 : 0) + saving.length * 15 + goalBonus(ctx.prefs.goal, nutrition) - recipe.minutes / 5
+  return { recipe, items, missing, saving, favoriteCuisine, nutrition, score }
 }
 
 /** Recipes compatible with diet and allergies, evaluated at the default portions, best first. */

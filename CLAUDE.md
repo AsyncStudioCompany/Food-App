@@ -23,7 +23,8 @@ App mobile de recettes anti-gaspillage (PWA, en français, au tutoiement). L'uti
 - Les ingrédients sont référencés par leur **identifiant du catalogue** (`src/data/catalog.ts`), jamais par du texte libre. Les recettes générées par l'IA aussi : le schéma de sortie limite les identifiants au catalogue.
 - Recettes importées de TheMealDB : `src/data/mealdb.ts` (id `m<idMeal>`, vraie photo, `pantry`, `source`). Candidats listés par `scripts/mealdb-candidates.mjs`, puis traduits et vérifiés à la main. L'IA se coupe dans le Profil (`prefs.ai`).
 - Quantités en unité de base (`g`, `cl`, `pc`) ; conversions dans `src/domain/units.ts`. Statut par ingrédient : `ok` / `partial` / `missing`.
-- Régime et allergies = **filtres stricts** ; cuisines préférées et aliments qui périment bientôt = **bonus de tri** (score dans `src/domain/matching.ts`).
+- Régime et allergies = **filtres stricts** ; cuisines préférées, aliments qui périment bientôt et **objectif** (nutrition estimée) = **bonus de tri** (score dans `src/domain/matching.ts`). Tout nouvel ingrédient doit avoir ses valeurs dans `src/data/nutrition.ts`.
+- Non connecté : seul l'accueil (`screens/Welcome.tsx`) est visible ; après inscription, la configuration (`screens/Onboarding.tsx`) tant que `prefs.onboarded` est faux.
 - Zones de sécurité : `var(--safe-top)` / `var(--safe-bottom)` / `var(--top)`, jamais `env()` directement.
 - Les bottom sheets (`ui/Sheet.tsx`) sont rendus dans `.app` via un portail React : ils ne suivent jamais le défilement d'un écran.
 - Animations : keyframes `mj-*` de `styles.css`, coupées par `prefers-reduced-motion`.

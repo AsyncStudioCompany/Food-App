@@ -2,6 +2,9 @@ import { useSyncExternalStore } from 'react'
 import { NO_FILTERS, type SearchFilters } from '../domain/search'
 import type { Fridge, Prefs, Recipe, RecipeList } from '../domain/types'
 
+/** Saved data as stored (older saves may lack newer preferences). */
+export type PartialSaved = Partial<Omit<SavedState, 'prefs'>> & { prefs?: Partial<Prefs> }
+
 /** Saved on the device. */
 export interface SavedState {
   fridge: Fridge
@@ -31,7 +34,7 @@ export type State = SavedState & UiState
 
 export const DEFAULT_SAVED: SavedState = {
   fridge: {},
-  prefs: { diet: 'Tout', allergies: [], cuisines: [], portions: 2, ai: true },
+  prefs: { diet: 'Tout', allergies: [], cuisines: [], portions: 2, ai: true, goal: 'Équilibré', onboarded: false },
   liked: {},
   lists: [],
   generated: [],
@@ -40,7 +43,7 @@ export const DEFAULT_SAVED: SavedState = {
 const DEFAULT_UI: UiState = { fridgeQuery: '', searchQuery: '', searchFilters: NO_FILTERS, toast: null, celebrate: null }
 
 /** Fills what older saves lack (like `prefs.ai`). */
-export function withDefaults(saved: Partial<SavedState>): SavedState {
+export function withDefaults(saved: PartialSaved): SavedState {
   return { ...DEFAULT_SAVED, ...saved, prefs: { ...DEFAULT_SAVED.prefs, ...saved.prefs } }
 }
 
@@ -71,14 +74,14 @@ export function setState(patch: Partial<State> | ((s: State) => Partial<State>))
 }
 
 /** Replaces all the saved data: loading from the device, data from the account, reset. */
-export function replaceSaved(saved: Partial<SavedState>, source: SavedSource) {
+export function replaceSaved(saved: PartialSaved, source: SavedSource) {
   state = { ...state, ...withDefaults(saved) }
   listeners.forEach((l) => l())
   savedListeners.forEach((l) => l(savedOf(state), source))
 }
 
 /** Replaces the whole state (tests, sign-out). */
-export function resetState(saved: Partial<SavedState> = {}) {
+export function resetState(saved: PartialSaved = {}) {
   state = { ...withDefaults(saved), ...DEFAULT_UI }
   listeners.forEach((l) => l())
   savedListeners.forEach((l) => l(savedOf(state), 'local'))

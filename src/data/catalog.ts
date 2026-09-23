@@ -1,5 +1,6 @@
 import type { AisleId, Ingredient, PhotoCredit, Recipe } from '../domain/types.ts'
 import { MEALDB_RECIPES } from './mealdb.ts'
+import { NUTRITION } from './nutrition.ts'
 
 export const AISLES: [AisleId, string][] = [
   ['frais', 'Crèmerie & frais'],
@@ -15,7 +16,7 @@ const I = (
   unit: Ingredient['unit'],
   defaultQty: number,
   extra: Pick<Ingredient, 'animal' | 'allergens'> = {},
-): Ingredient => ({ id, name, aisle, unit, defaultQty, ...extra })
+): Ingredient => ({ id, name, aisle, unit, defaultQty, ...extra, nutrition: NUTRITION[id] })
 
 export const INGREDIENTS: Ingredient[] = [
   I('oeufs', 'Œufs', 'frais', 'pc', 6, { animal: 'egg', allergens: ['Œufs'] }),

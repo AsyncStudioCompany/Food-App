@@ -8,6 +8,10 @@ Public : 18–35 ans et familles. Ton familier (tutoiement), usage rapide.
 
 ## 2. Fonctionnalités
 
+### Accueil et première configuration
+- Sans être connecté, on ne voit que l'accueil (« Cuisine avec ce que t'as. ») : **Créer mon compte** ou **J'ai déjà un compte**. Sans serveur de comptes configuré, un bouton **Commencer** crée un profil local.
+- Après l'inscription, 4 étapes : régime et allergies, **objectif** (Équilibré, Prise de masse, Protéines, Perte de poids), cuisines et portions, puis les aliments qu'on a chez soi. Chaque étape peut être passée ; tout se modifie ensuite dans le Profil et le Frigo.
+
 ### Mon frigo (`/`)
 - Aliments du catalogue regroupés par rayon (Crèmerie & frais, Légumes, Fruits, Épicerie), en pastilles. Une pastille active affiche la quantité ; un point orange signale un aliment qui périme dans 2 jours ou moins.
 - Panneau de quantité : − / + (pas de 50 g, 0,25 kg, 5 cl, 0,25 L ou 1 pièce), unité, date de péremption (Aujourd'hui, Demain, 3 jours, 1 semaine, Pas de date), Retirer / Valider.
@@ -40,6 +44,8 @@ Pour chaque recette compatible avec le régime et les allergies, évaluée aux p
 ```
 score = −100 × manquants + 20 si cuisine préférée + 15 × aliments qui périment dans ≤ 2 jours − minutes / 5
 ```
+
+L'objectif ajoute un bonus selon la nutrition estimée par portion (`src/domain/nutrition.ts`, valeurs par ingrédient dans `src/data/nutrition.ts`, huile et épices non comptées) : au plus ±35 points, moins qu'un ingrédient manquant, donc il réordonne sans jamais masquer. La fiche affiche kcal, protéines, glucides et lipides par portion ; les listes affichent les protéines (prise de masse, protéines) ou les kcal (perte de poids).
 
 Un ingrédient est `ok` si la quantité du frigo couvre le besoin, `partial` s'il y en a trop peu, `missing` s'il n'y en a pas. Les deux derniers comptent comme manquants.
 

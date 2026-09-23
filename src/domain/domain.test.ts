@@ -50,7 +50,7 @@ describe('diet', () => {
 })
 
 describe('search', () => {
-  const ranked = rankAll(RECIPES, { fridge: {}, prefs: { diet: 'Tout', allergies: [], cuisines: [], portions: 2, ai: true }, byId, today: '2026-09-23' })
+  const ranked = rankAll(RECIPES, { fridge: {}, prefs: { diet: 'Tout', allergies: [], cuisines: [], portions: 2, ai: true, goal: 'Équilibré', onboarded: true }, byId, today: '2026-09-23' })
   it('finds by recipe or ingredient name, without accents', () => {
     expect(searchRecipes(ranked, 'crepes', NO_FILTERS).map((e) => e.recipe.id)).toEqual(['r12'])
     const chickpeas = searchRecipes(ranked, 'pois chiche', NO_FILTERS)

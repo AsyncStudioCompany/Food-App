@@ -23,7 +23,7 @@ export async function inventRecipe(wish: string): Promise<Recipe> {
     res = await fetch(ENDPOINT, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', ...(ANON_KEY ? { Authorization: `Bearer ${ANON_KEY}` } : {}) },
-      body: JSON.stringify({ fridge: fridgeSnapshot(s.fridge, today()), prefs: { diet: s.prefs.diet, allergies: s.prefs.allergies, cuisines: s.prefs.cuisines, portions: s.prefs.portions }, wish }),
+      body: JSON.stringify({ fridge: fridgeSnapshot(s.fridge, today()), prefs: { diet: s.prefs.diet, allergies: s.prefs.allergies, cuisines: s.prefs.cuisines, portions: s.prefs.portions, goal: s.prefs.goal }, wish }),
     })
   } catch {
     throw new AiError("Impossible de joindre l'IA. Vérifie ta connexion.")

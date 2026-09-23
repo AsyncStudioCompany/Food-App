@@ -1,8 +1,11 @@
+import 'fake-indexeddb/auto'
 import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import App from './App'
+import { configureAccount, getAccount, initAccount } from './account/account'
+import { AccountError, type AccountBackend, type Vault } from './account/backend'
 import { getState, resetState } from './state/store'
 
 function renderAt(path: string) {
@@ -16,7 +19,8 @@ function renderAt(path: string) {
 beforeEach(() => {
   // No network in tests: TheMealDB searches find nothing, photos stay striped.
   vi.stubGlobal('fetch', vi.fn(async () => new Response(JSON.stringify({ meals: null }))))
-  resetState()
+  configureAccount(null)
+  resetState({ prefs: { onboarded: true } })
 })
 afterEach(() => vi.unstubAllGlobals())
 
@@ -128,3 +132,91 @@ describe('Mijote', () => {
     expect(await screen.findByRole('alert')).toHaveTextContent("L'IA n'est pas encore branchée sur ce serveur.")
   })
 })
+
+/** Minimal in-memory account server. */
+function fakeBackend(): AccountBackend {
+  const users = new Map<string, string>()
+  const vaults = new Map<string, Vault>()
+  let current: { userId: string; email: string } | null = null
+  return {
+    async signUp(email, password) {
+      if (users.has(email)) throw new AccountError('exists')
+      users.set(email, password)
+      current = { userId: email, email }
+      return { confirmEmail: false }
+    },
+    async signIn(email, password) {
+      if (users.get(email) !== password) throw new AccountError('E-mail ou mot de passe incorrect.')
+      current = { userId: email, email }
+      return { userId: email }
+    },
+    async signOut() {
+      current = null
+    },
+    async session() {
+      return current
+    },
+    async getVault(id) {
+      return vaults.get(id) ?? null
+    },
+    async putVault(id, v) {
+      const updatedAt = new Date().toISOString()
+      vaults.set(id, { ...v, updatedAt })
+      return updatedAt
+    },
+    async deleteVault(id) {
+      vaults.delete(id)
+    },
+  }
+}
+
+describe('welcome and setup', () => {
+  it('shows no recipe before signing in, then sets up diet, goal and fridge after sign-up', async () => {
+    localStorage.clear()
+    resetState()
+    configureAccount(fakeBackend(), { pbkdf2Iterations: 1000 })
+    await initAccount()
+    const user = userEvent.setup()
+    renderAt('/recettes')
+    expect(screen.queryByRole('navigation')).not.toBeInTheDocument()
+    expect(screen.queryByText('Les plus adaptées')).not.toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: 'Créer mon compte' }))
+    await user.type(screen.getByLabelText('E-mail'), 'moi@exemple.fr')
+    await user.type(screen.getByLabelText('Mot de passe'), 'mon-mot-de-passe')
+    await user.click(screen.getByRole('button', { name: 'Créer mon compte' }))
+
+    expect(await screen.findByText('1/4')).toBeInTheDocument()
+    expect(getAccount().status).toBe('signedIn')
+    await user.click(screen.getByRole('button', { name: 'Végétarien' }))
+    await user.click(screen.getByRole('button', { name: 'Continuer' }))
+    await user.click(screen.getByRole('button', { name: /^Protéines/ }))
+    await user.click(screen.getByRole('button', { name: 'Continuer' }))
+    await user.click(screen.getByRole('button', { name: 'Italienne' }))
+    await user.click(screen.getByRole('button', { name: 'Continuer' }))
+    await user.click(screen.getByRole('button', { name: 'Œufs' }))
+    await user.click(screen.getByRole('button', { name: /C'est parti/ }))
+
+    expect(getState().prefs).toMatchObject({ diet: 'Végétarien', goal: 'Protéines', cuisines: ['Italienne'], onboarded: true })
+    expect(getState().fridge.oeufs.qty).toBe(6)
+    expect(screen.getByRole('navigation')).toBeInTheDocument()
+    expect(screen.getAllByText(/g de protéines/).length).toBeGreaterThan(0)
+
+    await user.click(screen.getByRole('link', { name: 'Profil' }))
+    await user.click(screen.getByRole('button', { name: 'Se déconnecter' }))
+    expect(await screen.findByRole('button', { name: "J'ai déjà un compte" })).toBeInTheDocument()
+    expect(screen.queryByRole('navigation')).not.toBeInTheDocument()
+  })
+
+  it('works without an account server, with a local profile', async () => {
+    resetState()
+    const user = userEvent.setup()
+    renderAt('/')
+    await user.click(screen.getByRole('button', { name: 'Commencer' }))
+    for (let i = 0; i < 3; i++) await user.click(screen.getByRole('button', { name: 'Continuer' }))
+    await user.click(screen.getByRole('button', { name: /C'est parti/ }))
+    expect(getState().prefs.onboarded).toBe(true)
+    expect(screen.getByRole('navigation')).toBeInTheDocument()
+  })
+})
+

@@ -4,7 +4,7 @@ import { z } from 'zod'
 import { INGREDIENTS } from '../src/data/catalog.ts'
 import { checkDraft, type AiRecipeDraft, type AiRecipeRequest } from '../src/domain/aiRecipe.ts'
 import { indexIngredients } from '../src/domain/matching.ts'
-import { ALLERGENS, CUISINES, DIETS } from '../src/domain/types.ts'
+import { ALLERGENS, CUISINES, DIETS, GOALS } from '../src/domain/types.ts'
 import { qtyLabel } from '../src/domain/units.ts'
 
 const byId = indexIngredients(INGREDIENTS)
@@ -23,6 +23,12 @@ const DraftSchema = z.object({
 })
 
 const UNIT_WORD = { g: 'grammes', cl: 'centilitres', pc: 'pièces' } as const
+
+const GOAL_TEXT = {
+  'Prise de masse': 'prise de masse, un plat copieux et riche en protéines',
+  Protéines: 'manger plus de protéines',
+  'Perte de poids': 'perdre du poids, un plat léger mais rassasiant',
+} as const
 
 // Stable across requests so the prefix can be cached: the catalog never changes at runtime.
 const SYSTEM = `Tu es le cuisinier de Mijote, une app anti-gaspillage en français. Tu inventes une recette maison, simple et réaliste, à partir du frigo de l'utilisateur.
@@ -55,6 +61,7 @@ function userPrompt(req: AiRecipeRequest): string {
     `Allergies : ${p.allergies.length ? p.allergies.join(', ') : 'aucune'}.`,
     `Cuisines que j'aime : ${p.cuisines.length ? p.cuisines.join(', ') : 'toutes'}.`,
     `Portions : ${p.portions}.`,
+    p.goal && p.goal !== 'Équilibré' ? `Mon objectif : ${GOAL_TEXT[p.goal]}.` : '',
     req.wish.trim() ? `Mon envie : ${req.wish.trim()}` : '',
   ]
     .filter((l) => l !== '')
@@ -70,6 +77,7 @@ export function parseRequest(body: unknown): AiRecipeRequest {
       allergies: z.array(z.enum(ALLERGENS)),
       cuisines: z.array(z.enum(CUISINES)),
       portions: z.number().int().min(1).max(12),
+      goal: z.enum(GOALS).optional(),
     }),
     wish: z.string().max(200),
   })

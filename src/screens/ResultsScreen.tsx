@@ -21,6 +21,7 @@ export function ResultsScreen() {
   const context: [string, string][] = [
     [`${count} ingrédients`, '/'],
     [prefs.diet === 'Tout' ? 'Omnivore' : prefs.diet, '/profil'],
+    ...(prefs.goal !== 'Équilibré' ? ([[prefs.goal, '/profil']] as [string, string][]) : []),
     [prefs.allergies.length ? 'Sans ' + prefs.allergies.map((a) => a.toLowerCase()).join(', ') : 'Aucune allergie', '/profil'],
     [prefs.cuisines.length ? prefs.cuisines.join(' · ') : 'Toutes cuisines', '/profil'],
   ]

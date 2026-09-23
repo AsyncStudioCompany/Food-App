@@ -12,7 +12,7 @@ import {
   wrapDataKey,
 } from '../crypto/vault'
 import { clearLocalData, flushLocalData } from '../state/persist'
-import { getState, onSavedChange, replaceSaved, resetState, savedOf, type SavedState } from '../state/store'
+import { getState, onSavedChange, replaceSaved, resetState, savedOf, type PartialSaved } from '../state/store'
 import { AccountError, type AccountBackend } from './backend'
 
 /**
@@ -22,8 +22,8 @@ import { AccountError, type AccountBackend } from './backend'
  */
 
 export interface AccountState {
-  /** `unavailable`: no account server configured (or no WebCrypto/IndexedDB). */
-  status: 'unavailable' | 'signedOut' | 'signedIn'
+  /** `unavailable`: no account server configured (or no WebCrypto/IndexedDB). `loading`: restoring the session. */
+  status: 'loading' | 'unavailable' | 'signedOut' | 'signedIn'
   email: string | null
   /** A long operation is running (key derivation, first sync). */
   busy: boolean
@@ -97,7 +97,7 @@ export function configureAccount(b: AccountBackend | null, options: { pbkdf2Iter
   clearTimeout(pushTimer)
   unsubscribe?.()
   unsubscribe = null
-  state = { status: 'unavailable', email: null, busy: false, syncing: false, lastSync: null, error: null, notice: null }
+  state = { status: b ? 'loading' : 'unavailable', email: null, busy: false, syncing: false, lastSync: null, error: null, notice: null }
 }
 
 /** Restores the session of this device, then keeps the data in sync. */
@@ -168,7 +168,7 @@ async function openVault(userId: string, email: string, kek: CryptoKey) {
     notice = 'Compte prêt : tes données sont chiffrées et sauvegardées.'
   } else {
     dek = await unwrapDataKey({ data: vault.wrappedKey, iv: vault.wrapIv }, kek)
-    replaceSaved(await decryptJson<Partial<SavedState>>(dek, { data: vault.data, iv: vault.dataIv }), 'remote')
+    replaceSaved(await decryptJson<PartialSaved>(dek, { data: vault.data, iv: vault.dataIv }), 'remote')
     writeMeta({ userId, email: normalizeEmail(email), wrappedKey: vault.wrappedKey, wrapIv: vault.wrapIv, lastSync: vault.updatedAt })
     notice = 'Connecté : tes données ont été récupérées.'
   }
@@ -204,7 +204,7 @@ export async function pull() {
   try {
     const vault = await backend.getVault(meta.userId)
     if (!vault || vault.updatedAt <= meta.lastSync) return
-    replaceSaved(await decryptJson<Partial<SavedState>>(dek, { data: vault.data, iv: vault.dataIv }), 'remote')
+    replaceSaved(await decryptJson<PartialSaved>(dek, { data: vault.data, iv: vault.dataIv }), 'remote')
     writeMeta({ ...meta, lastSync: vault.updatedAt })
     set({ lastSync: vault.updatedAt, error: null })
   } catch (e) {

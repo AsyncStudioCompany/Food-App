@@ -28,6 +28,9 @@ export const CUISINES = [
 ] as const
 export type Cuisine = (typeof CUISINES)[number]
 
+export const GOALS = ['Équilibré', 'Prise de masse', 'Protéines', 'Perte de poids'] as const
+export type Goal = (typeof GOALS)[number]
+
 /** What an ingredient means for diets: meat and fish rule out vegetarian, dairy and eggs rule out vegan. */
 export type AnimalKind = 'pork' | 'meat' | 'fish' | 'dairy' | 'egg'
 
@@ -40,6 +43,8 @@ export interface Ingredient {
   defaultQty: number
   animal?: AnimalKind
   allergens?: Allergen[]
+  /** Per 100 g (or 100 ml); `g` is the weight of one piece. See src/data/nutrition.ts. */
+  nutrition?: { per100: [kcal: number, protein: number, carbs: number, fat: number]; g?: number }
 }
 
 export interface RecipeIngredient {
@@ -94,6 +99,10 @@ export interface Prefs {
   portions: number
   /** Recipes invented by the AI: shows or hides "Invente-moi une recette". */
   ai: boolean
+  /** Reorders recipes by estimated nutrition (never hides any). */
+  goal: Goal
+  /** Set once the welcome setup (diet, goal, fridge) is done. */
+  onboarded: boolean
 }
 
 export interface RecipeList {
