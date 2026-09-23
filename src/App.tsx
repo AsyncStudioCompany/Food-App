@@ -8,7 +8,7 @@ import { SuggestionsPage } from './features/suggestions/SuggestionsPage'
 export default function App() {
   return (
     <div className="mx-auto flex min-h-full max-w-2xl flex-col">
-      <main className="flex-1 px-4 pt-6 pb-24">
+      <main className="flex-1 px-4 pt-[calc(env(safe-area-inset-top)+1.5rem)] pb-[calc(env(safe-area-inset-bottom)+6rem)]">
         <Routes>
           <Route path="/" element={<SuggestionsPage />} />
           <Route path="/recettes" element={<RecipesPage />} />
