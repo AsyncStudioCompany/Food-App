@@ -83,6 +83,7 @@ function RecipeView({ recipeId }: { recipeId: string }) {
             {recipe.minutes} min · {recipe.cuisine}
             {dietSuffix(traits)}
             {recipe.generated && ' · Inventée pour toi'}
+            {recipe.source && ` · via ${recipe.source.name}`}
           </div>
         </div>
 
@@ -146,7 +147,7 @@ function RecipeView({ recipeId }: { recipeId: string }) {
             )
           })}
           <div className="muted" style={{ font: '13px var(--font)', padding: '10px 0' }}>
-            Du placard : sel, poivre, huile d'olive.
+            Du placard : {['sel', 'poivre', "huile d'olive", ...(recipe.pantry ?? [])].join(', ')}.
           </div>
         </div>
 

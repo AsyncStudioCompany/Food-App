@@ -19,6 +19,7 @@ App mobile de recettes anti-gaspillage (PWA, en français, au tutoiement). L'uti
 - Mobile d'abord : largeur de référence 390 px, utilisable à 360 px. Cibles tactiles : 40 px minimum (boutons ronds), CTA de 52 à 56 px.
 - La logique métier vit dans `src/domain/` en fonctions pures testées, sans appel réseau. Ce code est partagé avec le serveur Deno, donc **ses imports gardent l'extension `.ts`**, tout comme `src/data/catalog.ts`.
 - Les ingrédients sont référencés par leur **identifiant du catalogue** (`src/data/catalog.ts`), jamais par du texte libre. Les recettes générées par l'IA aussi : le schéma de sortie limite les identifiants au catalogue.
+- Recettes importées de TheMealDB : `src/data/mealdb.ts` (id `m<idMeal>`, vraie photo, `pantry`, `source`). Candidats listés par `scripts/mealdb-candidates.mjs`, puis traduits et vérifiés à la main. L'IA se coupe dans le Profil (`prefs.ai`).
 - Quantités en unité de base (`g`, `cl`, `pc`) ; conversions dans `src/domain/units.ts`. Statut par ingrédient : `ok` / `partial` / `missing`.
 - Régime et allergies = **filtres stricts** ; cuisines préférées et aliments qui périment bientôt = **bonus de tri** (score dans `src/domain/matching.ts`).
 - Zones de sécurité : `var(--safe-top)` / `var(--safe-bottom)` / `var(--top)`, jamais `env()` directement.

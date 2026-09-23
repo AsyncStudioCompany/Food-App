@@ -33,6 +33,12 @@ function search(term: string): Promise<string[]> {
 }
 
 async function resolve(recipes: Recipe[]) {
+  // Imported recipes carry their own photo: no search, and stand-ins must not reuse it.
+  const exact = recipes.filter((r) => r.photoUrl && photos[r.id] !== r.photoUrl)
+  if (exact.length) {
+    photos = { ...photos, ...Object.fromEntries(exact.map((r) => [r.id, r.photoUrl!])) }
+    listeners.forEach((l) => l())
+  }
   const todo = recipes.filter((r) => !photos[r.id] && !pending.has(r.id) && r.photoTerms.length)
   if (!todo.length) return
   todo.forEach((r) => pending.add(r.id))

@@ -31,7 +31,7 @@ Recherche par recette ou ingrédient, et filtres : Faisable maintenant, 20 min m
 « Coups de cœur » (rempli automatiquement par les recettes aimées), listes perso, et « Inventées pour toi » dès que l'IA a créé une recette. Le panneau « Ajouter à une liste » s'ouvre depuis la fiche.
 
 ### Profil (`/profil`)
-Régime (Tout, Végétarien, Vegan, Sans porc), allergies (Gluten, Lactose, Arachides, Œufs, Fruits à coque), cuisines préférées, portions par défaut. Les changements s'appliquent immédiatement.
+Régime (Tout, Végétarien, Vegan, Sans porc), allergies (Gluten, Lactose, Arachides, Œufs, Fruits à coque), cuisines préférées, portions par défaut, et un interrupteur **Recettes inventées par l'IA** (coupé, la tuile « Invente-moi une recette » disparaît). Les changements s'appliquent immédiatement.
 
 ## 3. Classement
 
@@ -53,13 +53,17 @@ Un ingrédient est `ok` si la quantité du frigo couvre le besoin, `partial` s'i
 
 ## 5. Données
 
-- Catalogue : `src/data/catalog.ts` (36 ingrédients, 24 recettes pour 2 personnes). Chaque ingrédient a une unité de base, un rayon, une quantité proposée par défaut, et au besoin un type animal (porc, viande, poisson, laitier, œuf) et des allergènes. Régime et allergènes d'une recette se déduisent de ses ingrédients.
+- Catalogue : `src/data/catalog.ts` (52 ingrédients, 90 recettes) :
+  - 24 recettes maison (celles de la maquette et quelques ajouts) ;
+  - 66 recettes importées de **TheMealDB** (`src/data/mealdb.ts`), avec leur vraie photo. `scripts/mealdb-candidates.mjs` télécharge l'API et liste les recettes dont tous les ingrédients (hors placard) existent dans le catalogue ; noms, étapes (au tutoiement) et quantités sont ensuite traduits et vérifiés à la main. Pour en ajouter : compléter la table `MAP` du script (et le catalogue), relancer, traduire.
+- Les ingrédients comptés à la pièce sont arrondis au demi supérieur quand on change les portions (1,33 oignon → 1,5).
+- Cuisines : Française, Italienne, Asiatique, Mexicaine, Indienne, Moyen-Orient (maquette), plus Espagnole, Européenne, Maghreb, Africaine, Caribéenne, Sud-américaine, Américaine pour les recettes importées. Chaque ingrédient a une unité de base, un rayon, une quantité proposée par défaut, et au besoin un type animal (porc, viande, poisson, laitier, œuf) et des allergènes. Régime et allergènes d'une recette se déduisent de ses ingrédients.
 - Sur l'appareil (`localStorage`) : frigo (quantité, unité, date de péremption), préférences, favoris, listes, recettes inventées. Photos TheMealDB résolues et mises en cache.
-- Photos : remplaçants TheMealDB (plats proches, pas exacts), fond rayé tant qu'il n'y a pas de photo. À remplacer par de vraies photos.
+- Photos : vraie photo pour les recettes importées ; pour les recettes maison et celles de l'IA, un plat proche trouvé sur TheMealDB par mots-clés. Fond rayé tant qu'il n'y a pas de photo.
 
 ## 6. Suite possible
 
-- Comptes et synchro (Supabase Auth + tables avec RLS) pour retrouver son frigo sur plusieurs appareils.
+- Comptes et synchro (Supabase Auth + tables avec RLS) pour retrouver son frigo sur plusieurs appareils. Pas encore fait : aujourd'hui tout reste sur l'appareil.
 - Liste de courses à partir des ingrédients manquants.
 - Rappels de péremption (notifications).
 - Emballage natif avec Capacitor.

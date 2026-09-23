@@ -41,7 +41,9 @@ export function evaluate(recipe: Recipe, portions: number, ctx: MatchContext): E
   for (const ri of recipe.ingredients) {
     const ingredient = ctx.byId.get(ri.id)
     if (!ingredient) continue
-    const need = (ri.qty * portions) / recipe.servings
+    const exact = (ri.qty * portions) / recipe.servings
+    // Pieces are counted by halves, rounded up: 1,33 onion → 1,5.
+    const need = ingredient.unit === 'pc' ? Math.ceil(exact * 2 - 1e-9) / 2 : exact
     const f = ctx.fridge[ri.id]
     const have = f ? toBase(f.qty, f.unit) : 0
     const status: ItemStatus = have >= need - 1e-6 ? 'ok' : have > 0 ? 'partial' : 'missing'

@@ -98,6 +98,8 @@ export function ResultsScreen() {
         </div>
       )}
 
+      {prefs.ai && (
+      <>
       <div className="section-head">
         <h2 className="section-title" style={{ margin: 0 }}>
           Rien ne te tente ?
@@ -116,6 +118,8 @@ export function ResultsScreen() {
           </span>
         </button>
       </div>
+      </>
+      )}
     </div>
     {generating && <GenerateSheet onClose={() => setGenerating(false)} />}
     </>

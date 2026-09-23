@@ -1,4 +1,5 @@
 import type { AisleId, Ingredient, Recipe } from '../domain/types.ts'
+import { MEALDB_RECIPES } from './mealdb.ts'
 
 export const AISLES: [AisleId, string][] = [
   ['frais', 'Crèmerie & frais'],
@@ -28,6 +29,12 @@ export const INGREDIENTS: Ingredient[] = [
   I('poulet', 'Poulet', 'frais', 'g', 300, { animal: 'meat' }),
   I('saumon', 'Saumon', 'frais', 'g', 250, { animal: 'fish' }),
   I('yaourt', 'Yaourts', 'frais', 'pc', 4, { animal: 'dairy', allergens: ['Lactose'] }),
+  I('feta', 'Feta', 'frais', 'g', 200, { animal: 'dairy', allergens: ['Lactose'] }),
+  I('cheddar', 'Fromage râpé', 'frais', 'g', 150, { animal: 'dairy', allergens: ['Lactose'] }),
+  I('chorizo', 'Chorizo', 'frais', 'g', 200, { animal: 'pork' }),
+  I('boeuf', 'Bœuf', 'frais', 'g', 500, { animal: 'meat' }),
+  I('boeuf_hache', 'Bœuf haché', 'frais', 'g', 400, { animal: 'meat' }),
+  I('crevettes', 'Crevettes', 'frais', 'g', 200, { animal: 'fish' }),
   I('champignons', 'Champignons', 'legumes', 'g', 250),
   I('oignon', 'Oignons', 'legumes', 'pc', 2),
   I('ail', 'Ail', 'legumes', 'pc', 3),
@@ -38,7 +45,15 @@ export const INGREDIENTS: Ingredient[] = [
   I('tomate', 'Tomates', 'legumes', 'pc', 4),
   I('carotte', 'Carottes', 'legumes', 'pc', 4),
   I('brocoli', 'Brocoli', 'legumes', 'g', 300),
+  I('oignon_vert', 'Oignons nouveaux', 'legumes', 'pc', 6),
+  I('aubergine', 'Aubergines', 'legumes', 'pc', 2),
+  I('concombre', 'Concombre', 'legumes', 'pc', 1),
+  I('poireau', 'Poireaux', 'legumes', 'pc', 2),
+  I('haricots_verts', 'Haricots verts', 'legumes', 'g', 300),
+  I('chou', 'Chou', 'legumes', 'pc', 1),
+  I('gingembre', 'Gingembre', 'legumes', 'g', 50),
   I('citron', 'Citron', 'fruits', 'pc', 1),
+  I('citron_vert', 'Citron vert', 'fruits', 'pc', 2),
   I('banane', 'Bananes', 'fruits', 'pc', 3),
   I('pomme', 'Pommes', 'fruits', 'pc', 4),
   I('avocat', 'Avocats', 'fruits', 'pc', 2),
@@ -53,6 +68,8 @@ export const INGREDIENTS: Ingredient[] = [
   I('lentilles', 'Lentilles', 'epicerie', 'g', 500),
   I('thon', 'Thon', 'epicerie', 'g', 140, { animal: 'fish' }),
   I('tortillas', 'Tortillas', 'epicerie', 'pc', 6, { allergens: ['Gluten'] }),
+  I('nouilles', 'Nouilles de riz', 'epicerie', 'g', 250),
+  I('haricots_rouges', 'Haricots rouges', 'epicerie', 'g', 400),
 ]
 
 type Row = [id: string, qty: number]
@@ -75,7 +92,8 @@ const R = (
   photoTerms,
 })
 
-export const RECIPES: Recipe[] = [
+/** House recipes (from the design prototype and written for Mijote). */
+const HOUSE_RECIPES: Recipe[] = [
   R('r1', 'Omelette forestière', 'Française', 12, [['oeufs', 3], ['champignons', 150], ['oignon', 1]], [
     "Émince l'oignon et les champignons.",
     "Fais-les dorer 5 min à la poêle avec un filet d'huile.",
@@ -209,3 +227,5 @@ export const RECIPES: Recipe[] = [
     'Sers bien frais.',
   ], ['carrot', 'salad']),
 ]
+
+export const RECIPES: Recipe[] = [...HOUSE_RECIPES, ...MEALDB_RECIPES]

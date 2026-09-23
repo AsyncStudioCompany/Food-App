@@ -7,7 +7,7 @@ import { CUISINES, type Cuisine, type Fridge, type Ingredient, type Prefs, type 
 export interface AiRecipeRequest {
   /** Fridge content in base units, with days before expiry. */
   fridge: { id: string; qty: number; days: number | null }[]
-  prefs: Prefs
+  prefs: Omit<Prefs, 'ai'>
   /** Free text: "un truc réconfortant", "sans four"… */
   wish: string
 }
@@ -33,7 +33,7 @@ export function fridgeSnapshot(fridge: Fridge, today: string): AiRecipeRequest['
 }
 
 /** Problems that make a draft unusable; empty when it is fine. */
-export function checkDraft(draft: AiRecipeDraft, byId: Map<string, Ingredient>, prefs: Prefs): string[] {
+export function checkDraft(draft: AiRecipeDraft, byId: Map<string, Ingredient>, prefs: Pick<Prefs, 'diet' | 'allergies'>): string[] {
   const errors: string[] = []
   if (!draft.name.trim()) errors.push('Le nom est vide.')
   if (!CUISINES.includes(draft.cuisine)) errors.push(`Cuisine inconnue : ${draft.cuisine}.`)

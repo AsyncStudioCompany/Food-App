@@ -19,11 +19,24 @@ describe('catalog', () => {
     for (const r of RECIPES) {
       expect(CUISINES, r.id).toContain(r.cuisine)
       expect(r.steps.length, r.id).toBeGreaterThanOrEqual(2)
-      expect(r.photoTerms.length, r.id).toBeGreaterThan(0)
+      expect(r.photoTerms.length > 0 || !!r.photoUrl, `${r.id} has a photo`).toBe(true)
+      expect(r.servings, r.id).toBeGreaterThanOrEqual(1)
+      expect(r.minutes, r.id).toBeGreaterThan(0)
       for (const i of r.ingredients) {
         expect(ids.has(i.id), `${r.id} uses ${i.id}`).toBe(true)
         expect(i.qty).toBeGreaterThan(0)
       }
     }
+  })
+
+  it('imports TheMealDB recipes with their own photo', () => {
+    const imported = RECIPES.filter((r) => r.source)
+    expect(imported.length).toBeGreaterThanOrEqual(60)
+    for (const r of imported) {
+      expect(r.id).toBe('m' + r.source!.id)
+      expect(r.photoUrl).toMatch(/^https:\/\/www\.themealdb\.com\/images\/media\/meals\/.+\.jpg$/)
+    }
+    const photos = imported.map((r) => r.photoUrl)
+    expect(new Set(photos).size).toBe(photos.length)
   })
 })

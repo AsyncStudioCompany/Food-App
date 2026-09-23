@@ -33,7 +33,7 @@ const STORAGE_KEY = 'mijote:v1'
 
 export const DEFAULT_SAVED: SavedState = {
   fridge: {},
-  prefs: { diet: 'Tout', allergies: [], cuisines: [], portions: 2 },
+  prefs: { diet: 'Tout', allergies: [], cuisines: [], portions: 2, ai: true },
   liked: {},
   lists: [],
   generated: [],
@@ -44,7 +44,11 @@ const DEFAULT_UI: UiState = { fridgeQuery: '', searchQuery: '', searchFilters: N
 function load(): SavedState {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
-    if (raw) return { ...DEFAULT_SAVED, ...(JSON.parse(raw) as Partial<SavedState>) }
+    if (raw) {
+      const saved = JSON.parse(raw) as Partial<SavedState>
+      // Preferences added later (like `ai`) get their default value.
+      return { ...DEFAULT_SAVED, ...saved, prefs: { ...DEFAULT_SAVED.prefs, ...saved.prefs } }
+    }
   } catch {
     // Private mode or corrupted data: start fresh.
   }

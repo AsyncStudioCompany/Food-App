@@ -5,7 +5,7 @@ import type { Fridge, Prefs } from './types.ts'
 
 const byId = indexIngredients(INGREDIENTS)
 const TODAY = '2026-09-23'
-const prefs: Prefs = { diet: 'Tout', allergies: [], cuisines: [], portions: 2 }
+const prefs: Prefs = { diet: 'Tout', allergies: [], cuisines: [], portions: 2, ai: true }
 const ctx = (fridge: Fridge, p: Partial<Prefs> = {}): MatchContext => ({ fridge, prefs: { ...prefs, ...p }, byId, today: TODAY })
 const recipe = (id: string) => RECIPES.find((r) => r.id === id)!
 
@@ -25,6 +25,12 @@ describe('evaluate', () => {
     expect(evaluate(recipe('r10'), 2, ctx(fridge)).missing).toHaveLength(0)
     const four = evaluate(recipe('r10'), 4, ctx(fridge))
     expect(four.items[0]).toMatchObject({ need: 400, have: 300, status: 'partial' })
+  })
+
+  it('rounds pieces up to the half', () => {
+    const e = evaluate(recipe('m53327'), 2, ctx({})) // 2 onions for 3 servings
+    expect(e.items.find((i) => i.ingredient.id === 'oignon')!.need).toBe(1.5)
+    expect(evaluate(recipe('r1'), 2, ctx({})).items[0].need).toBe(3)
   })
 
   it('counts soon-to-expire food as saved and ranks it higher', () => {

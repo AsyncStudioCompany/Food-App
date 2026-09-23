@@ -67,6 +67,17 @@ export function ProfileScreen() {
           </button>
         </div>
       </div>
+      <div className="panel-row" style={{ padding: '14px 16px', gap: 12 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          <span style={{ font: '600 15px var(--font)' }}>Recettes inventées par l'IA</span>
+          <span className="muted" style={{ font: '13px var(--font)' }}>
+            {p.ai ? 'Activées : « Invente-moi une recette » dans Recettes.' : 'Désactivées : que des vraies recettes.'}
+          </span>
+        </div>
+        <button type="button" role="switch" aria-checked={p.ai} aria-label="Recettes inventées par l'IA" className="switch" onClick={() => set({ ai: !p.ai })}>
+          <span className="switch__knob" />
+        </button>
+      </div>
     </div>
   )
 }

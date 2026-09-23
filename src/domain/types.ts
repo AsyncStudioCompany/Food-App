@@ -11,7 +11,21 @@ export type Allergen = (typeof ALLERGENS)[number]
 export const DIETS = ['Tout', 'Végétarien', 'Vegan', 'Sans porc'] as const
 export type Diet = (typeof DIETS)[number]
 
-export const CUISINES = ['Française', 'Italienne', 'Asiatique', 'Mexicaine', 'Indienne', 'Moyen-Orient'] as const
+export const CUISINES = [
+  'Française',
+  'Italienne',
+  'Asiatique',
+  'Mexicaine',
+  'Indienne',
+  'Moyen-Orient',
+  'Espagnole',
+  'Européenne',
+  'Maghreb',
+  'Africaine',
+  'Caribéenne',
+  'Sud-américaine',
+  'Américaine',
+] as const
 export type Cuisine = (typeof CUISINES)[number]
 
 /** What an ingredient means for diets: meat and fish rule out vegetarian, dairy and eggs rule out vegan. */
@@ -44,6 +58,12 @@ export interface Recipe {
   steps: string[]
   /** English search terms for the TheMealDB stand-in photo, most specific first. */
   photoTerms: string[]
+  /** Exact photo of the dish (imported recipes); takes precedence over `photoTerms`. */
+  photoUrl?: string
+  /** Pantry items used besides salt, pepper and oil (French, lowercase). */
+  pantry?: string[]
+  /** Where an imported recipe comes from. */
+  source?: { name: 'TheMealDB'; id: string }
   /** Set on recipes invented by the AI for this user. */
   generated?: boolean
 }
@@ -62,6 +82,8 @@ export interface Prefs {
   allergies: Allergen[]
   cuisines: Cuisine[]
   portions: number
+  /** Recipes invented by the AI: shows or hides "Invente-moi une recette". */
+  ai: boolean
 }
 
 export interface RecipeList {

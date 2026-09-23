@@ -101,6 +101,24 @@ describe('Mijote', () => {
     expect(getState().generated).toHaveLength(1)
   })
 
+  it('hides the AI entry point when the AI is switched off', async () => {
+    const user = userEvent.setup()
+    renderAt('/profil')
+    const toggle = screen.getByRole('switch', { name: "Recettes inventées par l'IA" })
+    expect(toggle).toHaveAttribute('aria-checked', 'true')
+    await user.click(toggle)
+    expect(getState().prefs.ai).toBe(false)
+    await user.click(screen.getByRole('link', { name: 'Recettes' }))
+    expect(screen.queryByRole('button', { name: /Invente-moi une recette/ })).not.toBeInTheDocument()
+  })
+
+  it('shows imported recipes with their pantry and source', () => {
+    renderAt('/recette/m52908')
+    expect(screen.getByRole('heading', { name: 'Ratatouille' })).toBeInTheDocument()
+    expect(screen.getByText(/via TheMealDB/)).toBeInTheDocument()
+    expect(screen.getByText("Du placard : sel, poivre, huile d'olive, basilic, vinaigre, sucre.")).toBeInTheDocument()
+  })
+
   it('explains when the AI is not configured', async () => {
     vi.stubGlobal('fetch', vi.fn(async (url: string) => new Response(JSON.stringify(url.includes('generate-recipe') ? { error: 'not_configured' } : { meals: null }), { status: url.includes('generate-recipe') ? 503 : 200 })))
     const user = userEvent.setup()
