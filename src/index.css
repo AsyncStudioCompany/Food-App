@@ -6,6 +6,25 @@ body,
   height: 100%;
 }
 
+html {
+  color-scheme: dark;
+  -webkit-tap-highlight-color: transparent;
+}
+
 body {
-  @apply bg-stone-50 text-stone-900 antialiased;
+  @apply bg-stone-950 text-stone-100 antialiased;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", "Segoe UI", Roboto, sans-serif;
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+:root {
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
 }

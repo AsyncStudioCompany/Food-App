@@ -69,3 +69,14 @@ export function convert(
   if (oneTargetInGrams === undefined) return undefined
   return grams / oneTargetInGrams
 }
+
+const numberFormat = new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 2 })
+
+/** « 250 g », « 1,5 L », « 3 » (pièces), « 2 c. à soupe ». */
+export function formatQuantity(quantity: number, unit: Unit): string {
+  const value = numberFormat.format(quantity)
+  if (unit === 'piece') return value
+  if (unit === 'to_taste') return UNIT_LABELS.to_taste
+  if (unit === 'pinch') return `${value} ${quantity > 1 ? 'pincées' : 'pincée'}`
+  return `${value} ${UNIT_LABELS[unit]}`
+}

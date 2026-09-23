@@ -212,14 +212,17 @@ Le matching ne fonctionne que si « tomates », « tomate », « tomates concass
 
 ## 8. Écrans et navigation
 
-Barre de navigation en bas (mobile) avec 4 onglets :
+Design « popote » (thème sombre, pastilles). Barre de navigation flottante en bas avec 3 onglets :
 
-1. 🍳 **Cuisiner** (suggestions), écran d'accueil
-2. 📖 **Recettes** (catalogue)
-3. 🧊 **Mon frigo**
-4. 👤 **Profil** (préférences, favoris, placard de base)
+1. **Mon frigo** (`/`), écran d'accueil : pastilles d'aliments par rayon (compteur « 3/7 »), recherche d'aliment, panneau de quantité (+ / −, unité, date de péremption), bouton flottant « Trouver des recettes » avec le nombre de recettes trouvées.
+2. **Recherche** (`/recherche`) : catalogue complet, recherche par titre ou ingrédient.
+3. **Préférences** (`/preferences`) : régime, sans porc, allergies, cuisines préférées, goûts.
 
-Parcours clé à tester de bout en bout : *onboarding → ajout de 5 aliments au frigo → une suggestion « faisable » apparaît → ouverture de la fiche → ingrédients marqués « j'ai »*.
+Écrans secondaires :
+- **Résultats** (`/resultats`) : « N recettes avec ce que t'as. », filtres rapides (nombre d'ingrédients, régime, tri Pertinence / Plus rapide, type de plat), **Top 3** en grandes cartes, puis « Tu as tout ce qu'il faut », puis « Il te manque presque rien » (avec le détail de ce qui manque).
+- **Fiche recette** (`/recette/:id`) : ingrédients marqués J'ai / Pas assez / Il manque / Placard / Facultatif, portions ajustables, étapes, « J'ai cuisiné cette recette ».
+
+Parcours clé testé de bout en bout (`src/App.test.tsx`) : *ajout d'aliments avec quantités → « Trouver des recettes » → la recette faisable arrive en tête avec « Tu as tout » → fiche → « J'ai cuisiné » retire les quantités du frigo*.
 
 ## 9. Exigences non fonctionnelles
 

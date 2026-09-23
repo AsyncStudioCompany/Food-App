@@ -26,3 +26,24 @@ export function formatMinutes(minutes: number): string {
   const rest = minutes % 60
   return rest === 0 ? `${hours} h` : `${hours} h ${rest.toString().padStart(2, '0')}`
 }
+
+export const TAG_LABELS: Record<string, string> = {
+  quick: 'Rapide',
+  comfort: 'Réconfortant',
+  budget: 'Petit budget',
+  light: 'Léger',
+  spicy: 'Épicé',
+  family: 'En famille',
+  batch: 'Batch cooking',
+  oven: 'Au four',
+  'no-cook': 'Sans cuisson',
+  summer: "Recette d'été",
+  winter: "Recette d'hiver",
+}
+
+export const DIET_LABELS = {
+  omnivore: 'Omnivore',
+  vegetarian: 'Végétarien',
+  vegan: 'Vegan',
+  pescatarian: 'Pescétarien',
+} as const

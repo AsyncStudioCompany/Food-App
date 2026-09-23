@@ -2,6 +2,7 @@
   {
     "id": "tomato",
     "name": "Tomate",
+    "emoji": "🍅",
     "aliases": [
       "tomates"
     ],
@@ -20,6 +21,7 @@
   {
     "id": "cherry_tomato",
     "name": "Tomate cerise",
+    "emoji": "🍅",
     "aliases": [
       "tomates cerises"
     ],
@@ -39,6 +41,7 @@
   {
     "id": "canned_tomato",
     "name": "Tomates pelées en conserve",
+    "emoji": "🥫",
     "aliases": [
       "tomates concassées",
       "tomates en boîte",
@@ -58,6 +61,7 @@
   {
     "id": "onion",
     "name": "Oignon",
+    "emoji": "🧅",
     "aliases": [
       "oignons",
       "oignon jaune"
@@ -77,6 +81,7 @@
   {
     "id": "red_onion",
     "name": "Oignon rouge",
+    "emoji": "🧅",
     "aliases": [
       "oignons rouges"
     ],
@@ -96,6 +101,7 @@
   {
     "id": "shallot",
     "name": "Échalote",
+    "emoji": "🧅",
     "aliases": [
       "échalotes"
     ],
@@ -114,6 +120,7 @@
   {
     "id": "garlic",
     "name": "Ail",
+    "emoji": "🧄",
     "aliases": [
       "gousse d'ail",
       "gousses d'ail"
@@ -133,6 +140,7 @@
   {
     "id": "spring_onion",
     "name": "Oignon nouveau",
+    "emoji": "🌱",
     "aliases": [
       "oignons nouveaux",
       "cébette",
@@ -153,6 +161,7 @@
   {
     "id": "leek",
     "name": "Poireau",
+    "emoji": "🥬",
     "aliases": [
       "poireaux"
     ],
@@ -171,6 +180,7 @@
   {
     "id": "carrot",
     "name": "Carotte",
+    "emoji": "🥕",
     "aliases": [
       "carottes"
     ],
@@ -189,6 +199,7 @@
   {
     "id": "potato",
     "name": "Pomme de terre",
+    "emoji": "🥔",
     "aliases": [
       "pommes de terre",
       "patate",
@@ -209,6 +220,7 @@
   {
     "id": "sweet_potato",
     "name": "Patate douce",
+    "emoji": "🍠",
     "aliases": [
       "patates douces"
     ],
@@ -227,6 +239,7 @@
   {
     "id": "zucchini",
     "name": "Courgette",
+    "emoji": "🥒",
     "aliases": [
       "courgettes"
     ],
@@ -245,6 +258,7 @@
   {
     "id": "eggplant",
     "name": "Aubergine",
+    "emoji": "🍆",
     "aliases": [
       "aubergines"
     ],
@@ -263,6 +277,7 @@
   {
     "id": "bell_pepper",
     "name": "Poivron",
+    "emoji": "🫑",
     "aliases": [
       "poivrons",
       "poivron rouge",
@@ -284,6 +299,7 @@
   {
     "id": "cucumber",
     "name": "Concombre",
+    "emoji": "🥒",
     "aliases": [
       "concombres"
     ],
@@ -302,6 +318,7 @@
   {
     "id": "lettuce",
     "name": "Salade verte",
+    "emoji": "🥬",
     "aliases": [
       "laitue",
       "batavia",
@@ -322,6 +339,7 @@
   {
     "id": "spinach",
     "name": "Épinards",
+    "emoji": "🥬",
     "aliases": [
       "épinard",
       "pousses d'épinards"
@@ -340,6 +358,7 @@
   {
     "id": "broccoli",
     "name": "Brocoli",
+    "emoji": "🥦",
     "aliases": [
       "brocolis"
     ],
@@ -358,6 +377,7 @@
   {
     "id": "cauliflower",
     "name": "Chou-fleur",
+    "emoji": "🥦",
     "aliases": [
       "choux-fleurs"
     ],
@@ -376,6 +396,7 @@
   {
     "id": "cabbage",
     "name": "Chou",
+    "emoji": "🥬",
     "aliases": [
       "chou blanc",
       "chou vert"
@@ -395,6 +416,7 @@
   {
     "id": "red_cabbage",
     "name": "Chou rouge",
+    "emoji": "🥬",
     "aliases": [],
     "category": "fruits_vegetables",
     "defaultUnit": "piece",
@@ -412,6 +434,7 @@
   {
     "id": "green_beans",
     "name": "Haricots verts",
+    "emoji": "🫛",
     "aliases": [
       "haricot vert"
     ],
@@ -429,6 +452,7 @@
   {
     "id": "peas",
     "name": "Petits pois",
+    "emoji": "🫛",
     "aliases": [
       "petit pois"
     ],
@@ -446,6 +470,7 @@
   {
     "id": "mushroom",
     "name": "Champignons de Paris",
+    "emoji": "🍄",
     "aliases": [
       "champignon",
       "champignons"
@@ -465,6 +490,7 @@
   {
     "id": "pumpkin",
     "name": "Potiron",
+    "emoji": "🎃",
     "aliases": [
       "citrouille",
       "courge",
@@ -485,6 +511,7 @@
   {
     "id": "celery",
     "name": "Céleri branche",
+    "emoji": "🥬",
     "aliases": [
       "céleri"
     ],
@@ -505,6 +532,7 @@
   {
     "id": "fennel",
     "name": "Fenouil",
+    "emoji": "🌿",
     "aliases": [
       "fenouils"
     ],
@@ -523,6 +551,7 @@
   {
     "id": "asparagus",
     "name": "Asperges",
+    "emoji": "🌱",
     "aliases": [
       "asperge"
     ],
@@ -540,6 +569,7 @@
   {
     "id": "avocado",
     "name": "Avocat",
+    "emoji": "🥑",
     "aliases": [
       "avocats"
     ],
@@ -558,6 +588,7 @@
   {
     "id": "corn",
     "name": "Maïs",
+    "emoji": "🌽",
     "aliases": [
       "maïs doux"
     ],
@@ -575,6 +606,7 @@
   {
     "id": "radish",
     "name": "Radis",
+    "emoji": "🌱",
     "aliases": [
       "radis rose"
     ],
@@ -593,6 +625,7 @@
   {
     "id": "beetroot",
     "name": "Betterave",
+    "emoji": "🟣",
     "aliases": [
       "betteraves",
       "betterave cuite"
@@ -612,6 +645,7 @@
   {
     "id": "lemon",
     "name": "Citron",
+    "emoji": "🍋",
     "aliases": [
       "citrons",
       "citron jaune"
@@ -631,6 +665,7 @@
   {
     "id": "lime",
     "name": "Citron vert",
+    "emoji": "🍋",
     "aliases": [
       "citrons verts"
     ],
@@ -649,6 +684,7 @@
   {
     "id": "orange",
     "name": "Orange",
+    "emoji": "🍊",
     "aliases": [
       "oranges"
     ],
@@ -667,6 +703,7 @@
   {
     "id": "apple",
     "name": "Pomme",
+    "emoji": "🍎",
     "aliases": [
       "pommes"
     ],
@@ -685,6 +722,7 @@
   {
     "id": "pear",
     "name": "Poire",
+    "emoji": "🍐",
     "aliases": [
       "poires"
     ],
@@ -703,6 +741,7 @@
   {
     "id": "banana",
     "name": "Banane",
+    "emoji": "🍌",
     "aliases": [
       "bananes"
     ],
@@ -721,6 +760,7 @@
   {
     "id": "strawberry",
     "name": "Fraise",
+    "emoji": "🍓",
     "aliases": [
       "fraises"
     ],
@@ -739,6 +779,7 @@
   {
     "id": "raspberry",
     "name": "Framboise",
+    "emoji": "🍓",
     "aliases": [
       "framboises"
     ],
@@ -756,6 +797,7 @@
   {
     "id": "blueberry",
     "name": "Myrtille",
+    "emoji": "🫐",
     "aliases": [
       "myrtilles"
     ],
@@ -773,6 +815,7 @@
   {
     "id": "peach",
     "name": "Pêche",
+    "emoji": "🍑",
     "aliases": [
       "pêches"
     ],
@@ -791,6 +834,7 @@
   {
     "id": "apricot",
     "name": "Abricot",
+    "emoji": "🍑",
     "aliases": [
       "abricots"
     ],
@@ -809,6 +853,7 @@
   {
     "id": "cherry",
     "name": "Cerise",
+    "emoji": "🍒",
     "aliases": [
       "cerises"
     ],
@@ -826,6 +871,7 @@
   {
     "id": "grape",
     "name": "Raisin",
+    "emoji": "🍇",
     "aliases": [
       "raisins"
     ],
@@ -843,6 +889,7 @@
   {
     "id": "kiwi",
     "name": "Kiwi",
+    "emoji": "🥝",
     "aliases": [
       "kiwis"
     ],
@@ -861,6 +908,7 @@
   {
     "id": "mango",
     "name": "Mangue",
+    "emoji": "🥭",
     "aliases": [
       "mangues"
     ],
@@ -879,6 +927,7 @@
   {
     "id": "pineapple",
     "name": "Ananas",
+    "emoji": "🍍",
     "aliases": [],
     "category": "fruits_vegetables",
     "defaultUnit": "piece",
@@ -895,6 +944,7 @@
   {
     "id": "ginger",
     "name": "Gingembre",
+    "emoji": "🫚",
     "aliases": [
       "gingembre frais"
     ],
@@ -912,6 +962,7 @@
   {
     "id": "chili",
     "name": "Piment",
+    "emoji": "🌶️",
     "aliases": [
       "piments",
       "piment frais"
@@ -931,6 +982,7 @@
   {
     "id": "parsley",
     "name": "Persil",
+    "emoji": "🌿",
     "aliases": [
       "persil plat",
       "persil frisé"
@@ -949,6 +1001,7 @@
   {
     "id": "basil",
     "name": "Basilic",
+    "emoji": "🌿",
     "aliases": [
       "feuilles de basilic"
     ],
@@ -966,6 +1019,7 @@
   {
     "id": "coriander",
     "name": "Coriandre",
+    "emoji": "🌿",
     "aliases": [
       "coriandre fraîche"
     ],
@@ -983,6 +1037,7 @@
   {
     "id": "chives",
     "name": "Ciboulette",
+    "emoji": "🌿",
     "aliases": [],
     "category": "herbs_spices",
     "defaultUnit": "piece",
@@ -998,6 +1053,7 @@
   {
     "id": "mint",
     "name": "Menthe",
+    "emoji": "🌿",
     "aliases": [
       "menthe fraîche"
     ],
@@ -1015,6 +1071,7 @@
   {
     "id": "thyme",
     "name": "Thym",
+    "emoji": "🌿",
     "aliases": [],
     "category": "herbs_spices",
     "defaultUnit": "pinch",
@@ -1030,6 +1087,7 @@
   {
     "id": "rosemary",
     "name": "Romarin",
+    "emoji": "🌿",
     "aliases": [],
     "category": "herbs_spices",
     "defaultUnit": "pinch",
@@ -1045,6 +1103,7 @@
   {
     "id": "bay_leaf",
     "name": "Laurier",
+    "emoji": "🍃",
     "aliases": [
       "feuille de laurier"
     ],
@@ -1062,6 +1121,7 @@
   {
     "id": "oregano",
     "name": "Origan",
+    "emoji": "🌿",
     "aliases": [],
     "category": "herbs_spices",
     "defaultUnit": "pinch",
@@ -1077,6 +1137,7 @@
   {
     "id": "herbes_de_provence",
     "name": "Herbes de Provence",
+    "emoji": "🌿",
     "aliases": [],
     "category": "herbs_spices",
     "defaultUnit": "pinch",
@@ -1092,6 +1153,7 @@
   {
     "id": "dill",
     "name": "Aneth",
+    "emoji": "🌿",
     "aliases": [],
     "category": "herbs_spices",
     "defaultUnit": "piece",
@@ -1107,6 +1169,7 @@
   {
     "id": "salt",
     "name": "Sel",
+    "emoji": "🧂",
     "aliases": [
       "sel fin",
       "gros sel"
@@ -1125,6 +1188,7 @@
   {
     "id": "pepper",
     "name": "Poivre",
+    "emoji": "🧂",
     "aliases": [
       "poivre noir"
     ],
@@ -1286,6 +1350,7 @@
   {
     "id": "vanilla",
     "name": "Vanille",
+    "emoji": "🍦",
     "aliases": [
       "gousse de vanille",
       "extrait de vanille",
@@ -1305,6 +1370,7 @@
   {
     "id": "chicken",
     "name": "Poulet",
+    "emoji": "🍗",
     "aliases": [
       "volaille"
     ],
@@ -1322,6 +1388,7 @@
   {
     "id": "chicken_breast",
     "name": "Blanc de poulet",
+    "emoji": "🍗",
     "aliases": [
       "filet de poulet",
       "escalope de poulet",
@@ -1343,6 +1410,7 @@
   {
     "id": "chicken_thigh",
     "name": "Cuisse de poulet",
+    "emoji": "🍗",
     "aliases": [
       "hauts de cuisse",
       "cuisses de poulet"
@@ -1363,6 +1431,7 @@
   {
     "id": "turkey",
     "name": "Dinde",
+    "emoji": "🦃",
     "aliases": [
       "escalope de dinde",
       "blanc de dinde"
@@ -1381,6 +1450,7 @@
   {
     "id": "beef",
     "name": "Bœuf",
+    "emoji": "🥩",
     "aliases": [
       "viande de bœuf"
     ],
@@ -1398,6 +1468,7 @@
   {
     "id": "ground_beef",
     "name": "Bœuf haché",
+    "emoji": "🥩",
     "aliases": [
       "viande hachée",
       "steak haché"
@@ -1418,6 +1489,7 @@
   {
     "id": "beef_stew",
     "name": "Bœuf à braiser",
+    "emoji": "🥩",
     "aliases": [
       "paleron",
       "joue de bœuf",
@@ -1438,6 +1510,7 @@
   {
     "id": "steak",
     "name": "Steak",
+    "emoji": "🥩",
     "aliases": [
       "entrecôte",
       "bavette",
@@ -1459,6 +1532,7 @@
   {
     "id": "veal",
     "name": "Veau",
+    "emoji": "🥩",
     "aliases": [
       "escalope de veau"
     ],
@@ -1476,6 +1550,7 @@
   {
     "id": "lamb",
     "name": "Agneau",
+    "emoji": "🍖",
     "aliases": [
       "gigot",
       "épaule d'agneau",
@@ -1495,6 +1570,7 @@
   {
     "id": "pork",
     "name": "Porc",
+    "emoji": "🥩",
     "aliases": [
       "filet mignon",
       "échine",
@@ -1514,6 +1590,7 @@
   {
     "id": "bacon",
     "name": "Lardons",
+    "emoji": "🥓",
     "aliases": [
       "lardons fumés",
       "poitrine fumée",
@@ -1534,6 +1611,7 @@
   {
     "id": "ham",
     "name": "Jambon",
+    "emoji": "🍖",
     "aliases": [
       "jambon blanc",
       "jambon cuit",
@@ -1555,6 +1633,7 @@
   {
     "id": "cured_ham",
     "name": "Jambon cru",
+    "emoji": "🥓",
     "aliases": [
       "jambon de Bayonne",
       "jambon de Parme",
@@ -1576,6 +1655,7 @@
   {
     "id": "sausage",
     "name": "Saucisse",
+    "emoji": "🌭",
     "aliases": [
       "saucisses",
       "chipolata",
@@ -1597,6 +1677,7 @@
   {
     "id": "chorizo",
     "name": "Chorizo",
+    "emoji": "🌭",
     "aliases": [],
     "category": "meat",
     "defaultUnit": "g",
@@ -1613,6 +1694,7 @@
   {
     "id": "duck",
     "name": "Canard",
+    "emoji": "🦆",
     "aliases": [
       "magret de canard",
       "cuisse de canard"
@@ -1631,6 +1713,7 @@
   {
     "id": "merguez",
     "name": "Merguez",
+    "emoji": "🌭",
     "aliases": [],
     "category": "meat",
     "defaultUnit": "piece",
@@ -1647,6 +1730,7 @@
   {
     "id": "salmon",
     "name": "Saumon",
+    "emoji": "🐟",
     "aliases": [
       "pavé de saumon",
       "filet de saumon"
@@ -1668,6 +1752,7 @@
   {
     "id": "smoked_salmon",
     "name": "Saumon fumé",
+    "emoji": "🐟",
     "aliases": [],
     "category": "fish_seafood",
     "defaultUnit": "g",
@@ -1687,6 +1772,7 @@
   {
     "id": "tuna",
     "name": "Thon",
+    "emoji": "🐟",
     "aliases": [
       "steak de thon"
     ],
@@ -1706,6 +1792,7 @@
   {
     "id": "canned_tuna",
     "name": "Thon en boîte",
+    "emoji": "🥫",
     "aliases": [
       "thon au naturel",
       "miettes de thon"
@@ -1727,6 +1814,7 @@
   {
     "id": "cod",
     "name": "Cabillaud",
+    "emoji": "🐟",
     "aliases": [
       "dos de cabillaud",
       "filet de cabillaud",
@@ -1750,6 +1838,7 @@
   {
     "id": "white_fish",
     "name": "Poisson blanc",
+    "emoji": "🐟",
     "aliases": [
       "filet de poisson blanc",
       "merlu",
@@ -1771,6 +1860,7 @@
   {
     "id": "sardine",
     "name": "Sardines",
+    "emoji": "🐟",
     "aliases": [
       "sardines à l'huile"
     ],
@@ -1790,6 +1880,7 @@
   {
     "id": "shrimp",
     "name": "Crevettes",
+    "emoji": "🍤",
     "aliases": [
       "crevette",
       "gambas"
@@ -1810,6 +1901,7 @@
   {
     "id": "mussels",
     "name": "Moules",
+    "emoji": "🦪",
     "aliases": [
       "moule"
     ],
@@ -1829,6 +1921,7 @@
   {
     "id": "anchovy",
     "name": "Anchois",
+    "emoji": "🐟",
     "aliases": [
       "filets d'anchois"
     ],
@@ -1848,6 +1941,7 @@
   {
     "id": "egg",
     "name": "Œuf",
+    "emoji": "🥚",
     "aliases": [
       "œufs",
       "oeuf",
@@ -1870,6 +1964,7 @@
   {
     "id": "milk",
     "name": "Lait",
+    "emoji": "🥛",
     "aliases": [
       "lait demi-écrémé",
       "lait entier"
@@ -1891,6 +1986,7 @@
   {
     "id": "butter",
     "name": "Beurre",
+    "emoji": "🧈",
     "aliases": [
       "beurre doux",
       "beurre demi-sel"
@@ -1912,6 +2008,7 @@
   {
     "id": "cream",
     "name": "Crème fraîche",
+    "emoji": "🥛",
     "aliases": [
       "crème",
       "crème épaisse"
@@ -1933,6 +2030,7 @@
   {
     "id": "liquid_cream",
     "name": "Crème liquide",
+    "emoji": "🥛",
     "aliases": [
       "crème fleurette",
       "crème entière"
@@ -1955,6 +2053,7 @@
   {
     "id": "yogurt",
     "name": "Yaourt nature",
+    "emoji": "🥛",
     "aliases": [
       "yaourt",
       "yaourts"
@@ -1976,6 +2075,7 @@
   {
     "id": "greek_yogurt",
     "name": "Yaourt grec",
+    "emoji": "🥛",
     "aliases": [],
     "category": "dairy_eggs",
     "defaultUnit": "g",
@@ -1994,6 +2094,7 @@
   {
     "id": "fromage_blanc",
     "name": "Fromage blanc",
+    "emoji": "🥛",
     "aliases": [],
     "category": "dairy_eggs",
     "defaultUnit": "g",
@@ -2011,6 +2112,7 @@
   {
     "id": "cheese",
     "name": "Fromage",
+    "emoji": "🧀",
     "aliases": [],
     "category": "dairy_eggs",
     "defaultUnit": "g",
@@ -2028,6 +2130,7 @@
   {
     "id": "grated_cheese",
     "name": "Fromage râpé",
+    "emoji": "🧀",
     "aliases": [
       "gruyère râpé",
       "emmental râpé"
@@ -2050,6 +2153,7 @@
   {
     "id": "emmental",
     "name": "Emmental",
+    "emoji": "🧀",
     "aliases": [],
     "category": "dairy_eggs",
     "defaultUnit": "g",
@@ -2068,6 +2172,7 @@
   {
     "id": "comte",
     "name": "Comté",
+    "emoji": "🧀",
     "aliases": [
       "gruyère"
     ],
@@ -2088,6 +2193,7 @@
   {
     "id": "parmesan",
     "name": "Parmesan",
+    "emoji": "🧀",
     "aliases": [
       "parmigiano",
       "grana padano"
@@ -2109,6 +2215,7 @@
   {
     "id": "mozzarella",
     "name": "Mozzarella",
+    "emoji": "🧀",
     "aliases": [
       "boule de mozzarella"
     ],
@@ -2130,6 +2237,7 @@
   {
     "id": "feta",
     "name": "Feta",
+    "emoji": "🧀",
     "aliases": [],
     "category": "dairy_eggs",
     "defaultUnit": "g",
@@ -2148,6 +2256,7 @@
   {
     "id": "goat_cheese",
     "name": "Fromage de chèvre",
+    "emoji": "🧀",
     "aliases": [
       "chèvre",
       "bûche de chèvre"
@@ -2169,6 +2278,7 @@
   {
     "id": "reblochon",
     "name": "Reblochon",
+    "emoji": "🧀",
     "aliases": [],
     "category": "dairy_eggs",
     "defaultUnit": "g",
@@ -2188,6 +2298,7 @@
   {
     "id": "ricotta",
     "name": "Ricotta",
+    "emoji": "🧀",
     "aliases": [],
     "category": "dairy_eggs",
     "defaultUnit": "g",
@@ -2206,6 +2317,7 @@
   {
     "id": "mascarpone",
     "name": "Mascarpone",
+    "emoji": "🧀",
     "aliases": [],
     "category": "dairy_eggs",
     "defaultUnit": "g",
@@ -2224,6 +2336,7 @@
   {
     "id": "coconut_milk",
     "name": "Lait de coco",
+    "emoji": "🥥",
     "aliases": [
       "crème de coco"
     ],
@@ -2242,6 +2355,7 @@
   {
     "id": "plant_milk",
     "name": "Lait végétal",
+    "emoji": "🥛",
     "aliases": [
       "lait d'avoine",
       "lait d'amande",
@@ -2262,6 +2376,7 @@
   {
     "id": "pasta",
     "name": "Pâtes",
+    "emoji": "🍝",
     "aliases": [
       "pâte"
     ],
@@ -2279,6 +2394,7 @@
   {
     "id": "spaghetti",
     "name": "Spaghetti",
+    "emoji": "🍝",
     "aliases": [
       "spaghettis"
     ],
@@ -2299,6 +2415,7 @@
   {
     "id": "penne",
     "name": "Penne",
+    "emoji": "🍝",
     "aliases": [
       "pennes"
     ],
@@ -2319,6 +2436,7 @@
   {
     "id": "tagliatelle",
     "name": "Tagliatelles",
+    "emoji": "🍝",
     "aliases": [
       "tagliatelle"
     ],
@@ -2340,6 +2458,7 @@
   {
     "id": "lasagna_sheets",
     "name": "Feuilles de lasagne",
+    "emoji": "🍝",
     "aliases": [
       "lasagnes"
     ],
@@ -2360,6 +2479,7 @@
   {
     "id": "short_pasta",
     "name": "Pâtes courtes",
+    "emoji": "🍝",
     "aliases": [
       "coquillettes",
       "fusilli",
@@ -2383,6 +2503,7 @@
   {
     "id": "rice",
     "name": "Riz",
+    "emoji": "🍚",
     "aliases": [
       "riz blanc"
     ],
@@ -2401,6 +2522,7 @@
   {
     "id": "basmati_rice",
     "name": "Riz basmati",
+    "emoji": "🍚",
     "aliases": [],
     "category": "starches",
     "defaultUnit": "g",
@@ -2418,6 +2540,7 @@
   {
     "id": "risotto_rice",
     "name": "Riz à risotto",
+    "emoji": "🍚",
     "aliases": [
       "riz arborio",
       "riz carnaroli"
@@ -2438,6 +2561,7 @@
   {
     "id": "rice_noodles",
     "name": "Nouilles de riz",
+    "emoji": "🍜",
     "aliases": [
       "vermicelles de riz"
     ],
@@ -2455,6 +2579,7 @@
   {
     "id": "egg_noodles",
     "name": "Nouilles aux œufs",
+    "emoji": "🍜",
     "aliases": [
       "nouilles chinoises",
       "nouilles"
@@ -2476,6 +2601,7 @@
   {
     "id": "semolina",
     "name": "Semoule",
+    "emoji": "🌾",
     "aliases": [
       "couscous",
       "semoule de blé"
@@ -2497,6 +2623,7 @@
   {
     "id": "bulgur",
     "name": "Boulgour",
+    "emoji": "🌾",
     "aliases": [],
     "category": "starches",
     "defaultUnit": "g",
@@ -2515,6 +2642,7 @@
   {
     "id": "quinoa",
     "name": "Quinoa",
+    "emoji": "🌾",
     "aliases": [],
     "category": "starches",
     "defaultUnit": "g",
@@ -2531,6 +2659,7 @@
   {
     "id": "oats",
     "name": "Flocons d'avoine",
+    "emoji": "🌾",
     "aliases": [
       "avoine"
     ],
@@ -2551,6 +2680,7 @@
   {
     "id": "gnocchi",
     "name": "Gnocchis",
+    "emoji": "🥟",
     "aliases": [
       "gnocchi"
     ],
@@ -2570,6 +2700,7 @@
   {
     "id": "bread",
     "name": "Pain",
+    "emoji": "🥖",
     "aliases": [
       "baguette",
       "pain de campagne"
@@ -2591,6 +2722,7 @@
   {
     "id": "sandwich_bread",
     "name": "Pain de mie",
+    "emoji": "🍞",
     "aliases": [
       "tranche de pain de mie"
     ],
@@ -2612,6 +2744,7 @@
   {
     "id": "burger_bun",
     "name": "Pain à burger",
+    "emoji": "🍔",
     "aliases": [
       "buns"
     ],
@@ -2633,6 +2766,7 @@
   {
     "id": "tortilla",
     "name": "Tortilla",
+    "emoji": "🫓",
     "aliases": [
       "tortillas",
       "wraps"
@@ -2654,6 +2788,7 @@
   {
     "id": "pita",
     "name": "Pain pita",
+    "emoji": "🫓",
     "aliases": [
       "pitas"
     ],
@@ -2675,6 +2810,7 @@
   {
     "id": "puff_pastry",
     "name": "Pâte feuilletée",
+    "emoji": "🥐",
     "aliases": [],
     "category": "bakery",
     "defaultUnit": "piece",
@@ -2694,6 +2830,7 @@
   {
     "id": "shortcrust_pastry",
     "name": "Pâte brisée",
+    "emoji": "🥧",
     "aliases": [],
     "category": "bakery",
     "defaultUnit": "piece",
@@ -2713,6 +2850,7 @@
   {
     "id": "pizza_dough",
     "name": "Pâte à pizza",
+    "emoji": "🍕",
     "aliases": [],
     "category": "bakery",
     "defaultUnit": "piece",
@@ -2731,6 +2869,7 @@
   {
     "id": "breadcrumbs",
     "name": "Chapelure",
+    "emoji": "🍞",
     "aliases": [],
     "category": "bakery",
     "defaultUnit": "g",
@@ -2749,6 +2888,7 @@
   {
     "id": "lentils",
     "name": "Lentilles",
+    "emoji": "🫘",
     "aliases": [
       "lentilles vertes"
     ],
@@ -2767,6 +2907,7 @@
   {
     "id": "red_lentils",
     "name": "Lentilles corail",
+    "emoji": "🫘",
     "aliases": [],
     "category": "legumes",
     "defaultUnit": "g",
@@ -2784,6 +2925,7 @@
   {
     "id": "chickpeas",
     "name": "Pois chiches",
+    "emoji": "🫘",
     "aliases": [
       "pois chiche"
     ],
@@ -2801,6 +2943,7 @@
   {
     "id": "kidney_beans",
     "name": "Haricots rouges",
+    "emoji": "🫘",
     "aliases": [
       "haricot rouge"
     ],
@@ -2818,6 +2961,7 @@
   {
     "id": "white_beans",
     "name": "Haricots blancs",
+    "emoji": "🫘",
     "aliases": [
       "lingots",
       "cocos"
@@ -2836,6 +2980,7 @@
   {
     "id": "tofu",
     "name": "Tofu",
+    "emoji": "⬜",
     "aliases": [
       "tofu ferme"
     ],
@@ -2855,6 +3000,7 @@
   {
     "id": "almonds",
     "name": "Amandes",
+    "emoji": "🌰",
     "aliases": [
       "amande",
       "amandes effilées"
@@ -2875,6 +3021,7 @@
   {
     "id": "ground_almonds",
     "name": "Poudre d'amande",
+    "emoji": "🌰",
     "aliases": [
       "amandes en poudre"
     ],
@@ -2896,6 +3043,7 @@
   {
     "id": "walnuts",
     "name": "Noix",
+    "emoji": "🌰",
     "aliases": [
       "cerneaux de noix"
     ],
@@ -2915,6 +3063,7 @@
   {
     "id": "hazelnuts",
     "name": "Noisettes",
+    "emoji": "🌰",
     "aliases": [
       "noisette"
     ],
@@ -2934,6 +3083,7 @@
   {
     "id": "cashews",
     "name": "Noix de cajou",
+    "emoji": "🌰",
     "aliases": [
       "cajou"
     ],
@@ -2953,6 +3103,7 @@
   {
     "id": "peanuts",
     "name": "Cacahuètes",
+    "emoji": "🥜",
     "aliases": [
       "arachides"
     ],
@@ -2972,6 +3123,7 @@
   {
     "id": "pine_nuts",
     "name": "Pignons de pin",
+    "emoji": "🌰",
     "aliases": [
       "pignons"
     ],
@@ -2989,6 +3141,7 @@
   {
     "id": "sesame_seeds",
     "name": "Graines de sésame",
+    "emoji": "🌰",
     "aliases": [
       "sésame"
     ],
@@ -3008,6 +3161,7 @@
   {
     "id": "olive_oil",
     "name": "Huile d'olive",
+    "emoji": "🫒",
     "aliases": [],
     "category": "condiments_sauces",
     "defaultUnit": "tbsp",
@@ -3024,6 +3178,7 @@
   {
     "id": "vegetable_oil",
     "name": "Huile neutre",
+    "emoji": "🫗",
     "aliases": [
       "huile de tournesol",
       "huile de colza",
@@ -3044,6 +3199,7 @@
   {
     "id": "sesame_oil",
     "name": "Huile de sésame",
+    "emoji": "🫗",
     "aliases": [],
     "category": "condiments_sauces",
     "defaultUnit": "tbsp",
@@ -3121,6 +3277,7 @@
   {
     "id": "mayonnaise",
     "name": "Mayonnaise",
+    "emoji": "🥚",
     "aliases": [],
     "category": "condiments_sauces",
     "defaultUnit": "tbsp",
@@ -3140,6 +3297,7 @@
   {
     "id": "ketchup",
     "name": "Ketchup",
+    "emoji": "🍅",
     "aliases": [],
     "category": "condiments_sauces",
     "defaultUnit": "tbsp",
@@ -3196,6 +3354,7 @@
   {
     "id": "tomato_paste",
     "name": "Concentré de tomate",
+    "emoji": "🍅",
     "aliases": [
       "double concentré"
     ],
@@ -3214,6 +3373,7 @@
   {
     "id": "tomato_sauce",
     "name": "Sauce tomate",
+    "emoji": "🍅",
     "aliases": [
       "coulis de tomate",
       "passata"
@@ -3233,6 +3393,7 @@
   {
     "id": "pesto",
     "name": "Pesto",
+    "emoji": "🌿",
     "aliases": [
       "pesto vert"
     ],
@@ -3310,6 +3471,7 @@
   {
     "id": "honey",
     "name": "Miel",
+    "emoji": "🍯",
     "aliases": [],
     "category": "condiments_sauces",
     "defaultUnit": "tbsp",
@@ -3326,6 +3488,7 @@
   {
     "id": "maple_syrup",
     "name": "Sirop d'érable",
+    "emoji": "🍁",
     "aliases": [],
     "category": "condiments_sauces",
     "defaultUnit": "tbsp",
@@ -3342,6 +3505,7 @@
   {
     "id": "stock_cube",
     "name": "Bouillon cube",
+    "emoji": "🧊",
     "aliases": [
       "bouillon",
       "cube de bouillon",
@@ -3363,6 +3527,7 @@
   {
     "id": "white_wine",
     "name": "Vin blanc",
+    "emoji": "🍷",
     "aliases": [],
     "category": "drinks",
     "defaultUnit": "ml",
@@ -3379,6 +3544,7 @@
   {
     "id": "red_wine",
     "name": "Vin rouge",
+    "emoji": "🍷",
     "aliases": [],
     "category": "drinks",
     "defaultUnit": "ml",
@@ -3395,6 +3561,7 @@
   {
     "id": "beer",
     "name": "Bière",
+    "emoji": "🍺",
     "aliases": [],
     "category": "drinks",
     "defaultUnit": "ml",
@@ -3413,6 +3580,7 @@
   {
     "id": "flour",
     "name": "Farine",
+    "emoji": "🌾",
     "aliases": [
       "farine de blé"
     ],
@@ -3451,6 +3619,7 @@
   {
     "id": "sugar",
     "name": "Sucre",
+    "emoji": "🍬",
     "aliases": [
       "sucre en poudre",
       "sucre blanc"
@@ -3470,6 +3639,7 @@
   {
     "id": "brown_sugar",
     "name": "Sucre roux",
+    "emoji": "🍬",
     "aliases": [
       "cassonade",
       "vergeoise"
@@ -3490,6 +3660,7 @@
   {
     "id": "icing_sugar",
     "name": "Sucre glace",
+    "emoji": "🍬",
     "aliases": [],
     "category": "grocery",
     "defaultUnit": "g",
@@ -3543,6 +3714,7 @@
   {
     "id": "dark_chocolate",
     "name": "Chocolat noir",
+    "emoji": "🍫",
     "aliases": [
       "chocolat pâtissier",
       "chocolat"
@@ -3563,6 +3735,7 @@
   {
     "id": "milk_chocolate",
     "name": "Chocolat au lait",
+    "emoji": "🍫",
     "aliases": [],
     "category": "grocery",
     "defaultUnit": "g",
@@ -3580,6 +3753,7 @@
   {
     "id": "cocoa_powder",
     "name": "Cacao en poudre",
+    "emoji": "🍫",
     "aliases": [
       "cacao"
     ],
@@ -3598,6 +3772,7 @@
   {
     "id": "jam",
     "name": "Confiture",
+    "emoji": "🍓",
     "aliases": [],
     "category": "grocery",
     "defaultUnit": "g",
@@ -3614,6 +3789,7 @@
   {
     "id": "olives",
     "name": "Olives",
+    "emoji": "🫒",
     "aliases": [
       "olives noires",
       "olives vertes"
@@ -3680,6 +3856,7 @@
   {
     "id": "coconut_flakes",
     "name": "Noix de coco râpée",
+    "emoji": "🥥",
     "aliases": [
       "coco râpée"
     ],
@@ -3697,6 +3874,7 @@
   {
     "id": "speculoos",
     "name": "Spéculoos",
+    "emoji": "🍪",
     "aliases": [
       "biscuits spéculoos"
     ],
@@ -3716,6 +3894,7 @@
   {
     "id": "ladyfingers",
     "name": "Biscuits à la cuillère",
+    "emoji": "🍪",
     "aliases": [
       "boudoirs"
     ],
@@ -3737,6 +3916,7 @@
   {
     "id": "water",
     "name": "Eau",
+    "emoji": "💧",
     "aliases": [],
     "category": "drinks",
     "defaultUnit": "ml",
@@ -3753,6 +3933,7 @@
   {
     "id": "coffee",
     "name": "Café",
+    "emoji": "☕",
     "aliases": [
       "café fort",
       "expresso"
@@ -3772,6 +3953,7 @@
   {
     "id": "frozen_peas",
     "name": "Petits pois surgelés",
+    "emoji": "🫛",
     "aliases": [],
     "category": "frozen",
     "defaultUnit": "g",
@@ -3788,6 +3970,7 @@
   {
     "id": "frozen_spinach",
     "name": "Épinards surgelés",
+    "emoji": "🥬",
     "aliases": [],
     "category": "frozen",
     "defaultUnit": "g",
@@ -3804,6 +3987,7 @@
   {
     "id": "frozen_vegetables",
     "name": "Légumes surgelés",
+    "emoji": "🥦",
     "aliases": [
       "poêlée de légumes"
     ],

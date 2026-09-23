@@ -9,9 +9,11 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
-    "lint": "oxlint && tsc -b"
+    "lint": "oxlint && tsc -b",
+    "build:demo": "node scripts/build-demo.mjs"
   },
   "dependencies": {
+    "lucide-react": "^1.47.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "react-router": "^8.4.0"

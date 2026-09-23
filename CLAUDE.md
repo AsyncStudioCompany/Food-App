@@ -26,19 +26,28 @@ La spécification complète (fonctionnalités, modèle de données, algorithme d
 - Le frigo stocke des **quantités avec unité**. Le matching compare les quantités au besoin de la recette (ajusté aux portions) : chaque ingrédient est `enough` / `insufficient` / `missing`. Conversions d'unités dans `src/domain/units.ts`. Si une quantité est inconnue ou non convertible, on considère l'ingrédient comme disponible.
 - Les allergies et régimes sont des **filtres stricts** ; les goûts (cuisines, types de plats aimés) ne font que **modifier le tri**.
 
-## Arborescence visée
+## Design « popote »
+
+- Nom affiché : **popote**. Thème sombre unique (fond `stone-950`, surfaces `stone-900`, bordures `stone-800`), pastilles arrondies, élément actif en blanc sur noir, chiffres en police mono.
+- Couleurs d'état : vert (`emerald-300`) « Tu as tout », orange (`amber-300`) « pas assez », rouge (`red-300`) « Il te manque ».
+- Barre de navigation flottante en bas : Mon frigo (`/`), Recherche (`/recherche`), Préférences (`/preferences`).
+- Zones de sécurité iPhone : utiliser `var(--safe-top)` / `var(--safe-bottom)` (définies dans `src/index.css`), jamais `env()` directement, pour que le cadre de la maquette puisse les simuler.
+- Icônes : `lucide-react`. Visuel de recette : `RecipeVisual` (photo si `imageUrl`, sinon dégradé + emoji).
+
+## Arborescence
 
 ```
 src/
-  domain/        # types + logique pure (matching, filtres, scores)
-  data/          # accès aux données (Supabase, stockage local, seed)
+  domain/        # types + logique pure (matching, unités, recherche, consommation du frigo)
+  data/          # seed, stores persistants (frigo, préférences) en localStorage
   features/
-    recipes/     # catalogue, détail recette
-    fridge/      # gestion du frigo
-    suggestions/ # « Que puis-je cuisiner ? »
-    preferences/ # profil alimentaire
-  components/    # UI partagée
-  seed/          # recettes et ingrédients de départ (JSON)
+    fridge/      # « Mon frigo » : pastilles par rayon + panneau de quantité
+    results/     # « N recettes avec ce que t'as » : top 3 puis faisables, puis presque
+    recipes/     # recherche + fiche recette (portions, « J'ai cuisiné »)
+    preferences/ # régime, allergies, cuisines, goûts
+  components/    # en-tête, barre de navigation, logo, visuel de recette
+  demo/          # cadre iPhone 16 Pro Max et frigo d'exemple de la maquette
+  seed/          # ingrédients et recettes de départ (JSON)
 ```
 
 ## Commandes
@@ -47,6 +56,7 @@ src/
 - `npm run build` — typecheck + build de production (génère aussi le service worker PWA)
 - `npm test` — tests unitaires (Vitest), `npm run test:watch` en continu
 - `npm run lint` — oxlint + typecheck
+- `npm run build:demo` — maquette interactive en un seul fichier (`dist-demo/popote.html`) : routes en mémoire, cadre iPhone 16 Pro Max sur grand écran, frigo d'exemple
 
 ## Données de départ
 

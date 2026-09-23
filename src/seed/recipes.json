@@ -2,6 +2,7 @@
   {
     "id": "pasta_carbonara",
     "title": "Pâtes carbonara",
+    "emoji": "🍝",
     "servings": 4,
     "prepMinutes": 10,
     "cookMinutes": 12,
@@ -66,6 +67,7 @@
   {
     "id": "pasta_pomodoro",
     "title": "Pâtes à la sauce tomate et basilic",
+    "emoji": "🍝",
     "servings": 4,
     "prepMinutes": 5,
     "cookMinutes": 20,
@@ -140,6 +142,7 @@
   {
     "id": "bolognese",
     "title": "Spaghetti bolognaise",
+    "emoji": "🍝",
     "servings": 4,
     "prepMinutes": 15,
     "cookMinutes": 60,
@@ -244,6 +247,7 @@
   {
     "id": "lasagna",
     "title": "Lasagnes à la bolognaise",
+    "emoji": "🫕",
     "servings": 6,
     "prepMinutes": 30,
     "cookMinutes": 45,
@@ -336,6 +340,7 @@
   {
     "id": "mushroom_risotto",
     "title": "Risotto aux champignons",
+    "emoji": "🍄",
     "servings": 4,
     "prepMinutes": 10,
     "cookMinutes": 25,
@@ -409,6 +414,7 @@
   {
     "id": "pesto_gnocchi",
     "title": "Gnocchis au pesto et tomates cerises",
+    "emoji": "🥟",
     "servings": 2,
     "prepMinutes": 5,
     "cookMinutes": 10,
@@ -461,6 +467,7 @@
   {
     "id": "margherita_pizza",
     "title": "Pizza margherita",
+    "emoji": "🍕",
     "servings": 2,
     "prepMinutes": 15,
     "cookMinutes": 12,
@@ -515,6 +522,7 @@
   {
     "id": "quiche_lorraine",
     "title": "Quiche lorraine",
+    "emoji": "🥧",
     "servings": 6,
     "prepMinutes": 15,
     "cookMinutes": 35,
@@ -581,6 +589,7 @@
   {
     "id": "leek_quiche",
     "title": "Quiche aux poireaux et chèvre",
+    "emoji": "🥧",
     "servings": 6,
     "prepMinutes": 20,
     "cookMinutes": 35,
@@ -652,6 +661,7 @@
   {
     "id": "tartiflette",
     "title": "Tartiflette",
+    "emoji": "🧀",
     "servings": 4,
     "prepMinutes": 20,
     "cookMinutes": 30,
@@ -714,6 +724,7 @@
   {
     "id": "gratin_dauphinois",
     "title": "Gratin dauphinois",
+    "emoji": "🥔",
     "servings": 6,
     "prepMinutes": 20,
     "cookMinutes": 60,
@@ -787,6 +798,7 @@
   {
     "id": "ratatouille",
     "title": "Ratatouille",
+    "emoji": "🍆",
     "servings": 4,
     "prepMinutes": 25,
     "cookMinutes": 45,
@@ -873,6 +885,7 @@
   {
     "id": "beef_bourguignon",
     "title": "Bœuf bourguignon",
+    "emoji": "🍲",
     "servings": 6,
     "prepMinutes": 30,
     "cookMinutes": 180,
@@ -977,6 +990,7 @@
   {
     "id": "roast_chicken",
     "title": "Poulet rôti et pommes de terre",
+    "emoji": "🍗",
     "servings": 4,
     "prepMinutes": 15,
     "cookMinutes": 75,
@@ -1050,6 +1064,7 @@
   {
     "id": "croque_monsieur",
     "title": "Croque-monsieur",
+    "emoji": "🥪",
     "servings": 2,
     "prepMinutes": 5,
     "cookMinutes": 10,
@@ -1098,6 +1113,7 @@
   {
     "id": "omelette",
     "title": "Omelette aux champignons",
+    "emoji": "🍳",
     "servings": 1,
     "prepMinutes": 5,
     "cookMinutes": 5,
@@ -1158,6 +1174,7 @@
   {
     "id": "leek_potato_soup",
     "title": "Soupe poireaux-pommes de terre",
+    "emoji": "🥣",
     "servings": 4,
     "prepMinutes": 15,
     "cookMinutes": 30,
@@ -1225,6 +1242,7 @@
   {
     "id": "pumpkin_soup",
     "title": "Velouté de potiron",
+    "emoji": "🎃",
     "servings": 4,
     "prepMinutes": 15,
     "cookMinutes": 30,
@@ -1284,6 +1302,7 @@
   {
     "id": "salmon_papillote",
     "title": "Saumon en papillote, citron et aneth",
+    "emoji": "🐟",
     "servings": 2,
     "prepMinutes": 10,
     "cookMinutes": 15,
@@ -1352,6 +1371,7 @@
   {
     "id": "moules_frites",
     "title": "Moules marinières",
+    "emoji": "🦪",
     "servings": 4,
     "prepMinutes": 15,
     "cookMinutes": 10,
@@ -1411,6 +1431,7 @@
   {
     "id": "nicoise_salad",
     "title": "Salade niçoise",
+    "emoji": "🥗",
     "servings": 4,
     "prepMinutes": 20,
     "cookMinutes": 10,
@@ -1491,6 +1512,7 @@
   {
     "id": "croquant_goat_salad",
     "title": "Salade de chèvre chaud",
+    "emoji": "🥗",
     "servings": 2,
     "prepMinutes": 10,
     "cookMinutes": 5,
@@ -1557,6 +1579,7 @@
   {
     "id": "chili_con_carne",
     "title": "Chili con carne",
+    "emoji": "🌶️",
     "servings": 6,
     "prepMinutes": 15,
     "cookMinutes": 60,
@@ -1643,6 +1666,7 @@
   {
     "id": "veggie_chili",
     "title": "Chili sin carne",
+    "emoji": "🌶️",
     "servings": 4,
     "prepMinutes": 15,
     "cookMinutes": 40,
@@ -1721,6 +1745,7 @@
   {
     "id": "chicken_fajitas",
     "title": "Fajitas au poulet",
+    "emoji": "🌯",
     "servings": 4,
     "prepMinutes": 15,
     "cookMinutes": 15,
@@ -1799,6 +1824,7 @@
   {
     "id": "guacamole",
     "title": "Guacamole",
+    "emoji": "🥑",
     "servings": 4,
     "prepMinutes": 10,
     "cookMinutes": 0,
@@ -1865,6 +1891,7 @@
   {
     "id": "chicken_curry",
     "title": "Curry de poulet au lait de coco",
+    "emoji": "🍛",
     "servings": 4,
     "prepMinutes": 15,
     "cookMinutes": 25,
@@ -1949,6 +1976,7 @@
   {
     "id": "dal",
     "title": "Dahl de lentilles corail",
+    "emoji": "🍛",
     "servings": 4,
     "prepMinutes": 10,
     "cookMinutes": 25,
@@ -2034,6 +2062,7 @@
   {
     "id": "chickpea_curry",
     "title": "Curry de pois chiches et épinards",
+    "emoji": "🍛",
     "servings": 4,
     "prepMinutes": 10,
     "cookMinutes": 20,
@@ -2105,6 +2134,7 @@
   {
     "id": "fried_rice",
     "title": "Riz sauté aux légumes et œufs",
+    "emoji": "🍚",
     "servings": 2,
     "prepMinutes": 10,
     "cookMinutes": 10,
@@ -2172,6 +2202,7 @@
   {
     "id": "beef_stir_fry",
     "title": "Bœuf sauté aux légumes",
+    "emoji": "🥢",
     "servings": 2,
     "prepMinutes": 15,
     "cookMinutes": 10,
@@ -2249,6 +2280,7 @@
   {
     "id": "pad_thai",
     "title": "Pad thaï aux crevettes",
+    "emoji": "🍜",
     "servings": 2,
     "prepMinutes": 15,
     "cookMinutes": 10,
@@ -2326,6 +2358,7 @@
   {
     "id": "tofu_stir_fry",
     "title": "Tofu sauté au sésame",
+    "emoji": "🥢",
     "servings": 2,
     "prepMinutes": 10,
     "cookMinutes": 10,
@@ -2397,6 +2430,7 @@
   {
     "id": "shakshuka",
     "title": "Chakchouka",
+    "emoji": "🍳",
     "servings": 2,
     "prepMinutes": 10,
     "cookMinutes": 20,
@@ -2475,6 +2509,7 @@
   {
     "id": "hummus",
     "title": "Houmous",
+    "emoji": "🫘",
     "servings": 4,
     "prepMinutes": 10,
     "cookMinutes": 0,
@@ -2541,6 +2576,7 @@
   {
     "id": "tabbouleh",
     "title": "Taboulé libanais",
+    "emoji": "🌿",
     "servings": 4,
     "prepMinutes": 20,
     "cookMinutes": 0,
@@ -2607,6 +2643,7 @@
   {
     "id": "couscous_veg",
     "title": "Couscous aux légumes",
+    "emoji": "🥘",
     "servings": 4,
     "prepMinutes": 20,
     "cookMinutes": 45,
@@ -2686,6 +2723,7 @@
   {
     "id": "greek_salad",
     "title": "Salade grecque",
+    "emoji": "🥗",
     "servings": 2,
     "prepMinutes": 10,
     "cookMinutes": 0,
@@ -2753,6 +2791,7 @@
   {
     "id": "spanish_omelette",
     "title": "Tortilla espagnole",
+    "emoji": "🥔",
     "servings": 4,
     "prepMinutes": 15,
     "cookMinutes": 30,
@@ -2807,6 +2846,7 @@
   {
     "id": "burger",
     "title": "Burger maison",
+    "emoji": "🍔",
     "servings": 4,
     "prepMinutes": 15,
     "cookMinutes": 10,
@@ -2891,6 +2931,7 @@
   {
     "id": "pancakes",
     "title": "Pancakes",
+    "emoji": "🥞",
     "servings": 4,
     "prepMinutes": 10,
     "cookMinutes": 15,
@@ -2959,6 +3000,7 @@
   {
     "id": "crepes",
     "title": "Crêpes",
+    "emoji": "🥞",
     "servings": 6,
     "prepMinutes": 10,
     "cookMinutes": 30,
@@ -3020,6 +3062,7 @@
   {
     "id": "overnight_oats",
     "title": "Porridge overnight aux fruits rouges",
+    "emoji": "🥣",
     "servings": 1,
     "prepMinutes": 5,
     "cookMinutes": 0,
@@ -3074,6 +3117,7 @@
   {
     "id": "chocolate_mousse",
     "title": "Mousse au chocolat",
+    "emoji": "🍫",
     "servings": 6,
     "prepMinutes": 20,
     "cookMinutes": 0,
@@ -3122,6 +3166,7 @@
   {
     "id": "apple_crumble",
     "title": "Crumble aux pommes",
+    "emoji": "🍎",
     "servings": 6,
     "prepMinutes": 15,
     "cookMinutes": 35,
@@ -3176,6 +3221,7 @@
   {
     "id": "yogurt_cake",
     "title": "Gâteau au yaourt",
+    "emoji": "🍰",
     "servings": 8,
     "prepMinutes": 10,
     "cookMinutes": 35,
@@ -3242,6 +3288,7 @@
   {
     "id": "tiramisu",
     "title": "Tiramisu",
+    "emoji": "☕",
     "servings": 6,
     "prepMinutes": 25,
     "cookMinutes": 0,
@@ -3301,6 +3348,7 @@
   {
     "id": "banana_bread",
     "title": "Banana bread",
+    "emoji": "🍌",
     "servings": 8,
     "prepMinutes": 15,
     "cookMinutes": 50,
@@ -3370,6 +3418,7 @@
   {
     "id": "fruit_salad",
     "title": "Salade de fruits frais",
+    "emoji": "🍓",
     "servings": 4,
     "prepMinutes": 15,
     "cookMinutes": 0,
@@ -3436,6 +3485,7 @@
   {
     "id": "lentil_salad",
     "title": "Salade de lentilles",
+    "emoji": "🥗",
     "servings": 4,
     "prepMinutes": 10,
     "cookMinutes": 25,
@@ -3508,6 +3558,7 @@
   {
     "id": "veggie_wrap",
     "title": "Wraps houmous et crudités",
+    "emoji": "🌯",
     "servings": 2,
     "prepMinutes": 10,
     "cookMinutes": 0,

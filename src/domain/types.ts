@@ -64,6 +64,7 @@ export type DietFlags = {
 export type Ingredient = {
   id: string
   name: string
+  emoji?: string
   aliases: string[]
   category: IngredientCategory
   defaultUnit: Unit
@@ -88,6 +89,7 @@ export type RecipeIngredient = {
 export type Recipe = {
   id: string
   title: string
+  emoji?: string
   description?: string
   imageUrl?: string
   servings: number
