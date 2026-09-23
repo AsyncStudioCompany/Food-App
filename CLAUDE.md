@@ -8,7 +8,7 @@ Application de recettes (web mobile-first, installable comme une app) avec trois
 
 La spécification complète (fonctionnalités, modèle de données, algorithme de correspondance, feuille de route) est dans [`docs/CONTEXTE.md`](docs/CONTEXTE.md). Lis-la avant toute nouvelle fonctionnalité.
 
-## Stack retenue (à confirmer avant de coder la première ligne)
+## Stack (validée)
 
 - **Front** : React + TypeScript + Vite, Tailwind CSS, React Router.
 - **PWA** : `vite-plugin-pwa` (installable sur mobile, fonctionne hors ligne pour le frigo).
@@ -22,6 +22,7 @@ La spécification complète (fonctionnalités, modèle de données, algorithme d
 - Mobile d'abord : chaque écran doit être utilisable à 360 px de large, cibles tactiles ≥ 44 px.
 - La logique métier (correspondance frigo ↔ recettes, filtres de préférences) vit dans des fonctions pures sous `src/domain/` et est testée unitairement. Aucun appel réseau dans `src/domain/`.
 - Les ingrédients sont toujours référencés par un **identifiant d'ingrédient canonique**, jamais par du texte libre (voir « Normalisation des ingrédients » dans `docs/CONTEXTE.md`).
+- Le frigo stocke des **quantités avec unité**. Le matching compare les quantités au besoin de la recette (ajusté aux portions) : chaque ingrédient est `enough` / `insufficient` / `missing`. Conversions d'unités dans `src/domain/units.ts`. Si une quantité est inconnue ou non convertible, on considère l'ingrédient comme disponible.
 - Les allergies et régimes sont des **filtres stricts** ; les goûts (cuisines, types de plats aimés) ne font que **modifier le tri**.
 
 ## Arborescence visée

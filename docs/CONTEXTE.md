@@ -22,19 +22,24 @@ Objectifs secondaires : réduire le gaspillage (mettre en avant les aliments qui
 - Recherche plein texte (titre, ingrédient).
 - Filtres : type de plat (entrée, plat, dessert, snack, boisson), cuisine (française, italienne, asiatique…), temps max, difficulté, régime.
 - Fiche recette :
-  - ingrédients avec quantités, **chaque ingrédient marqué « j'ai » / « il me manque »** selon le frigo ;
+  - ingrédients avec quantités, chacun marqué selon le frigo : **« j'ai »**, **« pas assez »** (ex. « j'ai 2 œufs / il en faut 4 ») ou **« il me manque »** ;
+  - ajustement du nombre de portions : les quantités sont recalculées **et la disponibilité aussi** (pour 2 personnes vous avez peut-être assez, pour 6 non) ;
   - étapes numérotées ; mode « cuisine » (écran qui reste allumé, grosses étapes) en bonus ;
-  - ajustement du nombre de portions (recalcul des quantités) ;
   - bouton « favori ».
 
 ### 3.2 Mon frigo
 
 - Ajout rapide d'aliments avec **autocomplétion** sur la base d'ingrédients canoniques (« tomat » → Tomate).
 - Rangement par catégorie : fruits & légumes, viandes & poissons, produits laitiers, féculents, épicerie, condiments, surgelés…
-- Quantité facultative (ex. « 6 œufs », « 500 g de pâtes »). En MVP, la **présence** seule suffit.
+- **Quantités saisies dès le MVP** (ex. « 6 œufs », « 500 g de pâtes », « 1 L de lait ») :
+  - le formulaire propose l'unité par défaut de l'ingrédient (pièces pour les œufs, g pour les pâtes, ml pour le lait) avec une quantité préremplie, modifiable ;
+  - boutons **+ / −** sur chaque aliment pour ajuster vite (pas de 1 pour les pièces, de 50 g / 100 ml sinon) ;
+  - un aliment à 0 disparaît du frigo (avec « annuler ») ;
+  - la quantité reste techniquement facultative : un aliment sans quantité compte comme « présent, quantité inconnue » (utile pour les restes ou les pots entamés).
 - Date de péremption facultative → les aliments qui périment bientôt sont mis en avant.
 - **Placard de base** (« toujours en stock ») : sel, poivre, huile, eau, sucre, farine… cochés une fois pour toutes et jamais comptés comme manquants.
-- Suppression rapide (glisser / bouton), et « j'ai cuisiné cette recette » → propose de retirer les ingrédients utilisés.
+- Suppression rapide (glisser / bouton).
+- **« J'ai cuisiné cette recette »** → écran de confirmation qui **déduit les quantités utilisées** du frigo (selon le nombre de portions choisi), chaque ligne restant modifiable avant validation.
 - Bonus plus tard : scan de ticket de caisse ou de code-barres (Open Food Facts).
 
 ### 3.3 Suggestions (« Que puis-je cuisiner ? »)
@@ -75,6 +80,9 @@ Bonus : apprentissage implicite (les recettes mises en favori ou marquées « cu
 type Ingredient = {
   id: string;              // "tomato"
   name: string;            // "Tomate" (affichage FR)
+  defaultUnit: Unit;       // unité proposée à la saisie ("piece" pour les œufs)
+  gramsPerPiece?: number;  // conversion pièce ↔ masse (1 œuf ≈ 60 g, 1 oignon ≈ 150 g)
+  gramsPerMl?: number;     // conversion volume ↔ masse (farine ≈ 0,55 ; lait ≈ 1,03)
   aliases: string[];       // ["tomates", "tomate cerise", "tomates pelées"]
   category: IngredientCategory;
   parentId?: string;       // "cherry_tomato" → parent "tomato"
@@ -114,7 +122,7 @@ type FridgeItem = {
   id: string;
   userId: string;
   ingredientId: string;
-  quantity?: number;
+  quantity?: number;       // absent = présent, quantité inconnue
   unit?: Unit;
   expiresOn?: string;      // ISO date
   addedAt: string;
@@ -134,6 +142,8 @@ type UserPreferences = {
 };
 ```
 
+Unités gérées : `g`, `kg`, `ml`, `cl`, `l`, `piece`, `tbsp` (c. à soupe = 15 ml), `tsp` (c. à café = 5 ml), `pinch` (pincée), `to_taste` (selon le goût). Les quantités sont stockées telles que saisies et converties uniquement au moment de la comparaison (`src/domain/units.ts`).
+
 Le régime et les allergènes d'une recette sont **déduits de ses ingrédients** (pas saisis à la main) pour éviter les incohérences.
 
 ## 5. Algorithme de correspondance frigo ↔ recettes
@@ -141,32 +151,42 @@ Le régime et les allergènes d'une recette sont **déduits de ses ingrédients*
 Fonction pure dans `src/domain/matching.ts`.
 
 ```
-entrée : recettes, frigo (set d'ingredientId), préférences
+entrée : recettes, frigo (FridgeItem[]), préférences, nombre de portions voulu
 pour chaque recette :
   1. FILTRE STRICT — exclure si :
      - un ingrédient (non optionnel ou optionnel non retirable) contient un allergène de l'utilisateur
      - un ingrédient est dans excludedIngredientIds
      - la recette est incompatible avec le régime
   2. ingrédients requis = ingrédients non optionnels, hors placard de base
-  3. possédé(i) = i ∈ frigo OU un parent/enfant de i ∈ frigo
-     (ex. « tomate cerise » dans le frigo satisfait « tomate »)
-  4. manquants = requis non possédés
-     couverture = (requis - manquants) / requis
-  5. score =
+  3. besoin(i) = quantité de la recette × (portions voulues / portions de la recette)
+     stock(i)  = somme des FridgeItem de i ou d'un parent/enfant de i
+                 (ex. « tomate cerise » dans le frigo satisfait « tomate »)
+  4. statut(i) :
+     - "missing"      si aucun stock
+     - "enough"       si stock ≥ besoin, ou si la comparaison est impossible :
+                      quantité du frigo inconnue, besoin en pincée / selon le goût,
+                      unités non convertibles faute de gramsPerPiece / gramsPerMl
+     - "insufficient" si stock < besoin
+     ratio(i) = enough → 1 ; missing → 0 ; insufficient → stock / besoin
+  5. couverture = moyenne des ratio(i) sur les requis
+     manquants  = requis "missing" ; insuffisants = requis "insufficient"
+  6. score =
        100 * couverture
      - 15 * |manquants|
+     -  7 * |insuffisants|
      + 10 si cuisine ∈ favoriteCuisines
      +  5 par tag ∈ favoriteTags (plafonné)
      +  5 par ingrédient adoré présent
      +  8 par ingrédient du frigo qui périme dans ≤ 3 jours et utilisé
      -  10 si temps total > maxTotalMinutes
 sortie : recettes classées, groupées en
-  - faisable (0 manquant)
-  - presque (1–2 manquants)
+  - faisable (tout "enough")
+  - presque (1–2 ingrédients "missing" ou "insufficient", avec le détail :
+    « il manque 2 œufs », « il manque le basilic »)
   - le reste (masqué ou en bas)
 ```
 
-Les poids sont des constantes nommées et ajustables ; les tests unitaires doivent couvrir chaque règle (allergène exclu, parent/enfant, placard ignoré, bonus péremption…).
+Les poids sont des constantes nommées et ajustables ; les tests unitaires doivent couvrir chaque règle (allergène exclu, parent/enfant, placard ignoré, bonus péremption, quantité insuffisante, recalcul par portions, conversions d'unités, quantité inconnue…).
 
 ## 6. Normalisation des ingrédients (point difficile)
 
@@ -217,7 +237,8 @@ Parcours clé à tester de bout en bout : *onboarding → ajout de 5 aliments au
 
 **Phase 1 — MVP local (sans backend)**
 - Catalogue + fiche recette.
-- Frigo avec autocomplétion, stocké en local.
+- Frigo avec autocomplétion et quantités (+ / −), stocké en local.
+- Comparaison des quantités dans le matching, recalcul par portions, déduction du frigo après « j'ai cuisiné ».
 - Préférences + onboarding.
 - Écran « Que puis-je cuisiner ? » avec l'algorithme de la section 5.
 
@@ -228,7 +249,7 @@ Parcours clé à tester de bout en bout : *onboarding → ajout de 5 aliments au
 **Phase 3 — Confort**
 - Dates de péremption et notifications.
 - Liste de courses.
-- Ajustement des portions, mode cuisine.
+- Mode cuisine.
 
 **Phase 4 — Mobile natif et extension**
 - Capacitor : build iOS/Android, publication sur les stores.
@@ -237,6 +258,5 @@ Parcours clé à tester de bout en bout : *onboarding → ajout de 5 aliments au
 ## 11. Questions ouvertes
 
 - Nom définitif et identité visuelle de l'app.
-- Gestion fine des quantités dans le matching (« j'ai 2 œufs, la recette en demande 4 ») : MVP = présence seule.
 - Monétisation éventuelle (aucune prévue au MVP).
 - Langues : français uniquement au départ ; prévoir l'i18n (clés de traduction) dès le début pour ne pas bloquer l'anglais plus tard.
