@@ -12,6 +12,7 @@ App mobile de recettes anti-gaspillage (PWA, en français, au tutoiement). L'uti
 - PWA : `vite-plugin-pwa` ; les photos TheMealDB sont mises en cache.
 - IA : API Claude (`@anthropic-ai/sdk`, sortie structurée zod) côté serveur uniquement, dans `server/recipeAI.ts`. Servie sur `/api/generate-recipe` par le serveur Vite local (`npm run dev` / `npm start`). Pour une mise en ligne, la fonction Supabase `supabase/functions/generate-recipe` réutilise le même code.
 - Usage actuel : **en local sur le Mac** (`Mijote.command` ou `npm start`), l'iPhone passe par le Wi-Fi. Pas d'hébergement pour l'instant. Voir [`docs/INSTALLATION.md`](docs/INSTALLATION.md). La clé `ANTHROPIC_API_KEY` ne doit jamais arriver côté client.
+- Comptes : Supabase Auth + table `vaults` (`supabase/migrations/0001_vaults.sql`), données **chiffrées de bout en bout** (`src/crypto/`, `src/account/`). Rien de lisible ne doit partir vers le serveur de comptes ; les données locales sont chiffrées aussi (`src/state/persist.ts`).
 - Tests : Vitest + Testing Library. Lint : oxlint.
 
 ## Conventions
@@ -24,7 +25,7 @@ App mobile de recettes anti-gaspillage (PWA, en français, au tutoiement). L'uti
 - Quantités en unité de base (`g`, `cl`, `pc`) ; conversions dans `src/domain/units.ts`. Statut par ingrédient : `ok` / `partial` / `missing`.
 - Régime et allergies = **filtres stricts** ; cuisines préférées et aliments qui périment bientôt = **bonus de tri** (score dans `src/domain/matching.ts`).
 - Zones de sécurité : `var(--safe-top)` / `var(--safe-bottom)` / `var(--top)`, jamais `env()` directement.
-- Les bottom sheets se rendent **hors** du conteneur qui défile (sinon ils suivent le défilement).
+- Les bottom sheets (`ui/Sheet.tsx`) sont rendus dans `.app` via un portail React : ils ne suivent jamais le défilement d'un écran.
 - Animations : keyframes `mj-*` de `styles.css`, coupées par `prefers-reduced-motion`.
 
 ## Arborescence
@@ -33,7 +34,9 @@ App mobile de recettes anti-gaspillage (PWA, en français, au tutoiement). L'uti
 src/
   domain/      # types + logique pure : unités, péremption, régime, matching/score, recherche, étapes, IA (validation)
   data/        # catalogue d'ingrédients et de recettes
-  state/       # store persistant (localStorage), photos TheMealDB, client IA, listes
+  state/       # store, données locales chiffrées, photos, client IA, listes
+  crypto/      # chiffrement de bout en bout (WebCrypto) et clés dans IndexedDB
+  account/     # comptes Supabase et synchro chiffrée
   ui/          # briques de la DA : cœur, en-tête, cartes, sheet, barre d'onglets, illustrations animées
   screens/     # Frigo, Recettes (résultats), Fiche, Chercher, Listes, Profil, sheets, « Bon appétit ! »
 server/        # génération de recettes par l'IA (partagé serveur local / Supabase)

@@ -1,5 +1,6 @@
 import { ALLERGENS, CUISINES, DIETS, type Prefs } from '../domain/types'
 import { setState, useStore } from '../state/store'
+import { AccountSection } from './AccountSection'
 
 export function ProfileScreen() {
   const p = useStore((s) => s.prefs)
@@ -14,6 +15,7 @@ export function ProfileScreen() {
           On cache les recettes qui ne te vont pas, promis.
         </div>
       </div>
+      <AccountSection />
       <section style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
         <h2 className="caps" style={{ margin: 0 }}>
           Régime

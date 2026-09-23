@@ -37,9 +37,32 @@ Mijote apparaît dans le Dock avec son icône et s'ouvre dans sa propre fenêtre
 
 Limites du mode local sur l'iPhone : le Mac doit être allumé avec Mijote lancée, et l'iPhone n'a pas de mode hors ligne (iOS l'exige en HTTPS).
 
+## Activer les comptes (synchro chiffrée entre tes appareils)
+
+Sans compte, tout marche, mais chaque appareil a son propre frigo. Avec un compte, tu retrouves les mêmes données sur l'iPhone et le Mac.
+
+1. Crée un projet gratuit sur [supabase.com](https://supabase.com).
+2. Dans **SQL Editor**, colle le contenu de `supabase/migrations/0001_vaults.sql` et clique sur **Run**.
+3. Pour une app perso, tu peux couper l'e-mail de confirmation : **Authentication → Sign In / Providers → Email → Confirm email** (désactivé). Sinon, clique sur le lien reçu avant ta première connexion.
+4. Dans **Project Settings → API**, copie l'**URL** du projet et la clé **anon public**, puis ajoute-les dans `.env.local` :
+   ```
+   VITE_SUPABASE_URL=https://xxxx.supabase.co
+   VITE_SUPABASE_ANON_KEY=la-cle-anon
+   ```
+   Sur Vercel, ajoute les mêmes variables dans **Settings → Environment Variables**, puis redéploie.
+5. Relance Mijote : dans **Profil → Ton compte**, crée ton compte, puis connecte-toi avec le même e-mail et mot de passe sur l'autre appareil.
+
+### Ce qui est chiffré
+
+- **Tout ce que tu enregistres** (frigo, préférences, favoris, listes, recettes inventées) est chiffré sur ton appareil (AES-256) avant d'être envoyé. Supabase ne stocke que des données illisibles.
+- **Ton mot de passe ne quitte jamais l'appareil** : on en dérive un code de connexion (envoyé à Supabase) et une clé de chiffrement (qui reste chez toi).
+- **Sur l'appareil aussi**, les données sont enregistrées chiffrées, avec une clé que le navigateur garde sans pouvoir l'exporter.
+- **Mot de passe oublié = données perdues** : personne ne peut les déchiffrer à ta place. Garde-le dans un gestionnaire de mots de passe.
+- Ce qui reste lisible : ton e-mail (pour te connecter) et, quand tu utilises l'IA, le contenu du frigo envoyé pour inventer la recette.
+
 ## À savoir
 
-- **Chaque appareil et chaque navigateur garde ses propres données** (frigo, favoris, listes, préférences). Le frigo de l'iPhone n'est pas celui du Mac.
+- **Sans compte, chaque appareil et chaque navigateur garde ses propres données** (frigo, favoris, listes, préférences). Avec un compte, elles sont synchronisées.
 - Pour récupérer une nouvelle version : `git pull` dans le dossier, puis relance `Mijote.command`.
 
 ## Plus tard : en ligne

@@ -62,9 +62,18 @@ Un ingrédient est `ok` si la quantité du frigo couvre le besoin, `partial` s'i
 - Sur l'appareil (`localStorage`) : frigo (quantité, unité, date de péremption), préférences, favoris, listes, recettes inventées. Photos TheMealDB résolues et mises en cache.
 - Photos : chaque recette du catalogue a une photo vérifiée à la main (celle de TheMealDB pour les recettes importées ; pour les recettes maison, le même plat sur TheMealDB ou une photo sous licence libre trouvée avec Openverse, créditée sur la fiche). Une recette de l'IA ne prend une photo TheMealDB que si le nom du plat contient tous les mots cherchés. Sinon, fond rayé : mieux vaut pas de photo qu'une photo d'un autre plat.
 
-## 6. Suite possible
+## 6. Comptes et chiffrement
 
-- Comptes et synchro (Supabase Auth + tables avec RLS) pour retrouver son frigo sur plusieurs appareils. Pas encore fait : aujourd'hui tout reste sur l'appareil.
+- Comptes Supabase (e-mail + mot de passe), activés par `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY`. Sans eux, l'app fonctionne sans compte.
+- **Chiffrement de bout en bout** (`src/crypto/vault.ts`) : PBKDF2-SHA256 (600 000 itérations) puis HKDF dérivent du mot de passe un mot de passe de connexion (seul envoyé à Supabase) et une clé qui emballe une clé de données aléatoire (AES-GCM 256). Les données sauvegardées sont chiffrées avec cette clé ; la table `vaults` (une ligne par utilisateur, RLS) ne contient que du chiffré.
+- Sur l'appareil, les données sont chiffrées avec une clé locale non exportable gardée dans IndexedDB (`src/state/persist.ts`) ; la clé de données du compte y est aussi gardée, non exportable, pour rouvrir l'app sans mot de passe.
+- Synchro (`src/account/account.ts`) : envoi 1,5 s après chaque changement, récupération au démarrage et au retour sur l'app ; la dernière écriture gagne. Première connexion d'un appareil : les données du compte remplacent celles de l'appareil (un compte neuf reprend celles de l'appareil).
+- Déconnexion : les données de l'appareil sont effacées (elles restent dans le compte). « Supprimer mes données » efface la ligne du serveur.
+- Limites : mot de passe oublié = données perdues ; pas encore de changement de mot de passe ni de suppression de l'utilisateur Supabase lui-même (à faire depuis le tableau de bord).
+
+## 7. Suite possible
+
+- Changement de mot de passe (réemballer la clé de données) et suppression complète du compte.
 - Liste de courses à partir des ingrédients manquants.
 - Rappels de péremption (notifications).
 - Emballage natif avec Capacitor.
