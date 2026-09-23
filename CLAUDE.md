@@ -10,11 +10,12 @@ La spécification complète (fonctionnalités, modèle de données, algorithme d
 
 ## Stack (validée)
 
-- **Front** : React + TypeScript + Vite, Tailwind CSS, React Router.
+- **Front** : React 19 + TypeScript + Vite, Tailwind CSS 4, React Router.
 - **PWA** : `vite-plugin-pwa` (installable sur mobile, fonctionne hors ligne pour le frigo).
 - **App mobile native (plus tard)** : Capacitor pour emballer le même code en app iOS/Android.
 - **Données** : Supabase (Postgres + Auth + stockage d'images). En MVP, un mode local (`localStorage`/IndexedDB) suffit pour le frigo et les préférences.
 - **Tests** : Vitest + Testing Library ; Playwright pour les parcours principaux.
+- **Lint** : oxlint.
 
 ## Conventions
 
@@ -40,9 +41,15 @@ src/
   seed/          # recettes et ingrédients de départ (JSON)
 ```
 
-## Commandes (une fois le projet initialisé)
+## Commandes
 
 - `npm run dev` — serveur de développement
-- `npm run build` — build de production
-- `npm test` — tests unitaires
-- `npm run lint` — lint + typecheck
+- `npm run build` — typecheck + build de production (génère aussi le service worker PWA)
+- `npm test` — tests unitaires (Vitest), `npm run test:watch` en continu
+- `npm run lint` — oxlint + typecheck
+
+## Données de départ
+
+- `src/seed/ingredients.json` et `src/seed/recipes.json` sont la source de vérité, chargés via `src/data/seed.ts`.
+- `src/seed/seed.test.ts` vérifie leur cohérence (identifiants uniques, parents existants, unités et allergènes valides, chaque ingrédient de recette existe). Toute nouvelle recette doit passer ces tests.
+- Pour une recette : quantités pour `servings` portions, unité mesurable (g, ml, pièce, c. à soupe…) dès que possible, `optional: true` pour ce qui n'est pas indispensable.
