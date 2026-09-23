@@ -40,7 +40,7 @@ export default defineConfig(({ mode }) => {
       recipeApi(env.ANTHROPIC_API_KEY),
       VitePWA({
         registerType: 'autoUpdate',
-        includeAssets: ['favicon.svg'],
+        includeAssets: ['favicon.svg', 'apple-touch-icon.png'],
         manifest: {
           name: 'Mijote',
           short_name: 'Mijote',
@@ -50,7 +50,11 @@ export default defineConfig(({ mode }) => {
           background_color: '#121110',
           display: 'standalone',
           start_url: '/',
-          icons: [{ src: 'favicon.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'any' }],
+          icons: [
+            { src: 'icon-192.png', sizes: '192x192', type: 'image/png' },
+            { src: 'icon-512.png', sizes: '512x512', type: 'image/png' },
+            { src: 'icon-maskable-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
+          ],
         },
         workbox: {
           navigateFallbackDenylist: [/^\/api\//],
