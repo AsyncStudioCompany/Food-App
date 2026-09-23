@@ -56,16 +56,26 @@ export interface Recipe {
   servings: number
   ingredients: RecipeIngredient[]
   steps: string[]
-  /** English search terms for the TheMealDB stand-in photo, most specific first. */
+  /** English words to look for a photo of an AI-invented dish on TheMealDB (exact name match only). */
   photoTerms: string[]
-  /** Exact photo of the dish (imported recipes); takes precedence over `photoTerms`. */
+  /** Photo of the dish, chosen by hand; takes precedence over `photoTerms`. */
   photoUrl?: string
+  /** Author and licence, when the photo's licence asks for credit. */
+  photoCredit?: PhotoCredit
   /** Pantry items used besides salt, pepper and oil (French, lowercase). */
   pantry?: string[]
   /** Where an imported recipe comes from. */
   source?: { name: 'TheMealDB'; id: string }
   /** Set on recipes invented by the AI for this user. */
   generated?: boolean
+}
+
+export interface PhotoCredit {
+  author: string
+  /** "CC BY 2.0", "CC BY-SA 2.0", "Domaine public"… */
+  license: string
+  /** Page of the original photo. */
+  url: string
 }
 
 export interface FridgeItem {

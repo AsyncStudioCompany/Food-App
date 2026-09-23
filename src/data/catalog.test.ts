@@ -19,7 +19,6 @@ describe('catalog', () => {
     for (const r of RECIPES) {
       expect(CUISINES, r.id).toContain(r.cuisine)
       expect(r.steps.length, r.id).toBeGreaterThanOrEqual(2)
-      expect(r.photoTerms.length > 0 || !!r.photoUrl, `${r.id} has a photo`).toBe(true)
       expect(r.servings, r.id).toBeGreaterThanOrEqual(1)
       expect(r.minutes, r.id).toBeGreaterThan(0)
       for (const i of r.ingredients) {
@@ -38,5 +37,16 @@ describe('catalog', () => {
     }
     const photos = imported.map((r) => r.photoUrl)
     expect(new Set(photos).size).toBe(photos.length)
+  })
+
+  it('gives every house recipe a checked photo, credited when needed', () => {
+    const house = RECIPES.filter((r) => !r.source)
+    // r14: no photo found that shows this dish, so it keeps the striped background.
+    expect(house.filter((r) => !r.photoUrl).map((r) => r.id)).toEqual(['r14'])
+    for (const r of house.filter((x) => x.photoUrl && !x.photoUrl.includes('themealdb.com'))) {
+      expect(r.photoCredit, r.id).toMatchObject({ author: expect.any(String), license: expect.any(String), url: expect.stringMatching(/^https:/) })
+    }
+    const urls = RECIPES.map((r) => r.photoUrl).filter(Boolean)
+    expect(new Set(urls).size).toBe(urls.length)
   })
 })

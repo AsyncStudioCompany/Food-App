@@ -19,7 +19,7 @@ const DraftSchema = z.object({
     .array(z.object({ id: z.enum(ids), qty: z.number().describe("Quantité dans l'unité du catalogue") }))
     .describe('Ingrédients du catalogue uniquement, sans les basiques du placard'),
   steps: z.array(z.string()).describe('3 à 6 étapes courtes, au tutoiement'),
-  photoQuery: z.string().describe('1 ou 2 mots en anglais pour chercher une photo du plat (ex. "chicken curry")'),
+  photoQuery: z.string().describe('Nom anglais usuel du plat, 1 à 3 mots, pour trouver sa photo (ex. "chicken curry", "omelette")'),
 })
 
 const UNIT_WORD = { g: 'grammes', cl: 'centilitres', pc: 'pièces' } as const

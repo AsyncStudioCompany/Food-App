@@ -42,8 +42,8 @@ export default defineConfig(({ mode }) => {
           navigateFallbackDenylist: [/^\/api\//],
           runtimeCaching: [
             {
-              // TheMealDB stand-in photos and search results, so seen recipes keep their photo offline.
-              urlPattern: /^https:\/\/www\.themealdb\.com\//,
+              // Recipe photos (TheMealDB, Flickr, Wikimedia) and TheMealDB searches, so seen recipes keep their photo offline.
+              urlPattern: /^https:\/\/(www\.themealdb\.com|live\.staticflickr\.com|upload\.wikimedia\.org)\//,
               handler: 'CacheFirst',
               options: {
                 cacheName: 'themealdb',

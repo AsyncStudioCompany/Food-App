@@ -177,6 +177,16 @@ function RecipeView({ recipeId }: { recipeId: string }) {
           })}
         </div>
 
+        {recipe.photoCredit && (
+          <div className="muted" style={{ padding: '18px 20px 0', font: '12px var(--font)' }}>
+            Photo :{' '}
+            <a href={recipe.photoCredit.url} target="_blank" rel="noreferrer" style={{ color: 'inherit' }}>
+              {recipe.photoCredit.author}
+            </a>
+            , {recipe.photoCredit.license}
+          </div>
+        )}
+
         {recipe.generated && (
           <div style={{ padding: '18px 20px 0' }}>
             <button type="button" style={{ height: 40, font: '600 14px var(--font)', color: 'var(--miss)' }} onClick={remove}>
