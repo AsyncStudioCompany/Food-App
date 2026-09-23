@@ -1,50 +1,52 @@
-# Installer Mijote sur iPhone et Mac
+# Utiliser Mijote sur ton Mac (et ton iPhone)
 
-Mijote est une app web installable (PWA). On la met en ligne une fois, puis on l'ajoute à l'écran d'accueil de l'iPhone et au Dock du Mac. Elle s'ouvre alors en plein écran avec son icône, comme une app, et le frigo marche hors ligne.
+Mijote tourne en local sur ton Mac : rien n'est mis en ligne. L'iPhone peut s'en servir sur le même Wi-Fi tant que le Mac l'a lancée.
 
-## 1. Mettre l'app en ligne (Netlify, gratuit)
+## Première fois
 
-1. Fusionne la branche de travail dans `main` sur GitHub (ou choisis directement la branche à l'étape 3).
-2. Va sur [netlify.com](https://www.netlify.com) et connecte-toi **avec ton compte GitHub**.
-3. **Add new site → Import an existing project → GitHub**, puis choisis le dépôt `Food-App` et la branche.
-   Les réglages de build sont lus dans `netlify.toml` : il n'y a rien à remplir. Clique sur **Deploy**.
-4. Au bout d'une minute, tu obtiens une adresse du type `https://mijote-xxxx.netlify.app`. Tu peux la renommer dans **Site configuration → Change site name**.
+1. **Installe Node.js** : télécharge la version « LTS » sur [nodejs.org](https://nodejs.org) et installe-la.
+2. **Récupère le projet** : dans le Terminal, `git clone https://github.com/AsyncStudioCompany/Food-App.git`.
+   (Si tu télécharges plutôt le ZIP depuis GitHub, macOS peut bloquer le lanceur la première fois : clic droit sur `Mijote.command` → **Ouvrir** → **Ouvrir**.)
+3. **Pour l'IA** (facultatif) : copie `.env.example` en `.env.local` et renseigne ta clé `ANTHROPIC_API_KEY` (à créer sur [console.anthropic.com](https://console.anthropic.com)). Sans clé, coupe « Recettes inventées par l'IA » dans le Profil : tout le reste marche.
 
-### Activer l'IA (facultatif)
+## Lancer Mijote
 
-1. Crée une clé sur [console.anthropic.com](https://console.anthropic.com) → **API Keys**. Chaque recette inventée coûte quelques centimes.
-2. Dans Netlify : **Site configuration → Environment variables → Add a variable** : `ANTHROPIC_API_KEY` = ta clé.
-3. **Deploys → Trigger deploy** pour que la clé soit prise en compte.
+**Double-clique sur `Mijote.command`** dans le dossier du projet.
 
-Sans clé, tout le reste marche : coupe simplement « Recettes inventées par l'IA » dans le Profil.
+- La première fois, il installe ce qu'il faut (1 à 2 minutes).
+- Il ouvre ensuite Mijote dans ton navigateur, sur `http://localhost:4173`.
+- La fenêtre du Terminal affiche aussi l'adresse pour l'iPhone, du type `http://192.168.x.x:4173`.
+- **Laisse cette fenêtre ouverte** pendant que tu utilises l'app. Ferme-la pour arrêter Mijote.
 
-## 2. Sur l'iPhone
+Depuis un terminal, `npm start` fait la même chose (sans ouvrir le navigateur).
 
-1. Ouvre l'adresse du site dans **Safari**.
-2. Touche le bouton **Partager** (carré avec une flèche), puis **Sur l'écran d'accueil**, puis **Ajouter**.
-3. Lance Mijote depuis son icône : elle s'ouvre en plein écran, sans barre d'adresse.
+## En faire une app sur le Mac
 
-## 3. Sur le Mac
+Une fois Mijote ouverte sur `http://localhost:4173` :
 
-- **Safari** (macOS Sonoma ou plus récent) : ouvre l'adresse, puis **Fichier → Ajouter au Dock**.
-- **Chrome** : ouvre l'adresse, puis clique sur l'icône d'installation à droite de la barre d'adresse.
+- **Safari** (macOS Sonoma ou plus récent) : **Fichier → Ajouter au Dock**.
+- **Chrome** : icône d'installation à droite de la barre d'adresse.
 
-L'app apparaît dans le Dock et le Launchpad et s'ouvre dans sa propre fenêtre.
+Mijote apparaît dans le Dock avec son icône et s'ouvre dans sa propre fenêtre. Après une première visite, elle se rouvre même si `Mijote.command` n'est pas lancé (le frigo, les recettes et les photos déjà vues sont gardés hors ligne). Pour l'IA et les nouvelles photos, relance `Mijote.command`.
+
+## Sur l'iPhone (même Wi-Fi)
+
+1. Lance `Mijote.command` sur le Mac.
+2. Sur l'iPhone, ouvre dans **Safari** l'adresse affichée par le Terminal (`http://192.168.x.x:4173`).
+3. **Partager → Sur l'écran d'accueil** pour avoir l'icône.
+
+Limites du mode local sur l'iPhone : le Mac doit être allumé avec Mijote lancée, et l'iPhone n'a pas de mode hors ligne (iOS l'exige en HTTPS).
 
 ## À savoir
 
-- **Chaque appareil garde ses propres données** (frigo, favoris, listes, préférences). Pour avoir le même frigo sur l'iPhone et le Mac, il faudra ajouter les comptes avec synchro (Supabase).
-- Les mises à jour arrivent seules : à chaque déploiement sur Netlify, l'app se met à jour à la prochaine ouverture.
-- Sur iPhone, les données d'une app installée sur l'écran d'accueil sont séparées de celles de Safari.
+- **Chaque appareil et chaque navigateur garde ses propres données** (frigo, favoris, listes, préférences). Le frigo de l'iPhone n'est pas celui du Mac.
+- Pour récupérer une nouvelle version : `git pull` dans le dossier, puis relance `Mijote.command`.
 
-## Lancer l'app en local sur le Mac (développement)
+## Plus tard : en ligne
 
-1. Installe [Node.js](https://nodejs.org) 22 ou plus récent.
-2. Dans le dossier du projet : `npm install`.
-3. Pour l'IA : copie `.env.example` en `.env.local` et renseigne `ANTHROPIC_API_KEY`.
-4. `npm run dev`, puis ouvre l'adresse affichée (`http://localhost:5173`).
-5. Pour l'essayer sur l'iPhone sur le même Wi-Fi : `npm run dev -- --host`, puis ouvre l'adresse « Network » dans Safari. L'installation hors ligne demande en revanche le site en HTTPS (étape 1).
+Le projet est prêt pour Netlify (`netlify.toml`, fonction `netlify/functions/generate-recipe.mts`) :
 
-## Et une vraie app de l'App Store ?
+1. Sur [netlify.com](https://www.netlify.com), connecte-toi avec GitHub et importe le dépôt. Les réglages de build sont lus dans `netlify.toml`.
+2. Ajoute `ANTHROPIC_API_KEY` dans **Site configuration → Environment variables**, puis redéploie.
 
-C'est possible plus tard avec Capacitor, qui emballe le même code en app iOS et macOS. Il faut alors Xcode sur le Mac et un compte Apple Developer (99 €/an). Avec un compte Apple gratuit, l'app installée depuis Xcode expire au bout de 7 jours.
+L'app devient alors installable partout, hors ligne compris, sans laisser le Mac allumé. Et une vraie app de l'App Store reste possible avec Capacitor : il faudra Xcode et un compte Apple Developer (99 €/an).

@@ -11,7 +11,7 @@ App mobile de recettes anti-gaspillage (PWA, en français, au tutoiement). L'uti
 - Polices Geist et Geist Mono via `@fontsource` (hors ligne).
 - PWA : `vite-plugin-pwa` ; les photos TheMealDB sont mises en cache.
 - IA : API Claude (`@anthropic-ai/sdk`, sortie structurée zod) côté serveur uniquement, dans `server/recipeAI.ts`. Servie sur `/api/generate-recipe` par Vite en dev et par une fonction Netlify en production (`netlify/functions/generate-recipe.mts`). Une variante Supabase existe (`supabase/functions/generate-recipe`).
-- Déploiement : Netlify (`netlify.toml`), installation sur iPhone et Mac comme PWA : voir [`docs/INSTALLATION.md`](docs/INSTALLATION.md). La clé `ANTHROPIC_API_KEY` ne doit jamais arriver côté client.
+- Usage actuel : **en local sur le Mac** (`Mijote.command` ou `npm start`), l'iPhone passe par le Wi-Fi. Netlify est prêt pour plus tard. Voir [`docs/INSTALLATION.md`](docs/INSTALLATION.md). La clé `ANTHROPIC_API_KEY` ne doit jamais arriver côté client.
 - Tests : Vitest + Testing Library. Lint : oxlint.
 
 ## Conventions
@@ -45,6 +45,7 @@ docs/design/   # handoff de design (référence visuelle)
 ## Commandes
 
 - `npm run dev` : serveur de dev, avec l'API IA si `ANTHROPIC_API_KEY` est dans `.env.local` (voir `.env.example`)
+- `npm start` : build + serveur local sur le port 4173, ouvert au réseau local (c'est ce que lance `Mijote.command`)
 - `npm run build` : typecheck + build PWA
 - `npm test` : tests unitaires et parcours (Vitest)
 - `npm run lint` : oxlint + typecheck
