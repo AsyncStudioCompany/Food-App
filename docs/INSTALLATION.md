@@ -44,9 +44,6 @@ Limites du mode local sur l'iPhone : le Mac doit être allumé avec Mijote lanc�
 
 ## Plus tard : en ligne
 
-Le projet est prêt pour Netlify (`netlify.toml`, fonction `netlify/functions/generate-recipe.mts`) :
+Rien n'est hébergé pour l'instant. Quand tu voudras l'app sans laisser le Mac allumé (avec le mode hors ligne sur l'iPhone), il suffira d'un hébergement de site statique en HTTPS, plus un endroit où faire tourner l'IA. La fonction Supabase `supabase/functions/generate-recipe` est déjà prête pour l'IA, et Supabase servira aussi pour les comptes.
 
-1. Sur [netlify.com](https://www.netlify.com), connecte-toi avec GitHub et importe le dépôt. Les réglages de build sont lus dans `netlify.toml`.
-2. Ajoute `ANTHROPIC_API_KEY` dans **Site configuration → Environment variables**, puis redéploie.
-
-L'app devient alors installable partout, hors ligne compris, sans laisser le Mac allumé. Et une vraie app de l'App Store reste possible avec Capacitor : il faudra Xcode et un compte Apple Developer (99 €/an).
+Une vraie app de l'App Store reste possible avec Capacitor : il faudra Xcode et un compte Apple Developer (99 €/an).

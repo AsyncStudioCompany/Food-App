@@ -10,8 +10,8 @@ App mobile de recettes anti-gaspillage (PWA, en français, au tutoiement). L'uti
 - React 19 + TypeScript + Vite, React Router, CSS pur (`src/styles.css`, variables du thème en haut du fichier). Pas de Tailwind, **pas de bibliothèque d'icônes** : cœurs, coches, loupe et « + » sont dessinés en CSS ou en texte.
 - Polices Geist et Geist Mono via `@fontsource` (hors ligne).
 - PWA : `vite-plugin-pwa` ; les photos TheMealDB sont mises en cache.
-- IA : API Claude (`@anthropic-ai/sdk`, sortie structurée zod) côté serveur uniquement, dans `server/recipeAI.ts`. Servie sur `/api/generate-recipe` par Vite en dev et par une fonction Netlify en production (`netlify/functions/generate-recipe.mts`). Une variante Supabase existe (`supabase/functions/generate-recipe`).
-- Usage actuel : **en local sur le Mac** (`Mijote.command` ou `npm start`), l'iPhone passe par le Wi-Fi. Netlify est prêt pour plus tard. Voir [`docs/INSTALLATION.md`](docs/INSTALLATION.md). La clé `ANTHROPIC_API_KEY` ne doit jamais arriver côté client.
+- IA : API Claude (`@anthropic-ai/sdk`, sortie structurée zod) côté serveur uniquement, dans `server/recipeAI.ts`. Servie sur `/api/generate-recipe` par le serveur Vite local (`npm run dev` / `npm start`). Pour une mise en ligne, la fonction Supabase `supabase/functions/generate-recipe` réutilise le même code.
+- Usage actuel : **en local sur le Mac** (`Mijote.command` ou `npm start`), l'iPhone passe par le Wi-Fi. Pas d'hébergement pour l'instant. Voir [`docs/INSTALLATION.md`](docs/INSTALLATION.md). La clé `ANTHROPIC_API_KEY` ne doit jamais arriver côté client.
 - Tests : Vitest + Testing Library. Lint : oxlint.
 
 ## Conventions
@@ -36,9 +36,8 @@ src/
   state/       # store persistant (localStorage), photos TheMealDB, client IA, listes
   ui/          # briques de la DA : cœur, en-tête, cartes, sheet, barre d'onglets, illustrations animées
   screens/     # Frigo, Recettes (résultats), Fiche, Chercher, Listes, Profil, sheets, « Bon appétit ! »
-server/        # génération de recettes par l'IA (partagé dev / Netlify / Supabase)
-netlify/       # fonction Netlify /api/generate-recipe
-supabase/      # fonction Edge generate-recipe (variante)
+server/        # génération de recettes par l'IA (partagé serveur local / Supabase)
+supabase/      # fonction Edge generate-recipe (pour une future mise en ligne)
 docs/design/   # handoff de design (référence visuelle)
 ```
 
