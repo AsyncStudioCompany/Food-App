@@ -1,65 +1,112 @@
 import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router'
-import { beforeEach, describe, expect, it } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import App from './App'
-import { fridgeStore } from './data/fridgeStore'
-import { preferencesStore } from './data/preferencesStore'
-import { defaultPreferences } from './domain/preferences'
-import { ingredients } from './data/seed'
+import { getState, resetState } from './state/store'
 
-function renderApp(path = '/') {
-  render(
+function renderAt(path: string) {
+  return render(
     <MemoryRouter initialEntries={[path]}>
       <App />
     </MemoryRouter>,
   )
 }
 
-async function addToFridge(name: string, increments = 0) {
-  await userEvent.click(screen.getByRole('button', { name: new RegExp(`^${name}`) }))
-  const dialog = screen.getByRole('dialog')
-  for (let i = 0; i < increments; i++) await userEvent.click(within(dialog).getByRole('button', { name: 'Augmenter' }))
-  await userEvent.click(within(dialog).getByRole('button', { name: 'Ajouter au frigo' }))
-}
+beforeEach(() => {
+  // No network in tests: TheMealDB searches find nothing, photos stay striped.
+  vi.stubGlobal('fetch', vi.fn(async () => new Response(JSON.stringify({ meals: null }))))
+  resetState()
+})
+afterEach(() => vi.unstubAllGlobals())
 
-describe('App', () => {
-  beforeEach(() => {
-    localStorage.clear()
-    fridgeStore.set([])
-    preferencesStore.set(defaultPreferences(ingredients))
+describe('Mijote', () => {
+  it('fridge → recipes → recipe → "J\'ai cuisiné" takes food out of the fridge', async () => {
+    const user = userEvent.setup()
+    renderAt('/')
+    expect(screen.getByRole('heading', { name: '0 aliment dans ton frigo.' })).toBeInTheDocument()
+
+    for (const name of ['Œufs', 'Crème fraîche']) {
+      await user.click(screen.getByRole('button', { name }))
+      await user.click(screen.getByRole('button', { name: 'Ajouter au frigo' }))
+    }
+    expect(screen.getByRole('heading', { name: '2 aliments dans ton frigo.' })).toBeInTheDocument()
+    expect(getState().fridge.oeufs).toMatchObject({ qty: 6, unit: 'pc' })
+
+    await user.click(screen.getByRole('button', { name: /Trouver des recettes/ }))
+    expect(screen.getByRole('heading', { name: /recettes? avec ce que t'as/ })).toBeInTheDocument()
+    const card = screen.getAllByRole('link').find((l) => l.textContent?.includes('Œufs brouillés crémeux'))!
+    expect(within(card).getByText('Tu as tout !')).toBeInTheDocument()
+
+    await user.click(card)
+    expect(screen.getByRole('heading', { name: 'Œufs brouillés crémeux' })).toBeInTheDocument()
+    expect(screen.getByText('Tout est dans ton frigo')).toBeInTheDocument()
+    expect(screen.queryByRole('navigation')).not.toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: /Bats les œufs/ }))
+    expect(screen.getByText('Étape 1 sur 3')).toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: "J'ai cuisiné" }))
+    expect(screen.getByText('Bon appétit !')).toBeInTheDocument()
+    expect(getState().fridge.oeufs.qty).toBe(3)
+    expect(getState().fridge.creme.qty).toBe(15)
   })
 
-  it('fills the fridge with quantities and finds recipes, ready ones first', async () => {
-    renderApp()
-    expect(screen.getByRole('heading', { name: /Qu'est-ce que t'as/ })).toBeInTheDocument()
-
-    await addToFridge('Œuf', 5) // 6 œufs
-    await addToFridge('Champignons de Paris') // 250 g
-    await addToFridge('Beurre') // 250 g
-    expect(screen.getByRole('button', { name: /Œuf/, pressed: true })).toHaveTextContent('6')
-
-    await userEvent.click(screen.getByRole('button', { name: /Trouver des recettes/ }))
-    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(/recettes? avec ce que t'as/)
-    const first = screen.getAllByRole('link', { name: /Omelette aux champignons/ })[0]
-    expect(first).toHaveTextContent('Tu as tout')
-
-    await userEvent.click(first)
-    expect(screen.getByRole('heading', { name: 'Omelette aux champignons' })).toBeInTheDocument()
-    await userEvent.click(screen.getByRole('button', { name: /J'ai cuisiné/ }))
-    expect(fridgeStore.get().find((item) => item.ingredientId === 'egg')?.quantity).toBe(3)
+  it('hides recipes that break the diet', async () => {
+    const user = userEvent.setup()
+    renderAt('/profil')
+    await user.click(screen.getByRole('button', { name: 'Végétarien' }))
+    await user.click(screen.getByRole('link', { name: 'Chercher' }))
+    await user.type(screen.getByRole('textbox'), 'carbonara')
+    expect(screen.getByText('Rien trouvé. Essaie un autre ingrédient.')).toBeInTheDocument()
   })
 
-  it('hides recipes excluded by the diet', async () => {
-    fridgeStore.set([
-      { id: '1', ingredientId: 'spaghetti', quantity: 500, unit: 'g', addedAt: '2026-09-20' },
-      { id: '2', ingredientId: 'bacon', quantity: 200, unit: 'g', addedAt: '2026-09-20' },
-      { id: '3', ingredientId: 'egg', quantity: 6, unit: 'piece', addedAt: '2026-09-20' },
-      { id: '4', ingredientId: 'parmesan', quantity: 100, unit: 'g', addedAt: '2026-09-20' },
-    ])
-    renderApp('/resultats')
-    expect(screen.getAllByRole('link', { name: /Pâtes carbonara/ }).length).toBeGreaterThan(0)
-    await userEvent.selectOptions(screen.getByLabelText('Régime'), 'vegetarian')
-    expect(screen.queryByRole('link', { name: /Pâtes carbonara/ })).not.toBeInTheDocument()
+  it('likes a recipe into "Coups de cœur"', async () => {
+    const user = userEvent.setup()
+    renderAt('/recette/r9')
+    await user.click(screen.getByRole('button', { name: 'Ajouter aux coups de cœur' }))
+    await user.click(screen.getByRole('button', { name: '+ Liste' }))
+    const dialog = screen.getByRole('dialog', { name: 'Ajouter à une liste' })
+    expect(within(dialog).getByRole('button', { name: /Coups de cœur/ })).toHaveAttribute('aria-pressed', 'true')
+    await user.type(within(dialog).getByRole('textbox'), 'Pour recevoir')
+    await user.click(within(dialog).getByRole('button', { name: 'Créer' }))
+    expect(getState().lists).toEqual([expect.objectContaining({ name: 'Pour recevoir', recipeIds: ['r9'] })])
+  })
+
+  it('invents a recipe with the AI and opens it', async () => {
+    const draft = {
+      name: 'Omelette aux épinards',
+      cuisine: 'Française',
+      minutes: 10,
+      servings: 2,
+      ingredients: [{ id: 'oeufs', qty: 4 }, { id: 'epinards', qty: 100 }],
+      steps: ['Bats les œufs.', 'Fais tomber les épinards, verse les œufs.'],
+      photoQuery: 'omelette',
+    }
+    const fetchMock = vi.fn(async (url: string, _init?: RequestInit) =>
+      url.includes('generate-recipe') ? new Response(JSON.stringify({ draft })) : new Response(JSON.stringify({ meals: null })),
+    )
+    vi.stubGlobal('fetch', fetchMock)
+    const user = userEvent.setup()
+    renderAt('/recettes')
+    await user.click(screen.getByRole('button', { name: /Invente-moi une recette/ }))
+    await user.type(screen.getByRole('textbox', { name: 'Ton envie' }), 'léger')
+    await user.click(screen.getByRole('button', { name: 'Inventer' }))
+
+    expect(await screen.findByRole('heading', { name: 'Omelette aux épinards' })).toBeInTheDocument()
+    expect(screen.getByText(/Inventée pour toi/)).toBeInTheDocument()
+    expect(screen.getByText('Il te manque 2 trucs')).toBeInTheDocument()
+    const body = JSON.parse(fetchMock.mock.calls.find(([u]) => u.includes('generate-recipe'))![1]!.body as string)
+    expect(body).toMatchObject({ wish: 'léger', prefs: { diet: 'Tout' } })
+    expect(getState().generated).toHaveLength(1)
+  })
+
+  it('explains when the AI is not configured', async () => {
+    vi.stubGlobal('fetch', vi.fn(async (url: string) => new Response(JSON.stringify(url.includes('generate-recipe') ? { error: 'not_configured' } : { meals: null }), { status: url.includes('generate-recipe') ? 503 : 200 })))
+    const user = userEvent.setup()
+    renderAt('/recettes')
+    await user.click(screen.getByRole('button', { name: /Invente-moi une recette/ }))
+    await user.click(screen.getByRole('button', { name: 'Inventer' }))
+    expect(await screen.findByRole('alert')).toHaveTextContent("L'IA n'est pas encore branchée sur ce serveur.")
   })
 })

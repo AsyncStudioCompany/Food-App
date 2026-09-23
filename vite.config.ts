@@ -1,36 +1,77 @@
 /// <reference types="vitest/config" />
-import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
-import { defineConfig } from 'vite'
+import type { IncomingMessage, ServerResponse } from 'node:http'
+import { defineConfig, loadEnv, type Plugin } from 'vite'
 import { VitePWA } from 'vite-plugin-pwa'
+import { handleGenerate } from './server/recipeAI.ts'
 
-// https://vite.dev/config/
-const isDemo = process.env.VITE_DEMO === '1'
+/** Serves POST /api/generate-recipe from `npm run dev` / `npm run preview`, with ANTHROPIC_API_KEY from .env.local. */
+function recipeApi(apiKey: string | undefined): Plugin {
+  const handler = async (req: IncomingMessage, res: ServerResponse) => {
+    if (req.method !== 'POST') {
+      res.statusCode = 405
+      return res.end()
+    }
+    let raw = ''
+    for await (const chunk of req) raw += chunk
+    let body: unknown = null
+    try {
+      body = JSON.parse(raw)
+    } catch {
+      // handleGenerate answers 400 on a null body
+    }
+    const { status, json } = await handleGenerate(body, apiKey)
+    res.statusCode = status
+    res.setHeader('Content-Type', 'application/json')
+    res.end(JSON.stringify(json))
+  }
+  return {
+    name: 'mijote-recipe-api',
+    configureServer: (server) => void server.middlewares.use('/api/generate-recipe', handler),
+    configurePreviewServer: (server) => void server.middlewares.use('/api/generate-recipe', handler),
+  }
+}
 
-export default defineConfig({
-  build: isDemo ? { outDir: 'dist-demo', assetsInlineLimit: 100_000_000 } : undefined,
-  plugins: [
-    react(),
-    tailwindcss(),
-    !isDemo &&
-    VitePWA({
-      registerType: 'autoUpdate',
-      includeAssets: ['favicon.svg'],
-      manifest: {
-        name: 'popote',
-        short_name: 'popote',
-        description: 'Des recettes selon ce que vous avez dans votre frigo.',
-        lang: 'fr',
-        theme_color: '#0c0a09',
-        background_color: '#0c0a09',
-        display: 'standalone',
-        start_url: '/',
-        icons: [{ src: 'favicon.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'any' }],
-      },
-    }),
-  ],
-  test: {
-    environment: 'jsdom',
-    setupFiles: ['./src/test/setup.ts'],
-  },
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd(), '')
+  return {
+    plugins: [
+      react(),
+      recipeApi(env.ANTHROPIC_API_KEY),
+      VitePWA({
+        registerType: 'autoUpdate',
+        includeAssets: ['favicon.svg'],
+        manifest: {
+          name: 'Mijote',
+          short_name: 'Mijote',
+          description: 'Des recettes avec ce que t’as dans ton frigo.',
+          lang: 'fr',
+          theme_color: '#121110',
+          background_color: '#121110',
+          display: 'standalone',
+          start_url: '/',
+          icons: [{ src: 'favicon.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'any' }],
+        },
+        workbox: {
+          navigateFallbackDenylist: [/^\/api\//],
+          runtimeCaching: [
+            {
+              // TheMealDB stand-in photos and search results, so seen recipes keep their photo offline.
+              urlPattern: /^https:\/\/www\.themealdb\.com\//,
+              handler: 'CacheFirst',
+              options: {
+                cacheName: 'themealdb',
+                expiration: { maxEntries: 300, maxAgeSeconds: 60 * 60 * 24 * 30 },
+                cacheableResponse: { statuses: [0, 200] },
+              },
+            },
+          ],
+        },
+      }),
+    ],
+    test: {
+      environment: 'jsdom',
+      setupFiles: ['./src/test/setup.ts'],
+    },
+  }
 })
