@@ -85,6 +85,9 @@ function RecipeView({ recipeId }: { recipeId: string }) {
             {recipe.generated && ' · Inventée pour toi'}
             {recipe.source && ` · via ${recipe.source.name}`}
           </div>
+          <div className="muted" style={{ font: '12.5px var(--mono)' }}>
+            ≈ {e.nutrition.kcal} kcal · {e.nutrition.protein} g prot. · {e.nutrition.carbs} g gluc. · {e.nutrition.fat} g lip. / portion
+          </div>
         </div>
 
         <div style={{ margin: '18px 20px 0', display: 'flex', gap: 14, alignItems: 'center', padding: '14px 16px 14px 10px', borderRadius: 'var(--r1)', background: mood.bg }}>
@@ -176,6 +179,16 @@ function RecipeView({ recipeId }: { recipeId: string }) {
             )
           })}
         </div>
+
+        {recipe.photoCredit && (
+          <div className="muted" style={{ padding: '18px 20px 0', font: '12px var(--font)' }}>
+            Photo :{' '}
+            <a href={recipe.photoCredit.url} target="_blank" rel="noreferrer" style={{ color: 'inherit' }}>
+              {recipe.photoCredit.author}
+            </a>
+            , {recipe.photoCredit.license}
+          </div>
+        )}
 
         {recipe.generated && (
           <div style={{ padding: '18px 20px 0' }}>

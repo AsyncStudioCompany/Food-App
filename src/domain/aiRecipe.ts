@@ -1,13 +1,13 @@
 import { isEligible, recipeTraits } from './diet.ts'
 import { daysLeft } from './expiry.ts'
 import { round2, toBase } from './units.ts'
-import { CUISINES, type Cuisine, type Fridge, type Ingredient, type Prefs, type Recipe } from './types.ts'
+import { CUISINES, type Cuisine, type Fridge, type Goal, type Ingredient, type Prefs, type Recipe } from './types.ts'
 
 /** What the app sends to the recipe generator. */
 export interface AiRecipeRequest {
   /** Fridge content in base units, with days before expiry. */
   fridge: { id: string; qty: number; days: number | null }[]
-  prefs: Omit<Prefs, 'ai'>
+  prefs: Pick<Prefs, 'diet' | 'allergies' | 'cuisines' | 'portions'> & { goal?: Goal }
   /** Free text: "un truc réconfortant", "sans four"… */
   wish: string
 }

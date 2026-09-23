@@ -1,5 +1,7 @@
 import { useNavigate } from 'react-router'
 import type { Evaluation } from '../domain/matching'
+import { goalLabel } from '../domain/nutrition'
+import { useStore } from '../state/store'
 import { photoBg, usePhotos } from '../state/photos'
 import { LikeButton } from './Heart'
 import { cardStatus, cardTag, meta, metaMono, missLabel, recipePath, saveLabel, statusLabel } from './labels'
@@ -10,6 +12,8 @@ export type RowLine = 'save' | 'missing' | 'status'
 export function RecipeRow({ e, line }: { e: Evaluation; line: RowLine }) {
   const navigate = useNavigate()
   const photos = usePhotos()
+  const goal = useStore((s) => s.prefs.goal)
+  const extra = goalLabel(goal, e.nutrition)
   let third: { text: string; color: string } | null = null
   if (line === 'save') third = e.saving.length ? { text: saveLabel(e), color: 'var(--warn-ink)' } : null
   else if (line === 'missing') third = { text: missLabel(e), color: 'var(--miss)' }
@@ -20,7 +24,10 @@ export function RecipeRow({ e, line }: { e: Evaluation; line: RowLine }) {
       <LikeButton recipeId={e.recipe.id} variant="row" />
       <div className="row__body">
         <div className="row__name">{e.recipe.name}</div>
-        <div className="row__meta">{meta(e)}</div>
+        <div className="row__meta">
+          {meta(e)}
+          {extra && ` · ${extra}`}
+        </div>
         {third && (
           <div className="row__status" style={{ color: third.color }}>
             {third.text}

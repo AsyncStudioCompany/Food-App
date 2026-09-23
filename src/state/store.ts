@@ -2,6 +2,9 @@ import { useSyncExternalStore } from 'react'
 import { NO_FILTERS, type SearchFilters } from '../domain/search'
 import type { Fridge, Prefs, Recipe, RecipeList } from '../domain/types'
 
+/** Saved data as stored (older saves may lack newer preferences). */
+export type PartialSaved = Partial<Omit<SavedState, 'prefs'>> & { prefs?: Partial<Prefs> }
+
 /** Saved on the device. */
 export interface SavedState {
   fridge: Fridge
@@ -29,11 +32,9 @@ export interface UiState {
 
 export type State = SavedState & UiState
 
-const STORAGE_KEY = 'mijote:v1'
-
 export const DEFAULT_SAVED: SavedState = {
   fridge: {},
-  prefs: { diet: 'Tout', allergies: [], cuisines: [], portions: 2, ai: true },
+  prefs: { diet: 'Tout', allergies: [], cuisines: [], portions: 2, ai: true, goal: 'Équilibré', onboarded: false },
   liked: {},
   lists: [],
   generated: [],
@@ -41,30 +42,24 @@ export const DEFAULT_SAVED: SavedState = {
 
 const DEFAULT_UI: UiState = { fridgeQuery: '', searchQuery: '', searchFilters: NO_FILTERS, toast: null, celebrate: null }
 
-function load(): SavedState {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY)
-    if (raw) {
-      const saved = JSON.parse(raw) as Partial<SavedState>
-      // Preferences added later (like `ai`) get their default value.
-      return { ...DEFAULT_SAVED, ...saved, prefs: { ...DEFAULT_SAVED.prefs, ...saved.prefs } }
-    }
-  } catch {
-    // Private mode or corrupted data: start fresh.
-  }
-  return DEFAULT_SAVED
+/** Fills what older saves lack (like `prefs.ai`). */
+export function withDefaults(saved: PartialSaved): SavedState {
+  return { ...DEFAULT_SAVED, ...saved, prefs: { ...DEFAULT_SAVED.prefs, ...saved.prefs } }
 }
 
-let state: State = { ...load(), ...DEFAULT_UI }
+export const savedOf = (s: State): SavedState => ({ fridge: s.fridge, prefs: s.prefs, liked: s.liked, lists: s.lists, generated: s.generated })
+
+let state: State = { ...DEFAULT_SAVED, ...DEFAULT_UI }
 const listeners = new Set<() => void>()
 
-function persist(s: State) {
-  const saved: SavedState = { fridge: s.fridge, prefs: s.prefs, liked: s.liked, lists: s.lists, generated: s.generated }
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(saved))
-  } catch {
-    // Storage full or unavailable: keep working in memory.
-  }
+/** Where a change of the saved data comes from: the user on this device, or the account (another device). */
+export type SavedSource = 'local' | 'remote'
+const savedListeners = new Set<(saved: SavedState, source: SavedSource) => void>()
+
+/** Called after every change of the saved data (local persistence, account sync). */
+export function onSavedChange(l: (saved: SavedState, source: SavedSource) => void) {
+  savedListeners.add(l)
+  return () => savedListeners.delete(l)
 }
 
 export function getState(): State {
@@ -74,15 +69,22 @@ export function getState(): State {
 export function setState(patch: Partial<State> | ((s: State) => Partial<State>)) {
   const next = typeof patch === 'function' ? patch(state) : patch
   state = { ...state, ...next }
-  if (Object.keys(next).some((k) => k in DEFAULT_SAVED)) persist(state)
   listeners.forEach((l) => l())
+  if (Object.keys(next).some((k) => k in DEFAULT_SAVED)) savedListeners.forEach((l) => l(savedOf(state), 'local'))
 }
 
-/** Replaces the whole state (tests). */
-export function resetState(saved: Partial<SavedState> = {}) {
-  state = { ...DEFAULT_SAVED, ...saved, ...DEFAULT_UI }
-  persist(state)
+/** Replaces all the saved data: loading from the device, data from the account, reset. */
+export function replaceSaved(saved: PartialSaved, source: SavedSource) {
+  state = { ...state, ...withDefaults(saved) }
   listeners.forEach((l) => l())
+  savedListeners.forEach((l) => l(savedOf(state), source))
+}
+
+/** Replaces the whole state (tests, sign-out). */
+export function resetState(saved: PartialSaved = {}) {
+  state = { ...withDefaults(saved), ...DEFAULT_UI }
+  listeners.forEach((l) => l())
+  savedListeners.forEach((l) => l(savedOf(state), 'local'))
 }
 
 function subscribe(l: () => void) {

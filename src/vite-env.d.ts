@@ -3,6 +3,8 @@
 interface ImportMetaEnv {
   /** Recipe generator endpoint; defaults to the dev server's /api/generate-recipe. */
   readonly VITE_RECIPE_AI_URL?: string
-  /** Supabase anon key, sent as Bearer token to the Supabase function. */
+  /** Supabase project URL: turns the accounts on. */
+  readonly VITE_SUPABASE_URL?: string
+  /** Supabase anon (public) key; the `vaults` table is protected by row level security. */
   readonly VITE_SUPABASE_ANON_KEY?: string
 }

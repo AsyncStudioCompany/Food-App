@@ -28,6 +28,9 @@ export const CUISINES = [
 ] as const
 export type Cuisine = (typeof CUISINES)[number]
 
+export const GOALS = ['Équilibré', 'Prise de masse', 'Protéines', 'Perte de poids'] as const
+export type Goal = (typeof GOALS)[number]
+
 /** What an ingredient means for diets: meat and fish rule out vegetarian, dairy and eggs rule out vegan. */
 export type AnimalKind = 'pork' | 'meat' | 'fish' | 'dairy' | 'egg'
 
@@ -40,6 +43,8 @@ export interface Ingredient {
   defaultQty: number
   animal?: AnimalKind
   allergens?: Allergen[]
+  /** Per 100 g (or 100 ml); `g` is the weight of one piece. See src/data/nutrition.ts. */
+  nutrition?: { per100: [kcal: number, protein: number, carbs: number, fat: number]; g?: number }
 }
 
 export interface RecipeIngredient {
@@ -56,16 +61,26 @@ export interface Recipe {
   servings: number
   ingredients: RecipeIngredient[]
   steps: string[]
-  /** English search terms for the TheMealDB stand-in photo, most specific first. */
+  /** English words to look for a photo of an AI-invented dish on TheMealDB (exact name match only). */
   photoTerms: string[]
-  /** Exact photo of the dish (imported recipes); takes precedence over `photoTerms`. */
+  /** Photo of the dish, chosen by hand; takes precedence over `photoTerms`. */
   photoUrl?: string
+  /** Author and licence, when the photo's licence asks for credit. */
+  photoCredit?: PhotoCredit
   /** Pantry items used besides salt, pepper and oil (French, lowercase). */
   pantry?: string[]
   /** Where an imported recipe comes from. */
   source?: { name: 'TheMealDB'; id: string }
   /** Set on recipes invented by the AI for this user. */
   generated?: boolean
+}
+
+export interface PhotoCredit {
+  author: string
+  /** "CC BY 2.0", "CC BY-SA 2.0", "Domaine public"… */
+  license: string
+  /** Page of the original photo. */
+  url: string
 }
 
 export interface FridgeItem {
@@ -84,6 +99,10 @@ export interface Prefs {
   portions: number
   /** Recipes invented by the AI: shows or hides "Invente-moi une recette". */
   ai: boolean
+  /** Reorders recipes by estimated nutrition (never hides any). */
+  goal: Goal
+  /** Set once the welcome setup (diet, goal, fridge) is done. */
+  onboarded: boolean
 }
 
 export interface RecipeList {

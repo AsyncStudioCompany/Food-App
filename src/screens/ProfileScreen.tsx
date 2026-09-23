@@ -1,5 +1,6 @@
-import { ALLERGENS, CUISINES, DIETS, type Prefs } from '../domain/types'
+import { ALLERGENS, CUISINES, DIETS, GOALS, type Prefs } from '../domain/types'
 import { setState, useStore } from '../state/store'
+import { AccountSection } from './AccountSection'
 
 export function ProfileScreen() {
   const p = useStore((s) => s.prefs)
@@ -14,6 +15,7 @@ export function ProfileScreen() {
           On cache les recettes qui ne te vont pas, promis.
         </div>
       </div>
+      <AccountSection />
       <section style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
         <h2 className="caps" style={{ margin: 0 }}>
           Régime
@@ -22,6 +24,18 @@ export function ProfileScreen() {
           {DIETS.map((d) => (
             <button key={d} type="button" className="chip" aria-pressed={p.diet === d} onClick={() => set({ diet: d })} style={{ height: 48, justifyContent: 'center', borderRadius: 'var(--r2)', font: '600 14px var(--font)' }}>
               {d}
+            </button>
+          ))}
+        </div>
+      </section>
+      <section style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+        <h2 className="caps" style={{ margin: 0 }}>
+          Objectif
+        </h2>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+          {GOALS.map((g) => (
+            <button key={g} type="button" className="chip" aria-pressed={p.goal === g} onClick={() => set({ goal: g })} style={{ height: 48, justifyContent: 'center', borderRadius: 'var(--r2)', font: '600 14px var(--font)' }}>
+              {g}
             </button>
           ))}
         </div>

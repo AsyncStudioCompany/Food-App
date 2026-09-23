@@ -8,6 +8,10 @@ Public : 18–35 ans et familles. Ton familier (tutoiement), usage rapide.
 
 ## 2. Fonctionnalités
 
+### Accueil et première configuration
+- Sans être connecté, on ne voit que l'accueil (« Cuisine avec ce que t'as. ») : **Créer mon compte** ou **J'ai déjà un compte**. Sans serveur de comptes configuré, un bouton **Commencer** crée un profil local.
+- Après l'inscription, 4 étapes : régime et allergies, **objectif** (Équilibré, Prise de masse, Protéines, Perte de poids), cuisines et portions, puis les aliments qu'on a chez soi. Chaque étape peut être passée ; tout se modifie ensuite dans le Profil et le Frigo.
+
 ### Mon frigo (`/`)
 - Aliments du catalogue regroupés par rayon (Crèmerie & frais, Légumes, Fruits, Épicerie), en pastilles. Une pastille active affiche la quantité ; un point orange signale un aliment qui périme dans 2 jours ou moins.
 - Panneau de quantité : − / + (pas de 50 g, 0,25 kg, 5 cl, 0,25 L ou 1 pièce), unité, date de péremption (Aujourd'hui, Demain, 3 jours, 1 semaine, Pas de date), Retirer / Valider.
@@ -41,6 +45,8 @@ Pour chaque recette compatible avec le régime et les allergies, évaluée aux p
 score = −100 × manquants + 20 si cuisine préférée + 15 × aliments qui périment dans ≤ 2 jours − minutes / 5
 ```
 
+L'objectif ajoute un bonus selon la nutrition estimée par portion (`src/domain/nutrition.ts`, valeurs par ingrédient dans `src/data/nutrition.ts`, huile et épices non comptées) : au plus ±35 points, moins qu'un ingrédient manquant, donc il réordonne sans jamais masquer. La fiche affiche kcal, protéines, glucides et lipides par portion ; les listes affichent les protéines (prise de masse, protéines) ou les kcal (perte de poids).
+
 Un ingrédient est `ok` si la quantité du frigo couvre le besoin, `partial` s'il y en a trop peu, `missing` s'il n'y en a pas. Les deux derniers comptent comme manquants.
 
 ## 4. Recettes inventées par l'IA
@@ -53,18 +59,27 @@ Un ingrédient est `ok` si la quantité du frigo couvre le besoin, `partial` s'i
 
 ## 5. Données
 
-- Catalogue : `src/data/catalog.ts` (52 ingrédients, 90 recettes) :
+- Catalogue : `src/data/catalog.ts` (85 ingrédients, 112 recettes) :
   - 24 recettes maison (celles de la maquette et quelques ajouts) ;
-  - 66 recettes importées de **TheMealDB** (`src/data/mealdb.ts`), avec leur vraie photo. `scripts/mealdb-candidates.mjs` télécharge l'API et liste les recettes dont tous les ingrédients (hors placard) existent dans le catalogue ; noms, étapes (au tutoiement) et quantités sont ensuite traduits et vérifiés à la main. Pour en ajouter : compléter la table `MAP` du script (et le catalogue), relancer, traduire.
+  - 88 recettes importées de **TheMealDB** (`src/data/mealdb.ts`), avec leur vraie photo. `scripts/mealdb-candidates.mjs` télécharge l'API et liste les recettes dont tous les ingrédients (hors placard) existent dans le catalogue ; noms, étapes (au tutoiement) et quantités sont ensuite traduits et vérifiés à la main. Pour en ajouter : compléter la table `MAP` du script (et le catalogue), relancer, traduire.
 - Les ingrédients comptés à la pièce sont arrondis au demi supérieur quand on change les portions (1,33 oignon → 1,5).
 - Cuisines : Française, Italienne, Asiatique, Mexicaine, Indienne, Moyen-Orient (maquette), plus Espagnole, Européenne, Maghreb, Africaine, Caribéenne, Sud-américaine, Américaine pour les recettes importées.
 - Chaque ingrédient a une unité de base, un rayon, une quantité proposée par défaut, et au besoin un type animal (porc, viande, poisson, laitier, œuf) et des allergènes. Régime et allergènes d'une recette se déduisent de ses ingrédients.
 - Sur l'appareil (`localStorage`) : frigo (quantité, unité, date de péremption), préférences, favoris, listes, recettes inventées. Photos TheMealDB résolues et mises en cache.
-- Photos : vraie photo pour les recettes importées ; pour les recettes maison et celles de l'IA, un plat proche trouvé sur TheMealDB par mots-clés. Fond rayé tant qu'il n'y a pas de photo.
+- Photos : chaque recette du catalogue a une photo vérifiée à la main (celle de TheMealDB pour les recettes importées ; pour les recettes maison, le même plat sur TheMealDB ou une photo sous licence libre trouvée avec Openverse, créditée sur la fiche). Une recette de l'IA ne prend une photo TheMealDB que si le nom du plat contient tous les mots cherchés. Sinon, fond rayé : mieux vaut pas de photo qu'une photo d'un autre plat.
 
-## 6. Suite possible
+## 6. Comptes et chiffrement
 
-- Comptes et synchro (Supabase Auth + tables avec RLS) pour retrouver son frigo sur plusieurs appareils. Pas encore fait : aujourd'hui tout reste sur l'appareil.
+- Comptes Supabase (e-mail + mot de passe), activés par `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY`. Sans eux, l'app fonctionne sans compte.
+- **Chiffrement de bout en bout** (`src/crypto/vault.ts`) : PBKDF2-SHA256 (600 000 itérations) puis HKDF dérivent du mot de passe un mot de passe de connexion (seul envoyé à Supabase) et une clé qui emballe une clé de données aléatoire (AES-GCM 256). Les données sauvegardées sont chiffrées avec cette clé ; la table `vaults` (une ligne par utilisateur, RLS) ne contient que du chiffré.
+- Sur l'appareil, les données sont chiffrées avec une clé locale non exportable gardée dans IndexedDB (`src/state/persist.ts`) ; la clé de données du compte y est aussi gardée, non exportable, pour rouvrir l'app sans mot de passe.
+- Synchro (`src/account/account.ts`) : envoi 1,5 s après chaque changement, récupération au démarrage et au retour sur l'app ; la dernière écriture gagne. Première connexion d'un appareil : les données du compte remplacent celles de l'appareil (un compte neuf reprend celles de l'appareil).
+- Déconnexion : les données de l'appareil sont effacées (elles restent dans le compte). « Supprimer mes données » efface la ligne du serveur.
+- Limites : mot de passe oublié = données perdues ; pas encore de changement de mot de passe ni de suppression de l'utilisateur Supabase lui-même (à faire depuis le tableau de bord).
+
+## 7. Suite possible
+
+- Changement de mot de passe (réemballer la clé de données) et suppression complète du compte.
 - Liste de courses à partir des ingrédients manquants.
 - Rappels de péremption (notifications).
 - Emballage natif avec Capacitor.
