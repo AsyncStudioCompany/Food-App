@@ -28,3 +28,6 @@ dist-demo
 supabase/.temp
 .env
 dev-dist
+
+# Vercel
+.vercel

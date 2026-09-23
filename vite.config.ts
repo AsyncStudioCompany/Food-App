@@ -1,30 +1,12 @@
 /// <reference types="vitest/config" />
 import react from '@vitejs/plugin-react'
-import type { IncomingMessage, ServerResponse } from 'node:http'
 import { defineConfig, loadEnv, type Plugin } from 'vite'
 import { VitePWA } from 'vite-plugin-pwa'
-import { handleGenerate } from './server/recipeAI.ts'
+import { recipeHandler } from './server/nodeHandler.ts'
 
-/** Serves POST /api/generate-recipe from `npm run dev` / `npm run preview`, with ANTHROPIC_API_KEY from .env.local. */
+/** Serves POST /api/generate-recipe from `npm run dev` / `npm start`, with ANTHROPIC_API_KEY from .env.local. */
 function recipeApi(apiKey: string | undefined): Plugin {
-  const handler = async (req: IncomingMessage, res: ServerResponse) => {
-    if (req.method !== 'POST') {
-      res.statusCode = 405
-      return res.end()
-    }
-    let raw = ''
-    for await (const chunk of req) raw += chunk
-    let body: unknown = null
-    try {
-      body = JSON.parse(raw)
-    } catch {
-      // handleGenerate answers 400 on a null body
-    }
-    const { status, json } = await handleGenerate(body, apiKey)
-    res.statusCode = status
-    res.setHeader('Content-Type', 'application/json')
-    res.end(JSON.stringify(json))
-  }
+  const handler = recipeHandler(() => apiKey)
   return {
     name: 'mijote-recipe-api',
     configureServer: (server) => void server.middlewares.use('/api/generate-recipe', handler),
