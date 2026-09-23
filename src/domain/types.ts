@@ -1,126 +1,93 @@
-export const INGREDIENT_CATEGORIES = [
-  'fruits_vegetables',
-  'meat',
-  'fish_seafood',
-  'dairy_eggs',
-  'starches',
-  'bakery',
-  'legumes',
-  'herbs_spices',
-  'condiments_sauces',
-  'grocery',
-  'nuts_seeds',
-  'frozen',
-  'drinks',
-] as const
-export type IngredientCategory = (typeof INGREDIENT_CATEGORIES)[number]
+/** Units the catalog stores quantities in (the "base" unit of an ingredient). */
+export type BaseUnit = 'g' | 'cl' | 'pc'
+/** Units the user can pick in the quantity sheet. */
+export type Unit = 'g' | 'kg' | 'cl' | 'L' | 'pc'
 
-export const ALLERGENS = [
-  'gluten',
-  'lactose',
-  'eggs',
-  'peanuts',
-  'tree_nuts',
-  'fish',
-  'crustaceans',
-  'molluscs',
-  'soy',
-  'sesame',
-  'celery',
-  'mustard',
-] as const
+export type AisleId = 'frais' | 'legumes' | 'fruits' | 'epicerie'
+
+export const ALLERGENS = ['Gluten', 'Lactose', 'Arachides', 'Œufs', 'Fruits à coque'] as const
 export type Allergen = (typeof ALLERGENS)[number]
 
-export const UNITS = ['g', 'kg', 'ml', 'cl', 'l', 'piece', 'tbsp', 'tsp', 'pinch', 'to_taste'] as const
-export type Unit = (typeof UNITS)[number]
-
-export const MEAL_TYPES = ['breakfast', 'starter', 'main', 'dessert', 'snack', 'drink'] as const
-export type MealType = (typeof MEAL_TYPES)[number]
+export const DIETS = ['Tout', 'Végétarien', 'Vegan', 'Sans porc'] as const
+export type Diet = (typeof DIETS)[number]
 
 export const CUISINES = [
-  'french',
-  'italian',
-  'spanish',
-  'greek',
-  'middle_eastern',
-  'indian',
-  'asian',
-  'japanese',
-  'mexican',
-  'american',
-  'north_african',
+  'Française',
+  'Italienne',
+  'Asiatique',
+  'Mexicaine',
+  'Indienne',
+  'Moyen-Orient',
+  'Espagnole',
+  'Européenne',
+  'Maghreb',
+  'Africaine',
+  'Caribéenne',
+  'Sud-américaine',
+  'Américaine',
 ] as const
 export type Cuisine = (typeof CUISINES)[number]
 
-export type Diet = 'omnivore' | 'vegetarian' | 'vegan' | 'pescatarian'
+/** What an ingredient means for diets: meat and fish rule out vegetarian, dairy and eggs rule out vegan. */
+export type AnimalKind = 'pork' | 'meat' | 'fish' | 'dairy' | 'egg'
 
-export type DietFlags = {
-  isMeat: boolean
-  isFish: boolean
-  isAnimalProduct: boolean
-  isPork: boolean
-}
-
-export type Ingredient = {
+export interface Ingredient {
   id: string
   name: string
-  emoji?: string
-  aliases: string[]
-  category: IngredientCategory
-  defaultUnit: Unit
-  parentId?: string
-  gramsPerPiece?: number
-  gramsPerMl?: number
-  isPantryStaple: boolean
-  allergens: Allergen[]
-  dietFlags: DietFlags
+  aisle: AisleId
+  unit: BaseUnit
+  /** Quantity proposed when the ingredient is first added to the fridge. */
+  defaultQty: number
+  animal?: AnimalKind
+  allergens?: Allergen[]
 }
 
-export type Difficulty = 'easy' | 'medium' | 'hard'
-
-export type RecipeIngredient = {
-  ingredientId: string
-  quantity?: number
-  unit?: Unit
-  note?: string
-  optional: boolean
-}
-
-export type Recipe = {
+export interface RecipeIngredient {
   id: string
-  title: string
-  emoji?: string
-  description?: string
-  imageUrl?: string
+  /** Quantity in the ingredient's base unit, for `servings` portions. */
+  qty: number
+}
+
+export interface Recipe {
+  id: string
+  name: string
+  cuisine: Cuisine
+  minutes: number
   servings: number
-  prepMinutes: number
-  cookMinutes: number
-  difficulty: Difficulty
-  mealType: MealType[]
-  cuisine?: Cuisine
-  tags: string[]
   ingredients: RecipeIngredient[]
   steps: string[]
-  source?: { name: string; url?: string }
+  /** English search terms for the TheMealDB stand-in photo, most specific first. */
+  photoTerms: string[]
+  /** Exact photo of the dish (imported recipes); takes precedence over `photoTerms`. */
+  photoUrl?: string
+  /** Pantry items used besides salt, pepper and oil (French, lowercase). */
+  pantry?: string[]
+  /** Where an imported recipe comes from. */
+  source?: { name: 'TheMealDB'; id: string }
+  /** Set on recipes invented by the AI for this user. */
+  generated?: boolean
 }
 
-export type FridgeItem = {
-  id: string
-  ingredientId: string
-  quantity?: number
-  unit?: Unit
-  expiresOn?: string
-  addedAt: string
+export interface FridgeItem {
+  qty: number
+  unit: Unit
+  /** ISO date (YYYY-MM-DD) to eat it by, or null when there is no date. */
+  expiresOn: string | null
 }
 
-export type UserPreferences = {
+export type Fridge = Record<string, FridgeItem>
+
+export interface Prefs {
   diet: Diet
-  excludePork: boolean
-  allergens: Allergen[]
-  excludedIngredientIds: string[]
-  pantryStapleIds: string[]
-  favoriteCuisines: Cuisine[]
-  favoriteTags: string[]
-  lovedIngredientIds: string[]
-  maxTotalMinutes?: number
+  allergies: Allergen[]
+  cuisines: Cuisine[]
+  portions: number
+  /** Recipes invented by the AI: shows or hides "Invente-moi une recette". */
+  ai: boolean
+}
+
+export interface RecipeList {
+  id: string
+  name: string
+  recipeIds: string[]
 }

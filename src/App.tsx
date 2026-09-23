@@ -1,25 +1,40 @@
-import { Navigate, Route, Routes } from 'react-router'
-import { BottomNav } from './components/BottomNav'
-import { FridgePage } from './features/fridge/FridgePage'
-import { PreferencesPage } from './features/preferences/PreferencesPage'
-import { RecipePage } from './features/recipes/RecipePage'
-import { RecipesPage } from './features/recipes/RecipesPage'
-import { ResultsPage } from './features/results/ResultsPage'
+import { Navigate, Route, Routes, useLocation } from 'react-router'
+import { FridgeScreen } from './screens/FridgeScreen'
+import { ListDetailScreen, ListsScreen } from './screens/ListsScreen'
+import { ProfileScreen } from './screens/ProfileScreen'
+import { RecipeScreen } from './screens/RecipeScreen'
+import { ResultsScreen } from './screens/ResultsScreen'
+import { SearchScreen } from './screens/SearchScreen'
+import { Celebration } from './screens/Celebration'
+import { useLoadPhotos } from './state/photos'
+import { useAllRecipes } from './state/recipes'
+import { useStore } from './state/store'
+import { TabBar } from './ui/TabBar'
 
 export default function App() {
+  useLoadPhotos(useAllRecipes())
+  const { pathname } = useLocation()
+  const toast = useStore((s) => s.toast)
   return (
-    <div className="mx-auto flex min-h-full max-w-2xl flex-col">
-      <main className="flex-1 px-4 pb-[calc(var(--safe-bottom)+10rem)]">
-        <Routes>
-          <Route path="/" element={<FridgePage />} />
-          <Route path="/resultats" element={<ResultsPage />} />
-          <Route path="/recherche" element={<RecipesPage />} />
-          <Route path="/recette/:id" element={<RecipePage />} />
-          <Route path="/preferences" element={<PreferencesPage />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </main>
-      <BottomNav />
+    <div className="app">
+      <Routes>
+        <Route path="/" element={<FridgeScreen />} />
+        <Route path="/recettes" element={<ResultsScreen />} />
+        <Route path="/chercher" element={<SearchScreen />} />
+        <Route path="/listes" element={<ListsScreen />} />
+        <Route path="/listes/:id" element={<ListDetailScreen />} />
+        <Route path="/profil" element={<ProfileScreen />} />
+        <Route path="/recette/:id" element={<RecipeScreen />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+      {/* Hidden on the recipe page, like in the design. */}
+      {!pathname.startsWith('/recette/') && <TabBar />}
+      <Celebration />
+      {toast && (
+        <div className="toast" role="status">
+          {toast}
+        </div>
+      )}
     </div>
   )
 }

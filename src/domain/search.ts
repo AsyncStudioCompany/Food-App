@@ -1,51 +1,33 @@
-import type { Ingredient } from './types'
+import type { Evaluation } from './matching.ts'
+import type { Cuisine } from './types.ts'
 
-/** Minuscules, sans accents, sans ponctuation : « Crème fraîche » → « creme fraiche ». */
-export function normalizeText(text: string): string {
-  return text
+/** Lowercase without accents, for forgiving search. */
+export const normalize = (s: string) =>
+  s
+    .toLowerCase()
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
-    .toLowerCase()
-    .replace(/œ/g, 'oe')
-    .replace(/æ/g, 'ae')
-    .replace(/[^a-z0-9]+/g, ' ')
-    .trim()
+
+export interface SearchFilters {
+  /** "Faisable maintenant": nothing missing. */
+  now: boolean
+  /** "20 min max". */
+  quick: boolean
+  cuisine: Cuisine | null
 }
 
-/** Retire un pluriel simple (s, x) de chaque mot. */
-function singularize(text: string): string {
-  return text
-    .split(' ')
-    .map((word) => (word.length > 3 && /[sx]$/.test(word) ? word.slice(0, -1) : word))
-    .join(' ')
-}
+export const NO_FILTERS: SearchFilters = { now: false, quick: false, cuisine: null }
 
-function searchKey(text: string): string {
-  return singularize(normalizeText(text))
-}
-
-/**
- * Autocomplétion des ingrédients : insensible aux accents et au pluriel.
- * Les noms qui commencent par la saisie passent avant ceux qui la contiennent.
- */
-export function searchIngredients(query: string, ingredients: Ingredient[], limit = 8): Ingredient[] {
-  const key = searchKey(query)
-  if (!key) return []
-  const ranked: { ingredient: Ingredient; rank: number }[] = []
-  for (const ingredient of ingredients) {
-    const names = [ingredient.name, ...ingredient.aliases].map(searchKey)
-    let rank = Infinity
-    for (const [position, name] of names.entries()) {
-      const penalty = position === 0 ? 0 : 0.5
-      if (name === key) rank = Math.min(rank, 0 + penalty)
-      else if (name.startsWith(key)) rank = Math.min(rank, 1 + penalty)
-      else if (name.split(' ').some((word) => word.startsWith(key))) rank = Math.min(rank, 2 + penalty)
-      else if (name.includes(key)) rank = Math.min(rank, 3 + penalty)
-    }
-    if (rank !== Infinity) ranked.push({ ingredient, rank })
-  }
-  return ranked
-    .sort((a, b) => a.rank - b.rank || a.ingredient.name.localeCompare(b.ingredient.name, 'fr'))
-    .slice(0, limit)
-    .map(({ ingredient }) => ingredient)
+/** Search by recipe name or ingredient name, then apply the filter pills. */
+export function searchRecipes(ranked: Evaluation[], query: string, f: SearchFilters): Evaluation[] {
+  const q = normalize(query.trim())
+  return ranked.filter(
+    (e) =>
+      (!q ||
+        normalize(e.recipe.name).includes(q) ||
+        e.items.some((i) => normalize(i.ingredient.name).includes(q))) &&
+      (!f.now || e.missing.length === 0) &&
+      (!f.quick || e.recipe.minutes <= 20) &&
+      (!f.cuisine || e.recipe.cuisine === f.cuisine),
+  )
 }

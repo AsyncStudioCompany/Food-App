@@ -1,82 +1,30 @@
-import type { Ingredient, Unit } from './types'
+import type { BaseUnit, Unit } from './types.ts'
 
-type Dimension = 'mass' | 'volume' | 'count'
+/** Factor from a unit to its base unit (kg → g, L → cl). */
+export const FACTOR: Record<Unit, number> = { g: 1, kg: 1000, cl: 1, L: 100, pc: 1 }
 
-// Facteur vers l'unité de base de la dimension : g, ml ou pièce.
-const UNIT_TABLE: Partial<Record<Unit, { dimension: Dimension; factor: number }>> = {
-  g: { dimension: 'mass', factor: 1 },
-  kg: { dimension: 'mass', factor: 1000 },
-  ml: { dimension: 'volume', factor: 1 },
-  cl: { dimension: 'volume', factor: 10 },
-  l: { dimension: 'volume', factor: 1000 },
-  tbsp: { dimension: 'volume', factor: 15 },
-  tsp: { dimension: 'volume', factor: 5 },
-  piece: { dimension: 'count', factor: 1 },
+/** Step of the − / + buttons in the quantity sheet. */
+export const STEP: Record<Unit, number> = { g: 50, kg: 0.25, cl: 5, L: 0.25, pc: 1 }
+
+/** Units offered for an ingredient, by base unit. */
+export const UNITS: Record<BaseUnit, Unit[]> = { g: ['g', 'kg'], cl: ['cl', 'L'], pc: ['pc'] }
+
+export const round2 = (n: number) => Math.round(n * 100) / 100
+
+export const toBase = (qty: number, unit: Unit) => qty * FACTOR[unit]
+
+export const convert = (qty: number, from: Unit, to: Unit) => round2((qty * FACTOR[from]) / FACTOR[to])
+
+/** French number: 0.5 → "0,5". */
+export const fmt = (n: number) => String(round2(n)).replace('.', ',')
+
+/** Label of a quantity expressed in the base unit: 1500 g → "1,5 kg", 3 pc → "3". */
+export function qtyLabel(qty: number, unit: BaseUnit): string {
+  if (unit === 'g' && qty >= 1000) return fmt(qty / 1000) + ' kg'
+  if (unit === 'cl' && qty >= 100) return fmt(qty / 100) + ' L'
+  if (unit === 'pc') return fmt(qty)
+  return fmt(qty) + ' ' + unit
 }
 
-export const UNIT_LABELS: Record<Unit, string> = {
-  g: 'g',
-  kg: 'kg',
-  ml: 'ml',
-  cl: 'cl',
-  l: 'L',
-  piece: 'pièce(s)',
-  tbsp: 'c. à soupe',
-  tsp: 'c. à café',
-  pinch: 'pincée(s)',
-  to_taste: 'selon le goût',
-}
-
-/** Unités qui ne peuvent pas être comparées : « une pincée », « selon le goût ». */
-export function isMeasurable(unit: Unit): boolean {
-  return UNIT_TABLE[unit] !== undefined
-}
-
-function toGrams(quantity: number, unit: Unit, ingredient: Ingredient): number | undefined {
-  const entry = UNIT_TABLE[unit]
-  if (!entry) return undefined
-  const base = quantity * entry.factor
-  switch (entry.dimension) {
-    case 'mass':
-      return base
-    case 'volume':
-      return ingredient.gramsPerMl !== undefined ? base * ingredient.gramsPerMl : undefined
-    case 'count':
-      return ingredient.gramsPerPiece !== undefined ? base * ingredient.gramsPerPiece : undefined
-  }
-}
-
-/**
- * Convertit une quantité d'une unité à une autre pour un ingrédient donné.
- * Renvoie `undefined` si la conversion est impossible (unité non mesurable
- * ou poids moyen / densité inconnus).
- */
-export function convert(
-  quantity: number,
-  from: Unit,
-  to: Unit,
-  ingredient: Ingredient,
-): number | undefined {
-  const source = UNIT_TABLE[from]
-  const target = UNIT_TABLE[to]
-  if (!source || !target) return undefined
-  if (source.dimension === target.dimension) {
-    return (quantity * source.factor) / target.factor
-  }
-  const grams = toGrams(quantity, from, ingredient)
-  if (grams === undefined) return undefined
-  const oneTargetInGrams = toGrams(1, to, ingredient)
-  if (oneTargetInGrams === undefined) return undefined
-  return grams / oneTargetInGrams
-}
-
-const numberFormat = new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 2 })
-
-/** « 250 g », « 1,5 L », « 3 » (pièces), « 2 c. à soupe ». */
-export function formatQuantity(quantity: number, unit: Unit): string {
-  const value = numberFormat.format(quantity)
-  if (unit === 'piece') return value
-  if (unit === 'to_taste') return UNIT_LABELS.to_taste
-  if (unit === 'pinch') return `${value} ${quantity > 1 ? 'pincées' : 'pincée'}`
-  return `${value} ${UNIT_LABELS[unit]}`
-}
+/** Label shown in the quantity sheet, in the unit the user picked. */
+export const sheetQtyLabel = (qty: number, unit: Unit) => (unit === 'pc' ? fmt(qty) : fmt(qty) + ' ' + unit)

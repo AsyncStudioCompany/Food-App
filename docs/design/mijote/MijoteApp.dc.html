@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&amp;family=Figtree:wght@400;500;600;700&amp;family=Nunito:wght@400;500;600;700;800&amp;family=Fredoka:wght@500;600&amp;family=Geist:wght@400;500;600;700&amp;family=Geist+Mono:wght@400;500&amp;family=JetBrains+Mono:wght@400&amp;display=swap" rel="stylesheet"><style>@keyframes mj-steam{0%{opacity:0;transform:translateY(8px) scaleY(.6)}40%{opacity:.9}100%{opacity:0;transform:translateY(-16px) scaleY(1.1)}}@keyframes mj-bob{0%,100%{transform:scale(1)}50%{transform:scale(1.05) rotate(3deg)}}@keyframes mj-pop{0%,100%{transform:scale(1)}50%{transform:scale(1.18)}}@keyframes mj-flicker{from{transform:scaleY(.8)}to{transform:scaleY(1.2) translateY(-2px)}}@keyframes mj-bubble{0%{opacity:0;transform:translateY(6px)}30%{opacity:1}100%{opacity:0;transform:translateY(-18px)}}@keyframes mj-twinkle{0%,100%{opacity:.2;transform:rotate(45deg) scale(.6)}50%{opacity:1;transform:rotate(45deg) scale(1.1)}}@keyframes mj-chop{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(7px) rotate(-6deg)}}@keyframes mj-stir{from{transform:rotate(-18deg)}to{transform:rotate(18deg)}}@keyframes mj-spin{to{transform:rotate(360deg)}}@keyframes mj-glow{from{opacity:.6}to{opacity:1;box-shadow:0 0 10px oklch(0.8 0.17 60)}}@keyframes mj-rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}body{margin:0}.mj-scroll::-webkit-scrollbar{display:none}.mj-scroll{scrollbar-width:none}</style></helmet>
+<div style="display:flex;flex-direction:column;align-items:center;gap:18px">
+<div style="width:390px;height:844px;box-sizing:border-box;border:10px solid {{ t.frame }};border-radius:54px;overflow:hidden;position:relative;background:{{ t.bg }};color:{{ t.ink }};font-family:{{ t.body }}">
+  <div style="position:absolute;top:0;left:0;right:0;height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 26px;box-sizing:border-box;font:600 14px {{ t.body }};color:{{ t.ink }};z-index:5;background:{{ t.bg }}"><span>9:41</span><span style="display:flex;gap:4px;align-items:center"><span style="width:16px;height:9px;border-radius:2px;border:1.5px solid {{ t.ink }}"></span></span></div>
+
+  <sc-if value="{{ isFrigo }}" hint-placeholder-val="{{ true }}">
+    <div class="mj-scroll" style="position:absolute;top:44px;left:0;right:0;bottom:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;padding:8px 20px 190px;box-sizing:border-box">
+<sc-if value="{{ t.v1 }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex;flex-direction:column;gap:4px;margin-bottom:16px">
+        <div style="font:{{ t.headW }} {{ t.headS }}/1.05 {{ t.head }};letter-spacing:{{ t.headLs }};color:{{ t.ink }}">Mon frigo</div>
+        <div style="font:500 14px {{ t.body }};color:{{ t.muted }}">{{ frigoSub }}</div>
+      </div>
+</sc-if>
+      <sc-if value="{{ t.v2 }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px"><div style="display:flex;align-items:center;gap:8px"><span style="width:24px;height:24px;border-radius:50%;background:{{ t.accent }};display:flex;align-items:center;justify-content:center"><span style="width:9px;height:9px;border-radius:50%;background:{{ t.bg }}"></span></span><span style="font:600 19px {{ t.body }};letter-spacing:-.03em;color:{{ t.ink }}">mijote</span></div><div style="display:flex;gap:8px"><span onClick="{{ goSearch }}" style="width:40px;height:40px;border-radius:50%;border:1px solid {{ t.line }};background:{{ t.surface }};display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none"><span style="position:relative;width:11px;height:11px;border:1.8px solid {{ t.ink }};border-radius:50%;margin:-2px 0 0 -2px"><span style="position:absolute;width:6px;height:1.8px;background:{{ t.ink }};right:-6px;bottom:-3px;transform:rotate(45deg);border-radius:1px"></span></span></span><span onClick="{{ goPrefs }}" style="width:40px;height:40px;border-radius:50%;border:1px solid {{ t.line }};background:{{ t.surface }};display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none"><span style="display:flex;flex-direction:column;gap:3px;align-items:center"><span style="width:15px;height:1.8px;background:{{ t.ink }};border-radius:1px"></span><span style="width:10px;height:1.8px;background:{{ t.ink }};border-radius:1px"></span><span style="width:5px;height:1.8px;background:{{ t.ink }};border-radius:1px"></span></span></span></div></div>
+        <div style="font:{{ t.headW }} {{ t.headS }}/1.06 {{ t.head }};letter-spacing:{{ t.headLs }};color:{{ t.ink }};text-wrap:pretty;margin-bottom:8px"><span>{{ frigoCount }}</span> <span style="color:{{ t.muted }}">dans ton frigo.</span></div>
+        <div style="font:500 13px {{ t.mono }};color:{{ t.muted }};margin-bottom:16px">{{ frigoSub2 }}</div>
+      </sc-if>
+      <input value="{{ q }}" onChange="{{ onQ }}" placeholder="Ajoute un aliment… (ex. courgette)" style="width:100%;box-sizing:border-box;height:46px;padding:0 16px;border-radius:{{ t.r2 }};border:1px solid {{ t.line }};background:{{ t.surface }};color:{{ t.ink }};font:15px {{ t.body }};outline:none;margin-bottom:18px">
+      <sc-for list="{{ rayons }}" as="ray" hint-placeholder-count="3">
+        <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:22px">
+          <div style="display:flex;justify-content:space-between;align-items:baseline">
+            <span style="font:700 12px {{ t.body }};letter-spacing:.08em;text-transform:uppercase;color:{{ t.muted }}">{{ ray.n }}</span>
+            <span style="font:600 12px {{ t.body }};color:{{ t.muted }}">{{ ray.count }}</span>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px">
+            <sc-for list="{{ ray.items }}" as="p" hint-placeholder-count="5">
+              <div onClick="{{ p.tap }}" style="display:flex;align-items:center;gap:6px;min-height:40px;padding:0 14px;box-sizing:border-box;border-radius:{{ t.pillR }};background:{{ p.bg }};color:{{ p.fg }};border:1.5px solid {{ p.bd }};cursor:pointer;font:500 14px {{ t.body }};user-select:none">
+                <sc-if value="{{ p.dot }}"><span style="width:7px;height:7px;border-radius:50%;background:{{ t.warn }}"></span></sc-if>
+                <span>{{ p.n }}</span>
+                <sc-if value="{{ p.on }}"><span style="font:700 13px {{ t.body }};opacity:.85">{{ p.sub }}</span></sc-if>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-for>
+      <sc-if value="{{ noMatch }}"><div style="font:14px {{ t.body }};color:{{ t.muted }};padding:10px 0">Aucun aliment ne correspond. Essaie « tomate » ou « riz ».</div></sc-if>
+    </div>
+    <div style="position:absolute;left:16px;right:16px;bottom:96px;z-index:4">
+      <div onClick="{{ goResults }}" style="height:56px;border-radius:{{ t.ctaR }};background:{{ t.accent }};color:{{ t.accentInk }};display:flex;align-items:center;justify-content:space-between;padding:0 22px;cursor:pointer;box-shadow:{{ t.shadow }}">
+        <span style="font:700 16px {{ t.body }}">Trouver des recettes</span>
+        <span style="font:600 14px {{ t.body }};opacity:.85">{{ ctaCount }}</span>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isResults }}" hint-placeholder-val="{{ false }}">
+    <div class="mj-scroll" style="position:absolute;top:44px;left:0;right:0;bottom:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;padding:8px 0 110px;box-sizing:border-box">
+<sc-if value="{{ t.v1 }}" hint-placeholder-val="{{ true }}">
+      <div style="padding:0 20px;display:flex;flex-direction:column;gap:10px;margin-bottom:18px">
+        <div style="font:{{ t.headW }} {{ t.headS }}/1.05 {{ t.head }};letter-spacing:{{ t.headLs }}">On cuisine quoi ?</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px">
+          <sc-for list="{{ ctxChips }}" as="c" hint-placeholder-count="2"><span style="font:600 12px {{ t.body }};padding:6px 10px;border-radius:{{ t.pillR }};background:{{ t.soft }};color:{{ t.softInk }}">{{ c }}</span></sc-for>
+        </div>
+      </div>
+</sc-if>
+      <sc-if value="{{ t.v2 }}" hint-placeholder-val="{{ false }}">
+        <div style="padding:0 20px;display:flex;flex-direction:column;gap:16px;margin-bottom:26px">
+          <div style="display:flex;align-items:center;justify-content:space-between"><div style="display:flex;align-items:center;gap:10px"><span onClick="{{ goFrigo }}" style="width:40px;height:40px;border-radius:50%;border:1px solid {{ t.line }};background:{{ t.surface }};display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none;font:500 17px {{ t.body }};color:{{ t.ink }}">←</span><div style="display:flex;align-items:center;gap:8px"><span style="width:24px;height:24px;border-radius:50%;background:{{ t.accent }};display:flex;align-items:center;justify-content:center"><span style="width:9px;height:9px;border-radius:50%;background:{{ t.bg }}"></span></span><span style="font:600 19px {{ t.body }};letter-spacing:-.03em;color:{{ t.ink }}">mijote</span></div></div><div style="display:flex;gap:8px"><span onClick="{{ goSearch }}" style="width:40px;height:40px;border-radius:50%;border:1px solid {{ t.line }};background:{{ t.surface }};display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none"><span style="position:relative;width:11px;height:11px;border:1.8px solid {{ t.ink }};border-radius:50%;margin:-2px 0 0 -2px"><span style="position:absolute;width:6px;height:1.8px;background:{{ t.ink }};right:-6px;bottom:-3px;transform:rotate(45deg);border-radius:1px"></span></span></span><span onClick="{{ goPrefs }}" style="width:40px;height:40px;border-radius:50%;border:1px solid {{ t.line }};background:{{ t.surface }};display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none"><span style="display:flex;flex-direction:column;gap:3px;align-items:center"><span style="width:15px;height:1.8px;background:{{ t.ink }};border-radius:1px"></span><span style="width:10px;height:1.8px;background:{{ t.ink }};border-radius:1px"></span><span style="width:5px;height:1.8px;background:{{ t.ink }};border-radius:1px"></span></span></span></div></div>
+          <div style="font:{{ t.headW }} {{ t.headS }}/1.06 {{ t.head }};letter-spacing:{{ t.headLs }};color:{{ t.ink }};text-wrap:pretty"><span>{{ resCount }}</span> <span style="color:{{ t.muted }}">avec ce que t'as.</span></div>
+          <div class="mj-scroll mj-hx" style="display:flex;gap:8px;overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;touch-action:pan-x pan-y;cursor:grab;user-select:none;-webkit-user-select:none;margin:0 -20px;padding:0 20px">
+            <sc-for list="{{ ctxChips2 }}" as="c" hint-placeholder-count="3"><span onClick="{{ c.tap }}" style="flex:none;height:38px;padding:0 14px;border-radius:999px;border:1px solid {{ t.line }};background:{{ t.surface }};color:{{ t.ink }};display:flex;align-items:center;gap:7px;font:500 13.5px {{ t.body }};white-space:nowrap;cursor:pointer">{{ c.n }}<span style="width:6px;height:6px;border-right:1.6px solid {{ t.muted }};border-bottom:1.6px solid {{ t.muted }};transform:rotate(45deg);margin-top:-4px"></span></span></sc-for><span style="flex:none;width:1px"></span>
+          </div>
+        </div>
+      </sc-if>
+      <sc-if value="{{ hasTop }}">
+        <sc-if value="{{ t.v1 }}" hint-placeholder-val="{{ true }}"><div style="padding:0 20px;font:700 12px {{ t.body }};letter-spacing:.08em;text-transform:uppercase;color:{{ t.muted }};margin-bottom:10px">Top 3 pour toi</div></sc-if>
+        <sc-if value="{{ t.v2 }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:0 20px;display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><span style="font:{{ t.headW }} 22px {{ t.head }};letter-spacing:{{ t.headLs }}">Les plus adaptées</span><span style="font:500 12px {{ t.mono }};padding:5px 11px;border-radius:999px;border:1px solid {{ t.line }};color:{{ t.muted }}">Top 3</span></div>
+          <div class="mj-scroll mj-hx" style="display:flex;gap:12px;overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;touch-action:pan-x pan-y;cursor:grab;user-select:none;-webkit-user-select:none;padding:0 20px 4px;scroll-snap-type:x mandatory;scroll-padding:0 20px">
+            <sc-for list="{{ top }}" as="r" hint-placeholder-count="3">
+              <div onClick="{{ r.open }}" style="flex:none;width:280px;height:392px;border-radius:{{ t.r1 }};background:{{ r.bg }};position:relative;overflow:hidden;cursor:pointer;-webkit-user-drag:none;scroll-snap-align:start">
+                <span style="position:absolute;top:42%;left:0;right:0;text-align:center;font:10px {{ t.mono }};color:{{ t.muted }}">{{ r.photo }}</span>
+                <div style="position:absolute;inset:0;background:{{ t.scrim }}"></div>
+                <sc-if value="{{ r.hasTag }}"><span style="position:absolute;top:14px;left:14px;font:500 12px {{ t.body }};padding:7px 12px;border-radius:999px;background:rgba(20,18,16,.45);color:#fff;backdrop-filter:blur(10px)">{{ r.tag }}</span></sc-if>
+                <span style="position:absolute;top:20px;right:18px;font:500 12px {{ t.mono }};color:rgba(255,255,255,.85)">{{ r.rank }}</span>
+                <div style="position:absolute;left:18px;right:18px;bottom:18px;display:flex;flex-direction:column;gap:8px">
+                  <div style="font:{{ t.headW }} 27px/1.08 {{ t.head }};letter-spacing:{{ t.headLs }};color:#fff;text-wrap:pretty">{{ r.n }}</div>
+                  <div style="font:12.5px {{ t.mono }};color:rgba(255,255,255,.75)">{{ r.metaMono }}</div>
+                  <div style="height:1px;background:rgba(255,255,255,.18);margin:6px 0 2px"></div>
+                  <div style="display:flex;align-items:center;justify-content:space-between;gap:10px"><div style="font:600 13.5px/1.35 {{ t.body }};color:{{ r.cardSt }}">{{ r.cardStTxt }}</div><span onClick="{{ r.like }}" style="width:38px;height:38px;flex:none;border-radius:50%;background:rgba(255,255,255,.16);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;cursor:pointer"><span style="position:relative;width:14px;height:13px;display:block;opacity:{{ r.heartPhotoOp }}"><span style="position:absolute;left:0;top:0;width:8px;height:8px;border-radius:50%;background:{{ r.heartPhoto }}"></span><span style="position:absolute;right:0;top:0;width:8px;height:8px;border-radius:50%;background:{{ r.heartPhoto }}"></span><span style="position:absolute;left:3px;top:3px;width:8px;height:8px;background:{{ r.heartPhoto }};transform:rotate(45deg)"></span></span></span></div>
+                </div>
+              </div>
+            </sc-for><span style="flex:none;width:1px"></span>
+          </div>
+        </sc-if>
+        <sc-if value="{{ t.carousel }}">
+          <div class="mj-scroll mj-hx" style="display:flex;gap:12px;overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;touch-action:pan-x pan-y;cursor:grab;user-select:none;-webkit-user-select:none;padding:0 20px 4px;scroll-snap-type:x mandatory;scroll-padding:0 20px">
+            <sc-for list="{{ top }}" as="r" hint-placeholder-count="3">
+              <div onClick="{{ r.open }}" style="flex:none;width:262px;height:330px;border-radius:{{ t.r1 }};background:{{ r.bg }};position:relative;overflow:hidden;cursor:pointer;-webkit-user-drag:none;scroll-snap-align:start">
+                <span style="position:absolute;top:14px;left:14px;font:10px 'JetBrains Mono',monospace;color:{{ t.muted }}">{{ r.photo }}</span>
+                <sc-if value="{{ r.hasSave }}"><span style="position:absolute;top:10px;right:10px;font:700 11px {{ t.body }};padding:5px 9px;border-radius:999px;background:{{ t.warnSoft }};color:{{ t.warnInk }}">{{ r.save }}</span></sc-if>
+                <div style="position:absolute;left:10px;right:10px;bottom:10px;background:{{ t.surface }};border-radius:{{ t.r2 }};padding:14px;display:flex;flex-direction:column;gap:6px">
+                  <div style="font:{{ t.headW }} 24px/1.1 {{ t.head }};letter-spacing:{{ t.headLs }}">{{ r.n }}</div>
+                  <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+                    <span style="font:13px {{ t.body }};color:{{ t.muted }}">{{ r.meta }}</span>
+                    <span style="display:flex;align-items:center;gap:4px"><span style="font:700 11px {{ t.body }};padding:4px 8px;border-radius:999px;background:{{ r.badgeBg }};color:{{ r.badgeFg }};white-space:nowrap">{{ r.badge }}</span><span onClick="{{ r.like }}" style="width:34px;height:34px;display:flex;align-items:center;justify-content:center;cursor:pointer;margin-right:-8px"><span style="position:relative;width:14px;height:13px;display:block;opacity:{{ r.heartOp }}"><span style="position:absolute;left:0;top:0;width:8px;height:8px;border-radius:50%;background:{{ r.heart }}"></span><span style="position:absolute;right:0;top:0;width:8px;height:8px;border-radius:50%;background:{{ r.heart }}"></span><span style="position:absolute;left:3px;top:3px;width:8px;height:8px;background:{{ r.heart }};transform:rotate(45deg)"></span></span></span></span>
+                  </div>
+                </div>
+              </div>
+            </sc-for><span style="flex:none;width:1px"></span>
+          </div>
+        </sc-if>
+        <sc-if value="{{ t.stack }}">
+          <div style="display:flex;flex-direction:column;gap:14px;padding:0 20px">
+            <sc-for list="{{ top }}" as="r" hint-placeholder-count="3">
+              <div onClick="{{ r.open }}" style="border-radius:{{ t.r1 }};overflow:hidden;background:{{ t.surface }};border:1px solid {{ t.line }};cursor:pointer">
+                <div style="height:168px;background:{{ r.bg }};position:relative">
+                  <sc-if value="{{ t.showNum }}"><span style="position:absolute;left:14px;bottom:4px;font:700 64px/1 {{ t.head }};color:{{ t.accent }};letter-spacing:-.04em">{{ r.rank }}</span></sc-if>
+                  <span style="position:absolute;top:12px;left:14px;font:10px 'JetBrains Mono',monospace;color:{{ t.muted }}">{{ r.photo }}</span>
+                  <sc-if value="{{ r.hasSave }}"><span style="position:absolute;top:10px;right:10px;font:700 11px {{ t.body }};padding:5px 9px;border-radius:999px;background:{{ t.warnSoft }};color:{{ t.warnInk }}">{{ r.save }}</span></sc-if>
+                </div>
+                <div style="padding:14px 16px 16px;display:flex;flex-direction:column;gap:6px">
+                  <div style="font:{{ t.headW }} 21px/1.15 {{ t.head }};letter-spacing:{{ t.headLs }}">{{ r.n }}</div>
+                  <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+                    <span style="font:13px {{ t.body }};color:{{ t.muted }}">{{ r.meta }}</span>
+                    <span style="display:flex;align-items:center;gap:4px"><span style="font:700 11px {{ t.body }};padding:4px 8px;border-radius:999px;background:{{ r.badgeBg }};color:{{ r.badgeFg }};white-space:nowrap">{{ r.badge }}</span><span onClick="{{ r.like }}" style="width:34px;height:34px;display:flex;align-items:center;justify-content:center;cursor:pointer;margin-right:-8px"><span style="position:relative;width:14px;height:13px;display:block;opacity:{{ r.heartOp }}"><span style="position:absolute;left:0;top:0;width:8px;height:8px;border-radius:50%;background:{{ r.heart }}"></span><span style="position:absolute;right:0;top:0;width:8px;height:8px;border-radius:50%;background:{{ r.heart }}"></span><span style="position:absolute;left:3px;top:3px;width:8px;height:8px;background:{{ r.heart }};transform:rotate(45deg)"></span></span></span></span>
+                  </div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+      </sc-if>
+      <sc-if value="{{ hasTout }}">
+        <div style="padding:26px 20px 10px;display:flex;justify-content:space-between;align-items:baseline"><span style="font:{{ t.headW }} 22px {{ t.head }};letter-spacing:{{ t.headLs }}">Tu as tout</span><span style="font:600 13px {{ t.body }};color:{{ t.ok }}">{{ toutCount }}</span></div>
+        <div style="display:flex;flex-direction:column;gap:10px;padding:0 20px">
+          <sc-for list="{{ tout }}" as="r" hint-placeholder-count="3">
+            <div onClick="{{ r.open }}" style="position:relative;display:flex;gap:12px;align-items:center;padding:10px 52px 10px 10px;background:{{ t.surface }};border:1px solid {{ t.line }};border-radius:{{ t.r2 }};cursor:pointer">
+              <div style="width:62px;height:62px;flex:none;border-radius:{{ t.r3 }};background:{{ r.bgSm }}"></div>
+              <span onClick="{{ r.like }}" style="position:absolute;right:6px;top:50%;margin-top:-20px;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer"><span style="position:relative;width:14px;height:13px;display:block;opacity:{{ r.heartOp }}"><span style="position:absolute;left:0;top:0;width:8px;height:8px;border-radius:50%;background:{{ r.heart }}"></span><span style="position:absolute;right:0;top:0;width:8px;height:8px;border-radius:50%;background:{{ r.heart }}"></span><span style="position:absolute;left:3px;top:3px;width:8px;height:8px;background:{{ r.heart }};transform:rotate(45deg)"></span></span></span>
+              <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:3px">
+                <div style="font:600 15px/1.25 {{ t.body }}">{{ r.n }}</div>
+                <div style="font:13px {{ t.body }};color:{{ t.muted }}">{{ r.meta }}</div>
+                <sc-if value="{{ r.hasSave }}"><div style="font:600 12.5px {{ t.body }};color:{{ t.warnInk }}">{{ r.save }}</div></sc-if>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+      <sc-if value="{{ hasPresque }}">
+        <div style="padding:26px 20px 10px;display:flex;justify-content:space-between;align-items:baseline"><span style="font:{{ t.headW }} 22px {{ t.head }};letter-spacing:{{ t.headLs }}">Il te manque presque rien</span><span style="font:600 13px {{ t.body }};color:{{ t.muted }}">{{ presqueCount }}</span></div>
+        <div style="display:flex;flex-direction:column;gap:10px;padding:0 20px">
+          <sc-for list="{{ presque }}" as="r" hint-placeholder-count="3">
+            <div onClick="{{ r.open }}" style="position:relative;display:flex;gap:12px;align-items:center;padding:10px 52px 10px 10px;background:{{ t.surface }};border:1px solid {{ t.line }};border-radius:{{ t.r2 }};cursor:pointer">
+              <div style="width:62px;height:62px;flex:none;border-radius:{{ t.r3 }};background:{{ r.bgSm }}"></div>
+              <span onClick="{{ r.like }}" style="position:absolute;right:6px;top:50%;margin-top:-20px;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer"><span style="position:relative;width:14px;height:13px;display:block;opacity:{{ r.heartOp }}"><span style="position:absolute;left:0;top:0;width:8px;height:8px;border-radius:50%;background:{{ r.heart }}"></span><span style="position:absolute;right:0;top:0;width:8px;height:8px;border-radius:50%;background:{{ r.heart }}"></span><span style="position:absolute;left:3px;top:3px;width:8px;height:8px;background:{{ r.heart }};transform:rotate(45deg)"></span></span></span>
+              <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:3px">
+                <div style="font:600 15px/1.25 {{ t.body }}">{{ r.n }}</div>
+                <div style="font:13px {{ t.body }};color:{{ t.muted }}">{{ r.meta }}</div>
+                <div style="font:600 12.5px {{ t.body }};color:{{ t.miss }}">{{ r.missLabel }}</div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+      <sc-if value="{{ noResults }}"><div style="padding:30px 20px;font:15px/1.5 {{ t.body }};color:{{ t.muted }}">Pas grand-chose avec ça… Ajoute 2 ou 3 aliments dans ton frigo et on repart.</div></sc-if>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isSearch }}" hint-placeholder-val="{{ false }}">
+    <div class="mj-scroll" style="position:absolute;top:44px;left:0;right:0;bottom:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;padding:8px 20px 110px;box-sizing:border-box">
+      <div style="font:{{ t.headW }} {{ t.headS }}/1.05 {{ t.head }};letter-spacing:{{ t.headLs }};margin-bottom:16px">Chercher</div>
+      <input value="{{ sq }}" onChange="{{ onSq }}" placeholder="Une recette, un ingrédient…" style="width:100%;box-sizing:border-box;height:46px;padding:0 16px;border-radius:{{ t.r2 }};border:1px solid {{ t.line }};background:{{ t.surface }};color:{{ t.ink }};font:15px {{ t.body }};outline:none;margin-bottom:12px">
+      <div class="mj-scroll mj-hx" style="display:flex;gap:8px;overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;touch-action:pan-x pan-y;cursor:grab;user-select:none;-webkit-user-select:none;margin:0 -20px 16px;padding:0 20px">
+        <sc-for list="{{ sFilters }}" as="f" hint-placeholder-count="4">
+          <span onClick="{{ f.tap }}" style="flex:none;height:36px;display:flex;align-items:center;padding:0 14px;border-radius:{{ t.pillR }};background:{{ f.bg }};color:{{ f.fg }};border:1.5px solid {{ f.bd }};font:600 13px {{ t.body }};cursor:pointer;white-space:nowrap">{{ f.n }}</span>
+        </sc-for>
+      </div>
+      <div style="font:600 13px {{ t.body }};color:{{ t.muted }};margin-bottom:10px">{{ sCount }}</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <sc-for list="{{ sResults }}" as="r" hint-placeholder-count="4">
+          <div onClick="{{ r.open }}" style="position:relative;display:flex;gap:12px;align-items:center;padding:10px 52px 10px 10px;background:{{ t.surface }};border:1px solid {{ t.line }};border-radius:{{ t.r2 }};cursor:pointer">
+            <div style="width:62px;height:62px;flex:none;border-radius:{{ t.r3 }};background:{{ r.bgSm }}"></div>
+              <span onClick="{{ r.like }}" style="position:absolute;right:6px;top:50%;margin-top:-20px;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer"><span style="position:relative;width:14px;height:13px;display:block;opacity:{{ r.heartOp }}"><span style="position:absolute;left:0;top:0;width:8px;height:8px;border-radius:50%;background:{{ r.heart }}"></span><span style="position:absolute;right:0;top:0;width:8px;height:8px;border-radius:50%;background:{{ r.heart }}"></span><span style="position:absolute;left:3px;top:3px;width:8px;height:8px;background:{{ r.heart }};transform:rotate(45deg)"></span></span></span>
+            <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:3px">
+              <div style="font:600 15px/1.25 {{ t.body }}">{{ r.n }}</div>
+              <div style="font:13px {{ t.body }};color:{{ t.muted }}">{{ r.meta }}</div>
+              <div style="font:600 12.5px {{ t.body }};color:{{ r.stColor }}">{{ r.stLabel }}</div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isPrefs }}" hint-placeholder-val="{{ false }}">
+    <div class="mj-scroll" style="position:absolute;top:44px;left:0;right:0;bottom:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;padding:8px 20px 110px;box-sizing:border-box;display:flex;flex-direction:column;gap:26px">
+      <div style="display:flex;flex-direction:column;gap:4px">
+        <div style="font:{{ t.headW }} {{ t.headS }}/1.05 {{ t.head }};letter-spacing:{{ t.headLs }}">Tes goûts</div>
+        <div style="font:14px/1.45 {{ t.body }};color:{{ t.muted }}">On cache les recettes qui ne te vont pas, promis.</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <span style="font:700 12px {{ t.body }};letter-spacing:.08em;text-transform:uppercase;color:{{ t.muted }}">Régime</span>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <sc-for list="{{ diets }}" as="d" hint-placeholder-count="4">
+            <div onClick="{{ d.tap }}" style="height:48px;display:flex;align-items:center;justify-content:center;border-radius:{{ t.r2 }};background:{{ d.bg }};color:{{ d.fg }};border:1.5px solid {{ d.bd }};font:600 14px {{ t.body }};cursor:pointer">{{ d.n }}</div>
+          </sc-for>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <span style="font:700 12px {{ t.body }};letter-spacing:.08em;text-transform:uppercase;color:{{ t.muted }}">Allergies &amp; intolérances</span>
+        <div style="display:flex;flex-wrap:wrap;gap:8px">
+          <sc-for list="{{ allergies }}" as="a" hint-placeholder-count="5">
+            <span onClick="{{ a.tap }}" style="min-height:40px;display:flex;align-items:center;padding:0 14px;border-radius:{{ t.pillR }};background:{{ a.bg }};color:{{ a.fg }};border:1.5px solid {{ a.bd }};font:600 14px {{ t.body }};cursor:pointer">{{ a.n }}</span>
+          </sc-for>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <span style="font:700 12px {{ t.body }};letter-spacing:.08em;text-transform:uppercase;color:{{ t.muted }}">Cuisines préférées</span>
+        <div style="display:flex;flex-wrap:wrap;gap:8px">
+          <sc-for list="{{ cuisines }}" as="a" hint-placeholder-count="6">
+            <span onClick="{{ a.tap }}" style="min-height:40px;display:flex;align-items:center;padding:0 14px;border-radius:{{ t.pillR }};background:{{ a.bg }};color:{{ a.fg }};border:1.5px solid {{ a.bd }};font:600 14px {{ t.body }};cursor:pointer">{{ a.n }}</span>
+          </sc-for>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-radius:{{ t.r2 }};background:{{ t.surface }};border:1px solid {{ t.line }}">
+        <div style="display:flex;flex-direction:column;gap:2px"><span style="font:600 15px {{ t.body }}">Portions par défaut</span><span style="font:13px {{ t.body }};color:{{ t.muted }}">Tu cuisines pour combien ?</span></div>
+        <div style="display:flex;align-items:center;gap:12px">
+          <span onClick="{{ prefPm }}" style="width:44px;height:44px;border-radius:50%;border:1.5px solid {{ t.line }};display:flex;align-items:center;justify-content:center;font:600 20px {{ t.body }};cursor:pointer">−</span>
+          <span style="font:700 18px {{ t.body }};min-width:18px;text-align:center">{{ prefPortions }}</span>
+          <span onClick="{{ prefPp }}" style="width:44px;height:44px;border-radius:50%;border:1.5px solid {{ t.line }};display:flex;align-items:center;justify-content:center;font:600 20px {{ t.body }};cursor:pointer">+</span>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isListes }}" hint-placeholder-val="{{ false }}">
+    <div class="mj-scroll" style="position:absolute;top:44px;left:0;right:0;bottom:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;padding:8px 20px 110px;box-sizing:border-box">
+      <sc-if value="{{ listOverview }}">
+        <div style="font:{{ t.headW }} {{ t.headS }}/1.06 {{ t.head }};letter-spacing:{{ t.headLs }};margin-bottom:6px"><span>Mes listes</span> <span style="color:{{ t.muted }}">de recettes.</span></div>
+        <div style="font:14px {{ t.body }};color:{{ t.muted }};margin-bottom:20px">{{ listsSub }}</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <sc-for list="{{ listCards }}" as="l" hint-placeholder-count="3">
+            <div onClick="{{ l.open }}" style="display:flex;flex-direction:column;gap:8px;cursor:pointer">
+              <div style="aspect-ratio:1;border-radius:{{ t.r1 }};overflow:hidden;display:grid;grid-template-columns:1fr 1fr;gap:2px;background:{{ t.line }};position:relative">
+                <sc-for list="{{ l.m }}" as="mb" hint-placeholder-count="4"><div style="background:{{ mb }}"></div></sc-for>
+                <sc-if value="{{ l.isFav }}"><span style="position:absolute;left:10px;top:10px;width:30px;height:30px;border-radius:50%;background:{{ t.surface }};display:flex;align-items:center;justify-content:center"><span style="position:relative;width:14px;height:13px;display:block;opacity:1"><span style="position:absolute;left:0;top:0;width:8px;height:8px;border-radius:50%;background:oklch(0.63 0.2 25)"></span><span style="position:absolute;right:0;top:0;width:8px;height:8px;border-radius:50%;background:oklch(0.63 0.2 25)"></span><span style="position:absolute;left:3px;top:3px;width:8px;height:8px;background:oklch(0.63 0.2 25);transform:rotate(45deg)"></span></span></span></sc-if>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:1px;padding:0 2px"><span style="font:600 15px {{ t.body }};color:{{ t.ink }}">{{ l.n }}</span><span style="font:13px {{ t.body }};color:{{ t.muted }}">{{ l.count }}</span></div>
+            </div>
+          </sc-for>
+          <sc-if value="{{ notCreating }}">
+            <div onClick="{{ startCreate }}" style="aspect-ratio:1;border-radius:{{ t.r1 }};border:1.5px dashed {{ t.line }};display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;cursor:pointer;color:{{ t.muted }}"><span style="font:300 34px/1 {{ t.body }}">+</span><span style="font:600 14px {{ t.body }}">Nouvelle liste</span></div>
+          </sc-if>
+        </div>
+        <sc-if value="{{ creating }}">
+          <div style="margin-top:14px;display:flex;gap:8px">
+            <input value="{{ newList }}" onChange="{{ onNewList }}" placeholder="Ex. Batch cooking du dimanche" style="flex:1;min-width:0;height:48px;padding:0 14px;border-radius:{{ t.r2 }};border:1px solid {{ t.line }};background:{{ t.surface }};color:{{ t.ink }};font:15px {{ t.body }};outline:none">
+            <span onClick="{{ createList }}" style="height:48px;padding:0 18px;border-radius:{{ t.r2 }};background:{{ t.ink }};color:{{ t.bg }};display:flex;align-items:center;font:700 14px {{ t.body }};cursor:pointer">Créer</span>
+          </div>
+        </sc-if>
+      </sc-if>
+      <sc-if value="{{ listDetail }}">
+        <span onClick="{{ closeList }}" style="display:inline-flex;height:40px;align-items:center;font:600 14px {{ t.body }};color:{{ t.muted }};cursor:pointer;margin-bottom:6px">← Mes listes</span>
+        <div style="font:{{ t.headW }} {{ t.headS }}/1.06 {{ t.head }};letter-spacing:{{ t.headLs }};margin-bottom:6px">{{ curList.n }}</div>
+        <div style="font:14px {{ t.body }};color:{{ t.muted }};margin-bottom:18px">{{ curList.count }}</div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <sc-for list="{{ listRows }}" as="r" hint-placeholder-count="3">
+            <div onClick="{{ r.open }}" style="position:relative;display:flex;gap:12px;align-items:center;padding:10px 52px 10px 10px;background:{{ t.surface }};border:1px solid {{ t.line }};border-radius:{{ t.r2 }};cursor:pointer">
+              <div style="width:62px;height:62px;flex:none;border-radius:{{ t.r3 }};background:{{ r.bgSm }}"></div>
+              <span onClick="{{ r.like }}" style="position:absolute;right:6px;top:50%;margin-top:-20px;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer"><span style="position:relative;width:14px;height:13px;display:block;opacity:{{ r.heartOp }}"><span style="position:absolute;left:0;top:0;width:8px;height:8px;border-radius:50%;background:{{ r.heart }}"></span><span style="position:absolute;right:0;top:0;width:8px;height:8px;border-radius:50%;background:{{ r.heart }}"></span><span style="position:absolute;left:3px;top:3px;width:8px;height:8px;background:{{ r.heart }};transform:rotate(45deg)"></span></span></span>
+              <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:3px">
+                <div style="font:600 15px/1.25 {{ t.body }}">{{ r.n }}</div>
+                <div style="font:13px {{ t.body }};color:{{ t.muted }}">{{ r.meta }}</div>
+                <div style="font:600 12.5px {{ t.body }};color:{{ r.stColor }}">{{ r.stLabel }}</div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+        <sc-if value="{{ listEmpty }}"><div style="padding:24px 18px;border-radius:{{ t.r2 }};border:1.5px dashed {{ t.line }};font:14px/1.5 {{ t.body }};color:{{ t.muted }};text-align:center">Rien ici pour l'instant. Touche le cœur ou « + Liste » sur une recette.</div></sc-if>
+      </sc-if>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isRecipe }}" hint-placeholder-val="{{ false }}">
+    <div class="mj-scroll" style="position:absolute;top:44px;left:0;right:0;bottom:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;padding:0 0 120px;box-sizing:border-box">
+      <div style="height:290px;background:{{ rec.bg }};position:relative">
+        <span onClick="{{ back }}" style="position:absolute;top:12px;left:16px;height:40px;padding:0 14px;border-radius:999px;background:{{ t.surface }};display:flex;align-items:center;font:600 14px {{ t.body }};cursor:pointer;color:{{ t.ink }}">← Retour</span>
+        <div style="position:absolute;top:12px;right:16px;display:flex;gap:8px">
+          <span onClick="{{ rec.like }}" style="width:40px;height:40px;border-radius:50%;background:{{ t.surface }};display:flex;align-items:center;justify-content:center;cursor:pointer"><span style="position:relative;width:14px;height:13px;display:block;opacity:{{ rec.heartOp }}"><span style="position:absolute;left:0;top:0;width:8px;height:8px;border-radius:50%;background:{{ rec.heart }}"></span><span style="position:absolute;right:0;top:0;width:8px;height:8px;border-radius:50%;background:{{ rec.heart }}"></span><span style="position:absolute;left:3px;top:3px;width:8px;height:8px;background:{{ rec.heart }};transform:rotate(45deg)"></span></span></span>
+          <span onClick="{{ openListSheet }}" style="height:40px;padding:0 14px;border-radius:999px;background:{{ t.surface }};color:{{ t.ink }};display:flex;align-items:center;font:600 14px {{ t.body }};cursor:pointer">+ Liste</span>
+        </div>
+        <span style="position:absolute;bottom:14px;left:20px;font:10px 'JetBrains Mono',monospace;color:{{ t.muted }}">{{ rec.photo }}</span>
+      </div>
+      <div style="padding:20px 20px 0;display:flex;flex-direction:column;gap:10px">
+        <span style="align-self:flex-start;font:700 12px {{ t.body }};padding:5px 10px;border-radius:999px;background:{{ rec.badgeBg }};color:{{ rec.badgeFg }}">{{ rec.badge }}</span>
+        <div style="font:{{ t.headW }} 32px/1.08 {{ t.head }};letter-spacing:{{ t.headLs }}">{{ rec.n }}</div>
+        <div style="font:14px {{ t.body }};color:{{ t.muted }}">{{ rec.meta }}</div>
+      </div>
+      <div style="margin:18px 20px 0;display:flex;gap:14px;align-items:center;padding:14px 16px 14px 10px;border-radius:{{ t.r1 }};background:{{ rec.moodBg }}">
+        <div style="width:104px;height:92px;flex:none">{{ illu }}</div>
+        <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:5px">
+          <span style="font:{{ t.headW }} 21px/1.1 {{ t.head }};letter-spacing:{{ t.headLs }};color:{{ t.ink }}">{{ rec.moodTitle }}</span>
+          <span style="font:13.5px/1.4 {{ t.body }};color:{{ t.ink }};opacity:.8;text-wrap:pretty">{{ rec.moodTxt }}</span>
+          <sc-if value="{{ rec.showProg }}"><div style="height:6px;border-radius:3px;background:rgba(127,127,127,.22);overflow:hidden;margin-top:4px"><div style="height:100%;width:{{ rec.prog }};background:{{ t.accent }};border-radius:3px;transition:width .4s ease"></div></div></sc-if>
+        </div>
+      </div>
+      <div style="margin:20px 20px 0;display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-radius:{{ t.r2 }};background:{{ t.surface }};border:1px solid {{ t.line }}">
+        <span style="font:600 15px {{ t.body }}">Portions</span>
+        <div style="display:flex;align-items:center;gap:12px">
+          <span onClick="{{ pm }}" style="width:44px;height:44px;border-radius:50%;border:1.5px solid {{ t.line }};display:flex;align-items:center;justify-content:center;font:600 20px {{ t.body }};cursor:pointer">−</span>
+          <span style="font:700 18px {{ t.body }};min-width:18px;text-align:center">{{ portions }}</span>
+          <span onClick="{{ pp }}" style="width:44px;height:44px;border-radius:50%;border:1.5px solid {{ t.line }};display:flex;align-items:center;justify-content:center;font:600 20px {{ t.body }};cursor:pointer">+</span>
+        </div>
+      </div>
+      <div style="padding:24px 20px 8px;font:{{ t.headW }} 22px {{ t.head }};letter-spacing:{{ t.headLs }}">Ingrédients</div>
+      <div style="display:flex;flex-direction:column;padding:0 20px">
+        <sc-for list="{{ rec.items }}" as="i" hint-placeholder-count="4">
+          <div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid {{ t.line }}">
+            <span style="width:10px;height:10px;border-radius:50%;flex:none;background:{{ i.dot }}"></span>
+            <div style="flex:1;display:flex;flex-direction:column;gap:2px"><span style="font:600 15px {{ t.body }}">{{ i.n }}</span><span style="font:12.5px {{ t.body }};color:{{ i.noteColor }}">{{ i.note }}</span></div>
+            <span style="font:600 14px {{ t.body }};color:{{ t.muted }}">{{ i.qty }}</span>
+          </div>
+        </sc-for>
+        <div style="font:13px {{ t.body }};color:{{ t.muted }};padding:10px 0">Du placard : sel, poivre, huile d'olive.</div>
+      </div>
+      <div style="padding:18px 20px 8px;font:{{ t.headW }} 22px {{ t.head }};letter-spacing:{{ t.headLs }}">Étapes</div>
+      <div style="display:flex;flex-direction:column;gap:8px;padding:0 20px">
+        <sc-for list="{{ rec.steps }}" as="s" hint-placeholder-count="3">
+          <div onClick="{{ s.tap }}" style="display:flex;gap:12px;align-items:center;padding:12px 12px 12px 14px;border-radius:{{ t.r2 }};background:{{ s.bg }};border:1px solid {{ t.line }};cursor:pointer">
+            <span style="width:28px;height:28px;flex:none;border-radius:50%;display:flex;align-items:center;justify-content:center;font:700 13px {{ t.body }};background:{{ s.numBg }};color:{{ s.numFg }}">{{ s.num }}</span>
+            <span style="flex:1;min-width:0;font:15px/1.5 {{ t.body }};color:{{ s.fg }};text-decoration:{{ s.deco }};text-wrap:pretty">{{ s.txt }}</span>
+            <div style="width:68px;height:60px;flex:none;border-radius:{{ t.r3 }};background:{{ t.soft }};position:relative;overflow:hidden;opacity:{{ s.illOp }};transition:opacity .3s">{{ s.ill }}</div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    <div style="position:absolute;left:16px;right:16px;bottom:24px;z-index:4">
+      <div onClick="{{ cook }}" style="height:56px;border-radius:{{ t.ctaR }};background:{{ t.accent }};color:{{ t.accentInk }};display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:{{ t.shadow }};font:700 16px {{ t.body }}">{{ rec.cookLabel }}</div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ showTabsV2 }}" hint-placeholder-val="{{ false }}">
+    <div style="position:absolute;left:14px;right:14px;bottom:18px;height:64px;border-radius:999px;background:{{ t.glass }};backdrop-filter:blur(18px);border:1px solid {{ t.line }};display:grid;grid-template-columns:repeat(5,1fr);gap:2px;padding:6px;box-sizing:border-box;z-index:4;box-shadow:0 12px 30px rgba(0,0,0,.25)">
+      <sc-for list="{{ tabs }}" as="tb" hint-placeholder-count="5"><div onClick="{{ tb.tap }}" style="border-radius:999px;display:flex;align-items:center;justify-content:center;background:{{ tb.pillBg }};color:{{ tb.pillFg }};font:{{ tb.w }} 12.5px {{ t.body }};cursor:pointer">{{ tb.n }}</div></sc-for>
+    </div>
+  </sc-if>
+  <sc-if value="{{ showTabsV1 }}" hint-placeholder-val="{{ true }}">
+    <div style="position:absolute;left:0;right:0;bottom:0;height:84px;background:{{ t.bg }};border-top:1px solid {{ t.line }};display:grid;grid-template-columns:repeat(5,1fr);padding:8px 8px 22px;box-sizing:border-box;z-index:4">
+      <sc-for list="{{ tabs }}" as="tb" hint-placeholder-count="4">
+        <div onClick="{{ tb.tap }}" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;cursor:pointer">
+          <span style="width:22px;height:4px;border-radius:2px;background:{{ tb.bar }}"></span>
+          <span style="font:{{ tb.w }} 13px {{ t.body }};color:{{ tb.fg }}">{{ tb.n }}</span>
+        </div>
+      </sc-for>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ hasSheet }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeSheet }}" style="position:absolute;inset:0;background:rgba(10,8,6,.42);z-index:10;display:flex;align-items:flex-end">
+      <div onClick="{{ stop }}" style="width:100%;background:{{ t.bg }};border-radius:28px 28px 0 0;padding:12px 22px 30px;box-sizing:border-box;display:flex;flex-direction:column;gap:20px">
+        <span style="align-self:center;width:40px;height:5px;border-radius:3px;background:{{ t.line }}"></span>
+        <div style="display:flex;flex-direction:column;gap:2px">
+          <span style="font:{{ t.headW }} 28px/1.1 {{ t.head }};letter-spacing:{{ t.headLs }}">{{ sheet.n }}</span>
+          <span style="font:14px {{ t.body }};color:{{ t.muted }}">{{ sheet.sub }}</span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px;border-radius:{{ t.r2 }};background:{{ t.surface }};border:1px solid {{ t.line }}">
+          <span onClick="{{ sheet.minus }}" style="width:56px;height:56px;border-radius:{{ t.r3 }};background:{{ t.bg }};border:1.5px solid {{ t.line }};display:flex;align-items:center;justify-content:center;font:500 26px {{ t.body }};cursor:pointer;user-select:none">−</span>
+          <span style="font:700 34px {{ t.body }};letter-spacing:-.02em">{{ sheet.qty }}</span>
+          <span onClick="{{ sheet.plus }}" style="width:56px;height:56px;border-radius:{{ t.r3 }};background:{{ t.accent }};color:{{ t.accentInk }};display:flex;align-items:center;justify-content:center;font:500 26px {{ t.body }};cursor:pointer;user-select:none">+</span>
+        </div>
+        <sc-if value="{{ sheet.multiUnit }}">
+          <div style="display:flex;gap:6px;padding:4px;border-radius:{{ t.r2 }};background:{{ t.surface }};border:1px solid {{ t.line }}">
+            <sc-for list="{{ sheet.units }}" as="u" hint-placeholder-count="2">
+              <span onClick="{{ u.tap }}" style="flex:1;height:38px;display:flex;align-items:center;justify-content:center;border-radius:{{ t.r3 }};background:{{ u.bg }};color:{{ u.fg }};font:600 14px {{ t.body }};cursor:pointer">{{ u.n }}</span>
+            </sc-for>
+          </div>
+        </sc-if>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <span style="font:700 12px {{ t.body }};letter-spacing:.08em;text-transform:uppercase;color:{{ t.muted }}">À consommer avant</span>
+          <div style="display:flex;flex-wrap:wrap;gap:6px">
+            <sc-for list="{{ sheet.exps }}" as="e" hint-placeholder-count="5">
+              <span onClick="{{ e.tap }}" style="height:36px;display:flex;align-items:center;padding:0 12px;border-radius:{{ t.pillR }};background:{{ e.bg }};color:{{ e.fg }};border:1.5px solid {{ e.bd }};font:600 13px {{ t.body }};cursor:pointer">{{ e.n }}</span>
+            </sc-for>
+          </div>
+        </div>
+        <div style="display:flex;gap:10px">
+          <sc-if value="{{ sheet.canRemove }}"><span onClick="{{ sheet.remove }}" style="height:52px;padding:0 18px;display:flex;align-items:center;border-radius:{{ t.ctaR }};border:1.5px solid {{ t.line }};font:600 15px {{ t.body }};color:{{ t.miss }};cursor:pointer">Retirer</span></sc-if>
+          <span onClick="{{ sheet.save }}" style="flex:1;height:52px;display:flex;align-items:center;justify-content:center;border-radius:{{ t.ctaR }};background:{{ t.ink }};color:{{ t.bg }};font:700 15px {{ t.body }};cursor:pointer">{{ sheet.saveLabel }}</span>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ listSheet }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeListSheet }}" style="position:absolute;inset:0;background:rgba(10,8,6,.42);z-index:10;display:flex;align-items:flex-end">
+      <div onClick="{{ stop }}" style="width:100%;background:{{ t.bg }};border-radius:28px 28px 0 0;padding:12px 22px 30px;box-sizing:border-box;display:flex;flex-direction:column;gap:16px">
+        <span style="align-self:center;width:40px;height:5px;border-radius:3px;background:{{ t.line }}"></span>
+        <div style="display:flex;flex-direction:column;gap:2px"><span style="font:{{ t.headW }} 26px/1.1 {{ t.head }};letter-spacing:{{ t.headLs }}">Ajouter à une liste</span><span style="font:14px {{ t.body }};color:{{ t.muted }}">{{ sheetRecName }}</span></div>
+        <div style="display:flex;flex-direction:column">
+          <sc-for list="{{ sheetLists }}" as="l" hint-placeholder-count="3">
+            <div onClick="{{ l.tap }}" style="display:flex;align-items:center;gap:12px;min-height:56px;border-bottom:1px solid {{ t.line }};cursor:pointer">
+              <div style="width:40px;height:40px;border-radius:{{ t.r3 }};background:{{ l.thumb }};flex:none"></div>
+              <div style="flex:1;display:flex;flex-direction:column;gap:1px"><span style="font:600 15px {{ t.body }}">{{ l.n }}</span><span style="font:12.5px {{ t.body }};color:{{ t.muted }}">{{ l.count }}</span></div>
+              <span style="width:26px;height:26px;border-radius:50%;border:1.5px solid {{ l.bd }};background:{{ l.bg }};color:{{ l.fg }};display:flex;align-items:center;justify-content:center;font:700 13px {{ t.body }}">{{ l.mark }}</span>
+            </div>
+          </sc-for>
+        </div>
+        <div style="display:flex;gap:8px">
+          <input value="{{ newList }}" onChange="{{ onNewList }}" placeholder="Nouvelle liste…" style="flex:1;min-width:0;height:48px;padding:0 14px;border-radius:{{ t.r2 }};border:1px solid {{ t.line }};background:{{ t.surface }};color:{{ t.ink }};font:15px {{ t.body }};outline:none">
+          <span onClick="{{ createListWithRec }}" style="height:48px;padding:0 16px;border-radius:{{ t.r2 }};border:1.5px solid {{ t.line }};display:flex;align-items:center;font:700 14px {{ t.body }};cursor:pointer">Créer</span>
+        </div>
+        <span onClick="{{ closeListSheet }}" style="height:52px;display:flex;align-items:center;justify-content:center;border-radius:{{ t.ctaR }};background:{{ t.ink }};color:{{ t.bg }};font:700 15px {{ t.body }};cursor:pointer">Terminé</span>
+      </div>
+    </div>
+  </sc-if>
+  <sc-if value="{{ hasCeleb }}" hint-placeholder-val="{{ false }}">
+    <div style="position:absolute;inset:0;z-index:11;background:{{ t.bg }};display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:40px 30px;box-sizing:border-box;text-align:center;animation:mj-rise .45s ease-out">
+      <div style="width:208px;height:184px;margin-bottom:10px">{{ celebIllu }}</div>
+      <div style="font:{{ t.headW }} 40px/1.05 {{ t.head }};letter-spacing:{{ t.headLs }};color:{{ t.ink }}">Bon appétit !</div>
+      <div style="font:15px/1.5 {{ t.body }};color:{{ t.muted }};max-width:280px;text-wrap:pretty">{{ celebTxt }}</div>
+      <sc-if value="{{ celebHasSaved }}"><div style="font:600 13px {{ t.body }};padding:8px 14px;border-radius:999px;background:{{ t.okSoft }};color:{{ t.okInk }}">{{ celebSaved }}</div></sc-if>
+      <div onClick="{{ closeCeleb }}" style="margin-top:18px;height:54px;padding:0 30px;border-radius:{{ t.ctaR }};background:{{ t.accent }};color:{{ t.accentInk }};display:flex;align-items:center;font:700 16px {{ t.body }};cursor:pointer">Retour aux recettes</div>
+    </div>
+  </sc-if>
+  <sc-if value="{{ hasToast }}" hint-placeholder-val="{{ false }}">
+    <div style="position:absolute;top:54px;left:16px;right:16px;z-index:12;padding:14px 16px;border-radius:{{ t.r2 }};background:{{ t.ink }};color:{{ t.bg }};font:600 14px/1.4 {{ t.body }};box-shadow:0 10px 30px rgba(0,0,0,.25)">{{ toast }}</div>
+  </sc-if>
+</div>
+<sc-if value="{{ showJump }}" hint-placeholder-val="{{ false }}">
+  <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:6px;max-width:390px">
+    <sc-for list="{{ jumps }}" as="j" hint-placeholder-count="6"><span onClick="{{ j.tap }}" style="height:32px;padding:0 13px;display:flex;align-items:center;border-radius:999px;font:500 12.5px system-ui,sans-serif;border:1px solid rgba(0,0,0,.14);background:{{ j.bg }};color:{{ j.fg }};cursor:pointer">{{ j.n }}</span></sc-for>
+  </div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:390,&quot;height&quot;:920},&quot;theme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;marche&quot;,&quot;frais&quot;,&quot;ludique&quot;,&quot;soir&quot;,&quot;jour&quot;,&quot;braise&quot;],&quot;default&quot;:&quot;soir&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;showJump&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}}">
+const F = { g: 1, kg: 1000, cl: 1, L: 100, pc: 1 };
+const UNITS = { g: ['g', 'kg'], cl: ['cl', 'L'], pc: ['pc'] };
+const STEP = { g: 50, kg: 0.25, cl: 5, L: 0.25, pc: 1 };
+const RAYONS = [['frais', 'Crèmerie & frais'], ['legumes', 'Légumes'], ['fruits', 'Fruits'], ['epicerie', 'Épicerie']];
+const CAT = [
+  ['oeufs', 'Œufs', 'frais', 'pc', 6], ['creme', 'Crème fraîche', 'frais', 'cl', 20], ['beurre', 'Beurre', 'frais', 'g', 250], ['lait', 'Lait', 'frais', 'cl', 100], ['fromage', 'Parmesan', 'frais', 'g', 100], ['lardons', 'Lardons', 'frais', 'g', 200], ['yaourt', 'Yaourts', 'frais', 'pc', 4],
+  ['champignons', 'Champignons', 'legumes', 'g', 250], ['oignon', 'Oignons', 'legumes', 'pc', 2], ['ail', 'Ail', 'legumes', 'pc', 3], ['courgette', 'Courgettes', 'legumes', 'pc', 2], ['poivron', 'Poivron', 'legumes', 'pc', 1], ['pdt', 'Pommes de terre', 'legumes', 'pc', 4], ['epinards', 'Épinards', 'legumes', 'g', 200],
+  ['citron', 'Citron', 'fruits', 'pc', 1], ['banane', 'Bananes', 'fruits', 'pc', 3], ['pomme', 'Pommes', 'fruits', 'pc', 4],
+  ['pates', 'Pâtes', 'epicerie', 'g', 500], ['riz', 'Riz', 'epicerie', 'g', 500], ['farine', 'Farine', 'epicerie', 'g', 1000], ['pois_chiches', 'Pois chiches', 'epicerie', 'g', 400], ['tomate_conc', 'Tomates concassées', 'epicerie', 'g', 400], ['lait_coco', 'Lait de coco', 'epicerie', 'cl', 40], ['lentilles', 'Lentilles', 'epicerie', 'g', 500], ['tortillas', 'Tortillas', 'epicerie', 'pc', 6]
+].map(([id, n, r, u, d]) => ({ id, n, r, u, d }));
+const CM = Object.fromEntries(CAT.map(c => [c.id, c]));
+const S = (...a) => a;
+const REC = [
+  { id: 'r1', n: 'Omelette forestière', cui: 'Française', t: 12, ing: [['oeufs', 3], ['champignons', 150], ['oignon', 1]], steps: S('Émince l\'oignon et les champignons.', 'Fais-les dorer 5 min à la poêle avec un filet d\'huile.', 'Bats les œufs, sale, poivre, verse sur les légumes.', 'Laisse prendre à feu doux, plie en deux, c\'est prêt.') },
+  { id: 'r2', n: 'Pâtes crème & champignons', cui: 'Italienne', t: 20, ing: [['pates', 200], ['champignons', 200], ['creme', 20], ['oignon', 1]], steps: S('Lance l\'eau des pâtes, bien salée.', 'Fais revenir oignon et champignons émincés 6 min.', 'Ajoute la crème, laisse réduire 3 min.', 'Mélange avec les pâtes égouttées, poivre généreusement.') },
+  { id: 'r5', n: 'Œufs cocotte à la crème', cui: 'Française', t: 15, ing: [['oeufs', 2], ['creme', 10], ['champignons', 50]], steps: S('Préchauffe le four à 180 °C.', 'Mets champignons hachés et crème au fond de 2 ramequins.', 'Casse un œuf dans chaque, sale, poivre.', 'Cuis 10 min au bain-marie : le jaune doit rester coulant.') },
+  { id: 'r13', n: 'Poêlée de champignons à la crème', cui: 'Française', t: 15, ing: [['champignons', 250], ['creme', 10], ['oignon', 1]], steps: S('Coupe les champignons en quartiers.', 'Saisis-les à feu vif avec l\'oignon 7 min.', 'Ajoute la crème, laisse napper 2 min et sers.') },
+  { id: 'r14', n: 'Pâtes à l\'oignon caramélisé', cui: 'Italienne', t: 25, ing: [['pates', 200], ['oignon', 2]], steps: S('Émince finement les oignons.', 'Fais-les compoter 15 min à feu doux avec l\'huile.', 'Cuis les pâtes, garde un peu d\'eau de cuisson.', 'Mélange le tout avec l\'eau de cuisson pour lier.') },
+  { id: 'r15', n: 'Œufs brouillés crémeux', cui: 'Française', t: 8, ing: [['oeufs', 3], ['creme', 5]], steps: S('Bats les œufs avec la crème.', 'Cuis à feu très doux en remuant sans arrêt.', 'Retire du feu quand c\'est encore un peu baveux.') },
+  { id: 'r3', n: 'Carbonara', cui: 'Italienne', t: 15, porc: true, ing: [['pates', 200], ['oeufs', 2], ['lardons', 150], ['fromage', 50]], steps: S('Cuis les pâtes.', 'Fais dorer les lardons sans matière grasse.', 'Mélange jaunes d\'œufs et parmesan râpé.', 'Hors du feu, mélange pâtes, lardons et sauce avec un peu d\'eau de cuisson.') },
+  { id: 'r4', n: 'Frittata à la courgette', cui: 'Italienne', t: 25, ing: [['oeufs', 4], ['courgette', 1], ['oignon', 1], ['fromage', 40]], steps: S('Râpe la courgette, émince l\'oignon.', 'Fais-les revenir 5 min.', 'Verse les œufs battus avec le parmesan.', 'Cuis 10 min couvert à feu doux.') },
+  { id: 'r6', n: 'Velouté de champignons', cui: 'Française', t: 30, ing: [['champignons', 250], ['oignon', 1], ['creme', 10], ['pdt', 1]], steps: S('Fais suer l\'oignon.', 'Ajoute champignons et pomme de terre en dés, couvre d\'eau.', 'Cuis 20 min puis mixe avec la crème.') },
+  { id: 'r7', n: 'Riz sauté aux œufs', cui: 'Asiatique', t: 20, ing: [['riz', 150], ['oeufs', 2], ['oignon', 1], ['poivron', 1]], steps: S('Cuis le riz (ou prends un reste, c\'est encore mieux).', 'Saute oignon et poivron à feu vif.', 'Ajoute le riz, puis les œufs battus, remue vite.') },
+  { id: 'r9', n: 'Shakshuka', cui: 'Moyen-Orient', t: 25, ing: [['oeufs', 4], ['tomate_conc', 400], ['oignon', 1], ['poivron', 1]], steps: S('Fais revenir oignon et poivron.', 'Ajoute les tomates, mijote 10 min.', 'Creuse 4 puits, casse les œufs, couvre 6 min.') },
+  { id: 'r10', n: 'Pâtes ail & citron', cui: 'Italienne', t: 12, vegan: true, ing: [['pates', 200], ['ail', 2], ['citron', 1]], steps: S('Cuis les pâtes.', 'Fais blondir l\'ail émincé dans l\'huile.', 'Mélange avec zeste et jus de citron.') },
+  { id: 'r11', n: 'Poêlée paysanne', cui: 'Française', t: 25, porc: true, ing: [['pdt', 3], ['champignons', 150], ['lardons', 100], ['oignon', 1]], steps: S('Coupe les pommes de terre en dés, fais-les dorer 15 min.', 'Ajoute lardons, oignon et champignons.', 'Poursuis 8 min à feu vif.') },
+  { id: 'r12', n: 'Crêpes du dimanche', cui: 'Française', t: 30, ing: [['farine', 250], ['oeufs', 3], ['lait', 50]], steps: S('Mélange farine et œufs.', 'Ajoute le lait petit à petit.', 'Laisse reposer 15 min puis cuis à la poêle.') },
+  { id: 'r8', n: 'Curry de pois chiches', cui: 'Indienne', t: 30, vegan: true, ing: [['pois_chiches', 400], ['lait_coco', 40], ['oignon', 1], ['tomate_conc', 400]], steps: S('Fais revenir l\'oignon avec les épices.', 'Ajoute tomates, lait de coco et pois chiches.', 'Mijote 20 min.') },
+  { id: 'r16', n: 'Quesadillas aux champignons', cui: 'Mexicaine', t: 15, ing: [['tortillas', 2], ['champignons', 150], ['fromage', 60]], steps: S('Poêle les champignons.', 'Garnis une tortilla de champignons et fromage, referme.', 'Dore 2 min de chaque côté.') }
+];
+const LACT = ['creme', 'beurre', 'lait', 'fromage', 'yaourt'], GLUT = ['pates', 'farine', 'tortillas'];
+REC.forEach(r => {
+  const ids = r.ing.map(i => i[0]);
+  r.p = 2; r.vege = !r.porc;
+  r.vegan = r.vegan || (!r.porc && !ids.some(i => ['oeufs', ...LACT].includes(i)));
+  r.al = []; if (ids.some(i => GLUT.includes(i))) r.al.push('Gluten'); if (ids.some(i => LACT.includes(i))) r.al.push('Lactose'); if (ids.includes('oeufs')) r.al.push('Œufs');
+});
+const THEMES = {
+  marche: { frame: '#1f1914', bg: '#f5efe4', surface: '#fffbf4', ink: '#2a2018', muted: '#76675a', line: '#e5dac8', accent: 'oklch(0.6 0.17 36)', accentInk: '#fffbf4', soft: 'oklch(0.92 0.045 45)', softInk: 'oklch(0.42 0.12 36)', ok: 'oklch(0.5 0.1 128)', okSoft: 'oklch(0.92 0.05 128)', okInk: 'oklch(0.38 0.09 128)', warn: 'oklch(0.72 0.14 70)', warnSoft: 'oklch(0.93 0.06 80)', warnInk: 'oklch(0.45 0.1 65)', miss: 'oklch(0.52 0.16 30)', missSoft: 'oklch(0.93 0.04 30)', head: "'Instrument Serif', Georgia, serif", headW: 400, headS: '44px', headLs: '-0.01em', body: "'Figtree', system-ui, sans-serif", r1: '26px', r2: '16px', r3: '12px', pillR: '999px', ctaR: '999px', shadow: '0 8px 24px oklch(0.6 0.17 36 / .35)', s1: '#ecdfca', s2: '#e5d5bc', carousel: true, stack: false, showNum: false, selBg: 'oklch(0.6 0.17 36)', selFg: '#fffbf4', selBd: 'oklch(0.6 0.17 36)', offBg: '#fffbf4', offFg: '#2a2018', offBd: '#e5dac8' },
+  frais: { frame: '#0f1a14', bg: '#fbfdfb', surface: '#f1f6f2', ink: '#14201a', muted: '#566560', line: '#dfe8e2', accent: 'oklch(0.55 0.13 155)', accentInk: '#ffffff', soft: 'oklch(0.94 0.04 155)', softInk: 'oklch(0.4 0.1 155)', ok: 'oklch(0.55 0.13 155)', okSoft: 'oklch(0.94 0.04 155)', okInk: 'oklch(0.4 0.1 155)', warn: 'oklch(0.72 0.14 70)', warnSoft: 'oklch(0.94 0.06 85)', warnInk: 'oklch(0.45 0.1 65)', miss: 'oklch(0.55 0.15 25)', missSoft: 'oklch(0.94 0.035 25)', head: "'Nunito', system-ui, sans-serif", headW: 800, headS: '34px', headLs: '-0.02em', body: "'Nunito', system-ui, sans-serif", r1: '20px', r2: '14px', r3: '10px', pillR: '12px', ctaR: '16px', shadow: '0 8px 20px oklch(0.55 0.13 155 / .28)', s1: '#e3ede6', s2: '#d8e5dc', carousel: false, stack: true, showNum: false, selBg: 'oklch(0.94 0.04 155)', selFg: 'oklch(0.36 0.1 155)', selBd: 'oklch(0.55 0.13 155)', offBg: '#ffffff', offFg: '#14201a', offBd: '#dfe8e2' },
+  ludique: { frame: '#2b2118', bg: 'oklch(0.965 0.03 90)', surface: '#fffdf7', ink: '#2b2118', muted: '#6f6152', line: 'oklch(0.9 0.04 85)', accent: 'oklch(0.63 0.19 32)', accentInk: '#fffdf7', soft: 'oklch(0.92 0.07 32)', softInk: 'oklch(0.45 0.15 32)', ok: 'oklch(0.58 0.14 140)', okSoft: 'oklch(0.92 0.08 140)', okInk: 'oklch(0.4 0.12 140)', warn: 'oklch(0.76 0.15 75)', warnSoft: 'oklch(0.92 0.09 90)', warnInk: 'oklch(0.46 0.11 65)', miss: 'oklch(0.53 0.18 30)', missSoft: 'oklch(0.93 0.05 30)', head: "'Fredoka', 'Nunito', sans-serif", headW: 600, headS: '38px', headLs: '-0.01em', body: "'Nunito', system-ui, sans-serif", r1: '30px', r2: '20px', r3: '14px', pillR: '999px', ctaR: '999px', shadow: '0 5px 0 oklch(0.48 0.17 32)', s1: 'oklch(0.9 0.07 140)', s2: 'oklch(0.86 0.08 140)', carousel: true, stack: false, showNum: true, selBg: 'oklch(0.58 0.14 140)', selFg: '#fffdf7', selBd: 'oklch(0.58 0.14 140)', offBg: '#fffdf7', offFg: '#2b2118', offBd: 'oklch(0.9 0.04 85)' }
+};
+const SOIR = { frame: '#050505', bg: '#121110', surface: '#1d1b19', ink: '#f5f2ec', muted: '#9a948a', line: '#2e2b28', accent: 'oklch(0.72 0.16 40)', accentInk: '#121110', soft: '#2a2724', softInk: '#f5f2ec', ok: 'oklch(0.83 0.15 138)', okSoft: 'oklch(0.32 0.06 138)', okInk: 'oklch(0.86 0.14 138)', warn: 'oklch(0.8 0.14 75)', warnSoft: 'oklch(0.33 0.06 75)', warnInk: 'oklch(0.86 0.12 78)', miss: 'oklch(0.76 0.14 30)', missSoft: 'oklch(0.32 0.06 30)', head: "'Geist', system-ui, sans-serif", headW: 600, headS: '34px', headLs: '-0.035em', body: "'Geist', system-ui, sans-serif", mono: "'Geist Mono', ui-monospace, monospace", r1: '28px', r2: '16px', r3: '12px', pillR: '999px', ctaR: '999px', shadow: 'none', s1: '#2b2723', s2: '#24211e', selBg: '#f5f2ec', selFg: '#121110', selBd: '#f5f2ec', offBg: '#1d1b19', offFg: '#f5f2ec', offBd: '#2e2b28', glass: 'rgba(33,31,28,.82)', tabOnBg: '#f5f2ec', tabOnFg: '#121110', scrim: 'linear-gradient(180deg, rgba(12,11,10,.25) 0%, rgba(12,11,10,0) 25%, rgba(12,11,10,0) 42%, rgba(12,11,10,.9) 100%)', cardOk: 'oklch(0.86 0.15 138)', cardMiss: 'oklch(0.8 0.13 32)', carousel: false, stack: false, v2: true };
+THEMES.soir = SOIR;
+THEMES.jour = { ...SOIR, frame: '#1a1816', bg: '#f5f2ec', surface: '#ffffff', ink: '#171512', muted: '#7d776d', line: '#e3ded5', accent: 'oklch(0.6 0.17 38)', accentInk: '#ffffff', soft: '#ebe6dd', softInk: '#171512', ok: 'oklch(0.52 0.13 140)', okSoft: 'oklch(0.93 0.05 140)', okInk: 'oklch(0.42 0.11 140)', warn: 'oklch(0.74 0.14 72)', warnSoft: 'oklch(0.94 0.06 85)', warnInk: 'oklch(0.46 0.1 65)', miss: 'oklch(0.55 0.17 30)', missSoft: 'oklch(0.94 0.04 30)', s1: '#e4dccf', s2: '#dcd3c4', selBg: '#171512', selFg: '#f5f2ec', selBd: '#171512', offBg: '#ffffff', offFg: '#171512', offBd: '#e3ded5', glass: 'rgba(255,255,255,.86)', tabOnBg: '#171512', tabOnFg: '#f5f2ec' };
+THEMES.braise = { ...SOIR, head: "'Instrument Serif', Georgia, serif", headW: 400, headS: '42px', headLs: '-0.01em', accent: 'oklch(0.68 0.18 36)', s1: '#2e2520', s2: '#27201b' };
+Object.values(THEMES).forEach(t => { t.v1 = !t.v2; t.dark = t.bg === '#121110'; t.mono = t.mono || "'JetBrains Mono', monospace"; t.stripe = `repeating-linear-gradient(135deg, ${t.s1} 0 9px, ${t.s2} 9px 18px)`; });
+const IMG_TERMS = { r1: ['omelette', 'tortilla'], r2: ['fettuc', 'mushroom', 'pasta'], r5: ['baked egg', 'benedict', 'egg'], r13: ['mushroom'], r14: ['onion', 'spaghetti'], r15: ['scrambled', 'egg'], r3: ['carbonara'], r4: ['frittata', 'tortilla'], r6: ['soup', 'mushroom'], r7: ['fried rice', 'rice'], r9: ['shakshuka'], r10: ['linguine', 'lemon', 'spaghetti'], r11: ['potato', 'hash'], r12: ['crepe', 'pancake'], r8: ['chickpea', 'chana', 'curry'], r16: ['quesadilla', 'taco', 'burrito'] };
+function loadImgs() {
+  if (window.__mjImgs) return window.__mjImgs;
+  const cache = {};
+  const get = term => cache[term] || (cache[term] = fetch('https://www.themealdb.com/api/json/v1/1/search.php?s=' + encodeURIComponent(term)).then(r => r.json()).then(j => j.meals || []).catch(() => []));
+  const terms = [...new Set(Object.values(IMG_TERMS).flat())];
+  return window.__mjImgs = Promise.all(terms.map(get)).then(() => {
+    const used = new Set(), out = {};
+    return Promise.all(REC.map(r => Promise.all((IMG_TERMS[r.id] || []).map(get)))).then(lists => {
+      REC.forEach((r, i) => { for (const ms of lists[i]) { const m = ms.find(x => !used.has(x.strMealThumb)); if (m) { used.add(m.strMealThumb); out[r.id] = m.strMealThumb; break; } } });
+      return out;
+    });
+  });
+}
+const RC = React.createElement;
+function mkIllu(kind, t, count, scale) {
+  const A = (style, key, ...kids) => RC('div', { key, style: { position: 'absolute', ...style } }, ...kids);
+  const pan = t.dark ? '#050404' : '#2e2723', yolk = 'oklch(0.82 0.16 80)', tomato = 'oklch(0.63 0.19 32)', leaf = 'oklch(0.62 0.14 140)';
+  const steamCol = t.dark ? 'rgba(255,255,255,.45)' : 'rgba(40,30,20,.2)';
+  const steam = (x0, y0) => [0, 1, 2].map(i => A({ left: x0 + i * 13, top: y0, width: 5, height: 18, borderRadius: 3, background: steamCol, opacity: 0, animation: `mj-steam 2.4s ease-in-out ${i * 0.55}s infinite` }, 'st' + i));
+  let kids = [];
+  if (kind === 'ready') kids = [...steam(32, 2),
+    A({ left: 12, top: 26, width: 64, height: 64, borderRadius: '50%', background: pan, boxShadow: 'inset 0 0 0 5px rgba(255,255,255,.07)' }, 'pan'),
+    A({ left: 70, top: 52, width: 32, height: 11, borderRadius: 6, background: pan }, 'hdl'),
+    A({ left: 25, top: 39, width: 38, height: 36, borderRadius: '48% 52% 44% 56%', background: '#fffaf0', animation: 'mj-bob 2.6s ease-in-out infinite' }, 'egg', A({ left: 12, top: 10, width: 15, height: 15, borderRadius: '50%', background: yolk }, 'y'))];
+  if (kind === 'missing') kids = [
+    A({ left: 30, top: 10, width: 16, height: 32, borderRadius: '50%', background: leaf, transform: 'rotate(-18deg)' }, 'l'),
+    A({ left: 47, top: 14, width: 24, height: 24, borderRadius: '50%', background: tomato }, 'tm'),
+    A({ left: 20, top: 28, width: 60, height: 62, borderRadius: '6px 6px 14px 14px', background: 'oklch(0.76 0.07 70)' }, 'bag', A({ left: 0, top: 0, right: 0, height: 10, borderRadius: '6px 6px 0 0', background: 'oklch(0.67 0.07 65)' }, 'f')),
+    A({ left: 70, top: 16, width: 28, height: 28, borderRadius: '50%', background: t.miss, color: '#fff', font: `700 14px ${t.body}`, display: 'flex', alignItems: 'center', justifyContent: 'center', animation: 'mj-pop 1.8s ease-in-out infinite' }, 'b', String(count))];
+  if (kind === 'cooking') kids = [...steam(34, 0),
+    ...[0, 1, 2].map(i => A({ left: 30 + i * 14, top: 14, width: 8, height: 8, borderRadius: '50%', border: '2px solid ' + steamCol, opacity: 0, animation: `mj-bubble 1.6s ease-out ${i * 0.4}s infinite` }, 'bb' + i)),
+    A({ left: 18, top: 34, width: 68, height: 44, borderRadius: '6px 6px 22px 22px', background: t.accent }, 'pot'),
+    A({ left: 10, top: 30, width: 84, height: 9, borderRadius: 5, background: pan }, 'rim'),
+    ...[0, 1, 2].map(i => A({ left: 32 + i * 15, top: 80, width: 10, height: 12, borderRadius: '50% 50% 45% 45% / 65% 65% 35% 35%', background: 'oklch(0.76 0.17 60)', transformOrigin: 'bottom', animation: `mj-flicker .8s ease-in-out ${i * 0.2}s infinite alternate` }, 'fl' + i))];
+  if (kind === 'done') kids = [
+    A({ left: 12, top: 10, width: 80, height: 80, borderRadius: '50%', background: '#fffaf0', boxShadow: 'inset 0 0 0 7px rgba(0,0,0,.06), 0 6px 14px rgba(0,0,0,.12)' }, 'pl'),
+    A({ left: 30, top: 34, width: 32, height: 32, borderRadius: '50%', background: tomato }, 'a'),
+    A({ left: 50, top: 42, width: 22, height: 22, borderRadius: '50%', background: yolk }, 'b'),
+    A({ left: 36, top: 26, width: 10, height: 20, borderRadius: '50%', background: leaf, transform: 'rotate(32deg)' }, 'c'),
+    ...[[4, 8, 0], [92, 20, 0.5], [86, 76, 1]].map(([x, y, d], i) => A({ left: x, top: y, width: 10, height: 10, background: yolk, animation: `mj-twinkle 1.6s ease-in-out ${d}s infinite` }, 'sp' + i))];
+  return RC('div', { key: kind, style: { position: 'relative', width: 104, height: 92, transform: scale ? `scale(${scale})` : undefined, transformOrigin: 'top left' } }, ...kids);
+}
+function stepKind(x) {
+  const s = x.toLowerCase();
+  if (/four|préchauff/.test(s)) return 'oven';
+  if (/émince|coupe|hache|râpe|quartiers|dés/.test(s)) return 'cut';
+  if (/repos/.test(s)) return 'rest';
+  if (/eau|pâtes|riz|mijote|bain-marie|mixe|lance/.test(s)) return 'pot';
+  if (/poêle|revenir|dor|saisi|compot|saute|sue|blondir|feu|cuis/.test(s)) return 'pan';
+  if (/sers|prêt|plie|garnis/.test(s)) return 'plate';
+  return 'mix';
+}
+function mkStepIllu(kind, t) {
+  const A = (style, key, ...kids) => RC('div', { key, style: { position: 'absolute', ...style } }, ...kids);
+  const pan = t.dark ? '#050404' : '#2e2723', leaf = 'oklch(0.62 0.14 140)', tomato = 'oklch(0.63 0.19 32)', onion = 'oklch(0.86 0.05 85)', wood = 'oklch(0.72 0.08 65)', yolk = 'oklch(0.82 0.16 80)';
+  const sc = t.dark ? 'rgba(255,255,255,.4)' : 'rgba(40,30,20,.2)';
+  const steam = (x0, y0) => [0, 1, 2].map(i => A({ left: x0 + i * 8, top: y0, width: 4, height: 12, borderRadius: 2, background: sc, opacity: 0, animation: `mj-steam 2.2s ease-in-out ${i * 0.5}s infinite` }, 'st' + i));
+  let k = [];
+  if (kind === 'cut') k = [
+    A({ left: 6, top: 38, width: 54, height: 13, borderRadius: 4, background: wood }, 'bd'),
+    ...[[10, onion], [20, tomato], [30, leaf]].map(([x, c], i) => A({ left: x, top: 31, width: 9, height: 9, borderRadius: '50%', background: c }, 'v' + i)),
+    A({ left: 42, top: 6, width: 10, height: 32, transformOrigin: 'bottom center', animation: 'mj-chop .9s ease-in-out infinite' }, 'kn', A({ left: 0, top: 11, width: 10, height: 20, borderRadius: '1px 1px 8px 1px', background: '#e4e1db' }, 'bl'), A({ left: 2, top: 0, width: 6, height: 12, borderRadius: 2, background: pan }, 'hd'))];
+  if (kind === 'pan') k = [...steam(16, 2),
+    A({ left: 6, top: 20, width: 36, height: 36, borderRadius: '50%', background: pan }, 'p'),
+    A({ left: 38, top: 34, width: 24, height: 8, borderRadius: 4, background: pan }, 'h'),
+    ...[[14, 30, 'oklch(0.72 0.05 60)'], [24, 36, onion], [18, 42, leaf]].map(([x, y, c], i) => A({ left: x, top: y, width: 8, height: 8, borderRadius: '50%', background: c, animation: `mj-bob 1.2s ease-in-out ${i * 0.3}s infinite` }, 'b' + i))];
+  if (kind === 'pot') k = [...steam(22, 0),
+    ...[0, 1].map(i => A({ left: 26 + i * 10, top: 12, width: 6, height: 6, borderRadius: '50%', border: '1.5px solid ' + sc, opacity: 0, animation: `mj-bubble 1.5s ease-out ${i * 0.5}s infinite` }, 'bb' + i)),
+    A({ left: 14, top: 26, width: 40, height: 24, borderRadius: '4px 4px 14px 14px', background: t.accent }, 'pt'),
+    A({ left: 10, top: 23, width: 48, height: 6, borderRadius: 3, background: pan }, 'rm'),
+    ...[0, 1, 2].map(i => A({ left: 23 + i * 9, top: 51, width: 6, height: 7, borderRadius: '50% 50% 45% 45% / 65% 65% 35% 35%', background: 'oklch(0.76 0.17 60)', transformOrigin: 'bottom', animation: `mj-flicker .8s ease-in-out ${i * 0.2}s infinite alternate` }, 'f' + i))];
+  if (kind === 'oven') k = [A({ left: 12, top: 8, width: 44, height: 44, borderRadius: 8, background: pan }, 'ov',
+    A({ left: 7, top: 5, width: 5, height: 5, borderRadius: '50%', background: 'rgba(255,255,255,.35)' }, 'k1'), A({ left: 16, top: 5, width: 5, height: 5, borderRadius: '50%', background: 'rgba(255,255,255,.35)' }, 'k2'),
+    A({ left: 6, top: 15, width: 32, height: 22, borderRadius: 4, background: 'oklch(0.72 0.17 55)', animation: 'mj-glow 1.6s ease-in-out infinite alternate' }, 'w'))];
+  if (kind === 'mix') k = [
+    A({ left: 34, top: 4, width: 5, height: 34, borderRadius: 3, background: wood, transformOrigin: 'bottom center', animation: 'mj-stir 1.3s ease-in-out infinite alternate' }, 'sp'),
+    A({ left: 12, top: 29, width: 44, height: 22, borderRadius: '0 0 22px 22px', background: t.accent }, 'bw'),
+    A({ left: 9, top: 26, width: 50, height: 5, borderRadius: 3, background: pan }, 'rm')];
+  if (kind === 'rest') k = [A({ left: 31, top: 6, width: 6, height: 6, borderRadius: 2, background: pan }, 'bt'),
+    A({ left: 18, top: 11, width: 26, height: 26, borderRadius: '50%', border: '3px solid ' + pan, background: '#fffaf0' }, 'tm', A({ left: 11.5, top: 1, width: 3, height: 12, borderRadius: 2, background: t.accent, transformOrigin: 'bottom center', animation: 'mj-spin 3s linear infinite' }, 'hd'))];
+  if (kind === 'plate') k = [A({ left: 13, top: 9, width: 42, height: 42, borderRadius: '50%', background: '#fffaf0', boxShadow: 'inset 0 0 0 4px rgba(0,0,0,.06)' }, 'pl'),
+    A({ left: 24, top: 20, width: 16, height: 16, borderRadius: '50%', background: tomato }, 'a'), A({ left: 34, top: 25, width: 11, height: 11, borderRadius: '50%', background: yolk }, 'b'),
+    ...[[6, 8, 0], [56, 14, 0.6], [52, 46, 1.1]].map(([x, y, d], i) => A({ left: x, top: y, width: 6, height: 6, background: yolk, animation: `mj-twinkle 1.6s ease-in-out ${d}s infinite` }, 's' + i))];
+  return RC('div', { key: kind, style: { position: 'absolute', inset: 0 } }, ...k);
+}
+const HEART_ON = 'oklch(0.63 0.2 25)';
+const norm = s => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+const fmt = n => String(Math.round(n * 100) / 100).replace('.', ',');
+const qLabel = (q, u) => u === 'g' && q >= 1000 ? fmt(q / 1000) + ' kg' : u === 'cl' && q >= 100 ? fmt(q / 100) + ' L' : u === 'pc' ? fmt(q) : fmt(q) + ' ' + u;
+const expTxt = d => d == null ? '' : d <= 0 ? "à finir aujourd'hui" : d === 1 ? 'à finir demain' : d <= 2 ? `à finir d'ici ${d} jours` : `encore ${d} jours`;
+const EXPS = [["Aujourd'hui", 0], ['Demain', 1], ['3 jours', 3], ['1 semaine', 7], ['Pas de date', null]];
+const DIETS = ['Tout', 'Végétarien', 'Vegan', 'Sans porc'];
+const ALLS = ['Gluten', 'Lactose', 'Arachides', 'Œufs', 'Fruits à coque'];
+const CUIS = ['Française', 'Italienne', 'Asiatique', 'Mexicaine', 'Indienne', 'Moyen-Orient'];
+
+class Component extends DCLogic {
+  state = {
+    screen: 'frigo', prev: 'resultats', q: '', sheet: null, recipe: null, portions: 2, done: {}, toast: null,
+    fridge: { oeufs: { qty: 6, unit: 'pc', exp: 10 }, champignons: { qty: 250, unit: 'g', exp: 2 }, creme: { qty: 20, unit: 'cl', exp: 3 }, pates: { qty: 500, unit: 'g', exp: null }, oignon: { qty: 2, unit: 'pc', exp: 14 } },
+    prefs: { diet: 'Végétarien', allergies: [], cuisines: ['Italienne', 'Asiatique'], portions: 2 },
+    sq: '', sf: { now: false, quick: false, cui: null },
+    liked: { r2: true, r14: true }, lists: [{ id: 'l1', n: 'Soirs de semaine', ids: ['r1', 'r7', 'r10'] }, { id: 'l2', n: 'Pour recevoir', ids: ['r9', 'r4'] }],
+    openList: null, listSheet: false, newList: '', creating: false
+  };
+  toggleLike = id => this.setState(s => ({ liked: { ...s.liked, [id]: !s.liked[id] } }));
+  toggleIn = (lid, id) => this.setState(s => ({ lists: s.lists.map(l => l.id !== lid ? l : { ...l, ids: l.ids.includes(id) ? l.ids.filter(x => x !== id) : [...l.ids, id] }) }));
+  go = screen => this.setState({ screen, sheet: null });
+  eligible(r) {
+    const { diet, allergies } = this.state.prefs;
+    if (diet === 'Végétarien' && !r.vege) return false;
+    if (diet === 'Vegan' && !r.vegan) return false;
+    if (diet === 'Sans porc' && r.porc) return false;
+    return !r.al.some(a => allergies.includes(a));
+  }
+  evalR(r, portions) {
+    const fr = this.state.fridge;
+    const items = r.ing.map(([id, q]) => {
+      const c = CM[id], need = q * portions / r.p, f = fr[id], have = f ? f.qty * F[f.unit] : 0;
+      const st = have >= need - 1e-6 ? 'ok' : have > 0 ? 'partial' : 'missing';
+      return { id, c, need, have, st, exp: f ? f.exp : null };
+    });
+    const miss = items.filter(i => i.st !== 'ok');
+    const saving = items.filter(i => i.st !== 'missing' && i.exp != null && i.exp <= 2);
+    const fav = this.state.prefs.cuisines.includes(r.cui);
+    const score = -miss.length * 100 + (fav ? 20 : 0) + saving.length * 15 - r.t / 5;
+    return { r, items, miss, saving, score };
+  }
+  card(e, i) {
+    const t = this.t, m = e.miss.length, fav = this.state.prefs.cuisines.includes(e.r.cui);
+    return {
+      tag: e.saving.length ? 'Anti-gaspi' : fav ? 'Ta cuisine préférée' : e.r.t <= 15 ? 'Express' : '', hasTag: !!(e.saving.length || fav || e.r.t <= 15),
+      metaMono: `${e.r.t} min · ${e.r.t <= 15 ? 'Express' : e.r.t <= 25 ? 'Facile' : 'On mijote'}`,
+      cardSt: m === 0 ? t.cardOk : t.cardMiss, cardStTxt: m === 0 ? 'Tu as tout !' : 'Il te manque : ' + e.miss.map(x => x.c.n.toLowerCase()).join(', '),
+      bg: this.imgBg(e.r.id), bgSm: this.imgBg(e.r.id, true),
+      like: ev => { ev.stopPropagation(); this.toggleLike(e.r.id); },
+      heart: this.state.liked[e.r.id] ? HEART_ON : t.muted, heartOp: this.state.liked[e.r.id] ? 1 : 0.4,
+      heartPhoto: this.state.liked[e.r.id] ? HEART_ON : '#ffffff', heartPhotoOp: this.state.liked[e.r.id] ? 1 : 0.55,
+      n: e.r.n, rank: String(i + 1).padStart(2, '0'), photo: this.state.imgs && this.state.imgs[e.r.id] ? '' : 'photo · ' + norm(e.r.n),
+      meta: `${e.r.t} min · ${e.r.cui}`,
+      badge: m === 0 ? 'Tout est là' : `Il manque ${m}`, badgeBg: m === 0 ? t.okSoft : t.missSoft, badgeFg: m === 0 ? t.okInk : t.miss,
+      hasSave: e.saving.length > 0, save: e.saving.length ? 'Sauve tes ' + e.saving.map(s => s.c.n.toLowerCase()).join(' et ') : '',
+      hasMiss: m > 0, missLabel: 'Manque : ' + e.miss.map(x => x.c.n.toLowerCase() + (x.st === 'partial' ? ' (pas assez)' : '')).join(', '),
+      stLabel: m === 0 ? 'Faisable maintenant' : `Il manque ${m} ingrédient${m > 1 ? 's' : ''}`, stColor: m === 0 ? t.okInk : t.miss,
+      open: () => this.setState({ screen: 'recette', prev: this.state.screen, recipe: e.r.id, portions: this.state.prefs.portions, done: {} })
+    };
+  }
+  openSheet(id) {
+    const f = this.state.fridge[id], c = CM[id];
+    this.setState({ sheet: f ? { id, qty: f.qty, unit: f.unit, exp: f.exp, isNew: false } : { id, qty: c.d, unit: c.u, exp: c.r === 'epicerie' ? null : 7, isNew: true } });
+  }
+  setDraft = patch => this.setState(s => ({ sheet: { ...s.sheet, ...patch } }));
+  flash(msg) { clearTimeout(this._tt); this.setState({ toast: msg }); this._tt = setTimeout(() => this.setState({ toast: null }), 2600); }
+  componentWillUnmount() { clearTimeout(this._tt); }
+  componentDidMount() {
+    if (!window.__mjHx) {
+      window.__mjHx = true;
+      let drag = null, moved = false;
+      document.addEventListener('pointerdown', e => {
+        if (e.pointerType !== 'mouse' || e.button !== 0) return;
+        const el = e.target.closest && e.target.closest('.mj-hx'); if (!el) return;
+        drag = { el, x: e.clientX, sl: el.scrollLeft, snap: el.style.scrollSnapType }; moved = false;
+      });
+      document.addEventListener('pointermove', e => {
+        if (!drag) return;
+        const dx = e.clientX - drag.x;
+        if (!moved && Math.abs(dx) > 5) { moved = true; drag.el.style.scrollSnapType = 'none'; drag.el.style.cursor = 'grabbing'; }
+        if (moved) { drag.el.scrollLeft = drag.sl - dx; e.preventDefault(); }
+      });
+      const end = () => {
+        if (!drag) return;
+        const d = drag; drag = null; d.el.style.cursor = '';
+        if (moved) {
+          const kids = [...d.el.children].filter(c => c.offsetWidth > 2);
+          const pad = 20, target = d.el.scrollLeft;
+          let best = 0; for (const c of kids) { const x = c.offsetLeft - d.el.firstElementChild.offsetLeft; if (Math.abs(x - target) < Math.abs(best - target)) best = x; }
+          if (d.snap && d.snap !== 'none') d.el.scrollTo({ left: Math.min(best, d.el.scrollWidth - d.el.clientWidth), behavior: 'smooth' });
+          setTimeout(() => { d.el.style.scrollSnapType = d.snap; }, 400);
+          void pad;
+        }
+      };
+      document.addEventListener('pointerup', end); document.addEventListener('pointercancel', end);
+      document.addEventListener('click', e => { if (moved) { e.stopPropagation(); e.preventDefault(); moved = false; } }, true);
+      document.addEventListener('wheel', e => {
+        const el = e.target.closest && e.target.closest('.mj-hx'); if (!el) return;
+        const max = el.scrollWidth - el.clientWidth; if (max <= 0) return;
+        const d = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : (e.shiftKey ? e.deltaY : 0);
+        if (!d) return;
+        if ((d < 0 && el.scrollLeft <= 0) || (d > 0 && el.scrollLeft >= max - 1)) { e.preventDefault(); return; }
+        e.stopPropagation();
+      }, { passive: false, capture: true });
+    }
+    loadImgs().then(imgs => this.setState({ imgs })).catch(() => {}); }
+  imgBg(id, sm) { const u = this.state.imgs && this.state.imgs[id]; return u ? `url("${u}${sm ? '/preview' : ''}") center / cover no-repeat, ${this.t.stripe}` : this.t.stripe; }
+  chip(on) { const t = this.t; return { bg: on ? t.selBg : t.offBg, fg: on ? t.selFg : t.offFg, bd: on ? t.selBd : t.offBd }; }
+  renderVals() {
+    const tKey = this.state.mode || this.props.theme || 'marche';
+    const t = this.t = THEMES[tKey] || THEMES.marche;
+    const s = this.state, fr = s.fridge, nq = norm(s.q.trim());
+    const all = REC.filter(r => this.eligible(r)).map(r => this.evalR(r, r.p)).sort((a, b) => b.score - a.score);
+    const doable = all.filter(e => e.miss.length <= 2);
+    const complete = all.filter(e => e.miss.length === 0);
+    const top = complete.slice(0, 3); if (top.length < 3) top.push(...doable.filter(e => e.miss.length > 0).slice(0, 3 - top.length));
+    const topIds = new Set(top.map(e => e.r.id));
+    const tout = complete.filter(e => !topIds.has(e.r.id)), presque = doable.filter(e => e.miss.length > 0 && !topIds.has(e.r.id));
+    const selCount = Object.keys(fr).length, expiring = Object.values(fr).filter(f => f.exp != null && f.exp <= 2).length;
+    const rayons = RAYONS.map(([id, n]) => {
+      const inR = CAT.filter(c => c.r === id);
+      const items = inR.filter(c => !nq || norm(c.n).includes(nq)).map(c => {
+        const f = fr[c.id], on = !!f;
+        return { n: c.n, on, sub: on ? qLabel(f.qty * F[f.unit], c.u) : '', dot: on && f.exp != null && f.exp <= 2, ...this.chip(on), tap: () => this.openSheet(c.id) };
+      });
+      return { n, count: `${inR.filter(c => fr[c.id]).length}/${inR.length}`, items };
+    }).filter(r => r.items.length);
+
+    let sheet = null;
+    if (s.sheet) {
+      const d = s.sheet, c = CM[d.id], st = STEP[d.unit];
+      sheet = {
+        n: c.n, sub: d.isNew ? 'Combien tu en as ?' : 'Dans ton frigo', qty: d.unit === 'pc' ? fmt(d.qty) : fmt(d.qty) + ' ' + d.unit,
+        minus: () => this.setDraft({ qty: Math.max(0, Math.round((d.qty - st) * 100) / 100) }),
+        plus: () => this.setDraft({ qty: Math.round((d.qty + st) * 100) / 100 }),
+        multiUnit: UNITS[c.u].length > 1,
+        units: UNITS[c.u].map(u => ({ n: u, bg: u === d.unit ? t.ink : 'transparent', fg: u === d.unit ? t.bg : t.ink, tap: () => u !== d.unit && this.setDraft({ unit: u, qty: Math.round(d.qty * F[d.unit] / F[u] * 100) / 100 }) })),
+        exps: EXPS.map(([n, v]) => ({ n, ...this.chip(d.exp === v), tap: () => this.setDraft({ exp: v }) })),
+        canRemove: !d.isNew,
+        remove: () => this.setState(ss => { const f = { ...ss.fridge }; delete f[d.id]; return { fridge: f, sheet: null }; }),
+        saveLabel: d.isNew ? 'Ajouter au frigo' : 'Valider',
+        save: () => this.setState(ss => { const f = { ...ss.fridge }; if (d.qty > 0) f[d.id] = { qty: d.qty, unit: d.unit, exp: d.exp }; else delete f[d.id]; return { fridge: f, sheet: null, q: '' }; })
+      };
+    }
+
+    let rec = null;
+    if (s.screen === 'recette' && s.recipe) {
+      const r = REC.find(x => x.id === s.recipe), e = this.evalR(r, s.portions), m = e.miss.length;
+      rec = {
+        n: r.n, bg: this.imgBg(r.id), like: () => this.toggleLike(r.id), heart: s.liked[r.id] ? HEART_ON : t.muted, heartOp: s.liked[r.id] ? 1 : 0.5, photo: this.state.imgs && this.state.imgs[r.id] ? '' : 'photo · ' + norm(r.n),
+        ...(() => {
+          const total = r.steps.length, dn = r.steps.filter((_, k) => s.done[k]).length;
+          const kind = dn === total ? 'done' : dn > 0 ? 'cooking' : m > 0 ? 'missing' : 'ready';
+          this._illuKind = kind; this._illuCount = m;
+          const names = e.miss.map(x => x.c.n.toLowerCase()).join(' et ');
+          return {
+            moodBg: kind === 'missing' ? t.missSoft : kind === 'cooking' ? t.warnSoft : t.okSoft,
+            moodTitle: kind === 'ready' ? 'Tout est dans ton frigo' : kind === 'missing' ? `Il te manque ${m} truc${m > 1 ? 's' : ''}` : kind === 'cooking' ? `Étape ${dn} sur ${total}` : "C'est prêt !",
+            moodTxt: kind === 'ready' ? `On allume le feu ? Dans ${r.t} min, c'est dans l'assiette.` : kind === 'missing' ? `Un saut à l'épicerie pour ${names}, ou on improvise sans.` : kind === 'cooking' ? (dn / total < 0.5 ? "C'est parti, ça commence à sentir bon…" : 'Plus que quelques gestes, tiens bon !') : "Dis-nous que t'as cuisiné, on met ton frigo à jour.",
+            showProg: kind === 'cooking' || kind === 'done', prog: Math.round(dn / total * 100) + '%'
+          };
+        })(), meta: `${r.t} min · ${r.cui}${r.vegan ? ' · Vegan' : r.vege ? ' · Végétarien' : ''}`,
+        badge: m === 0 ? 'Tu as tout' : `Il te manque ${m} ingrédient${m > 1 ? 's' : ''}`, badgeBg: m === 0 ? t.okSoft : t.missSoft, badgeFg: m === 0 ? t.okInk : t.miss,
+        items: e.items.map(i => ({
+          n: i.c.n, qty: qLabel(i.need, i.c.u),
+          dot: i.st === 'ok' ? t.ok : i.st === 'partial' ? t.warn : t.miss,
+          note: i.st === 'ok' ? (i.exp != null && i.exp <= 2 ? 'Dans ton frigo · ' + expTxt(i.exp) : 'Dans ton frigo') : i.st === 'partial' ? `Pas assez : tu as ${qLabel(i.have, i.c.u)}` : 'À acheter',
+          noteColor: i.st === 'ok' ? (i.exp != null && i.exp <= 2 ? t.warnInk : t.muted) : i.st === 'partial' ? t.warnInk : t.miss
+        })),
+        steps: r.steps.map((txt, k) => { const dn = !!s.done[k]; return { num: dn ? '✓' : k + 1, txt, bg: dn ? t.bg : t.surface, fg: dn ? t.muted : t.ink, deco: dn ? 'line-through' : 'none', ill: mkStepIllu(stepKind(txt), t), illOp: dn ? 0.45 : 1, numBg: dn ? t.ok : t.soft, numFg: dn ? t.accentInk : t.softInk, tap: () => this.setState(ss => ({ done: { ...ss.done, [k]: !ss.done[k] } })) }; }),
+        cookLabel: m === 0 ? "J'ai cuisiné" : "J'ai cuisiné quand même"
+      };
+      this._cookE = e;
+    }
+
+    const sq = norm(s.sq.trim()), sf = s.sf;
+    const sRes = all.filter(e => (!sq || norm(e.r.n).includes(sq) || e.r.ing.some(([id]) => norm(CM[id].n).includes(sq))) && (!sf.now || e.miss.length === 0) && (!sf.quick || e.r.t <= 20) && (!sf.cui || e.r.cui === sf.cui));
+    const tog = k => () => this.setState(ss => ({ sf: { ...ss.sf, [k]: !ss.sf[k] } }));
+    const sFilters = [{ n: 'Faisable maintenant', on: sf.now, tap: tog('now') }, { n: '20 min max', on: sf.quick, tap: tog('quick') }, ...CUIS.map(c => ({ n: c, on: sf.cui === c, tap: () => this.setState(ss => ({ sf: { ...ss.sf, cui: ss.sf.cui === c ? null : c } })) }))].map(f => ({ ...f, ...this.chip(f.on) }));
+
+    const p = s.prefs, setP = patch => this.setState(ss => ({ prefs: { ...ss.prefs, ...patch } }));
+    const togList = (k, v) => () => setP({ [k]: p[k].includes(v) ? p[k].filter(x => x !== v) : [...p[k], v] });
+    const tabs = [['frigo', 'Frigo'], ['resultats', 'Recettes'], ['recherche', 'Chercher'], ['listes', 'Listes'], ['prefs', 'Profil']].map(([k, n]) => { const on = s.screen === k; return { n, pillBg: on ? t.tabOnBg : 'transparent', pillFg: on ? t.tabOnFg : t.muted, fg: on ? t.ink : t.muted, w: on ? 700 : 500, bar: on ? t.accent : 'transparent', tap: () => this.go(k) }; });
+    const ctx = [`Avec tes ${selCount} aliments`]; if (p.diet !== 'Tout') ctx.push(p.diet); p.allergies.forEach(a => ctx.push('Sans ' + a.toLowerCase()));
+
+    return {
+      t, q: s.q, onQ: e => this.setState({ q: e.target.value }),
+      isFrigo: s.screen === 'frigo', isResults: s.screen === 'resultats', isSearch: s.screen === 'recherche', isPrefs: s.screen === 'prefs', isRecipe: s.screen === 'recette',
+      showTabsV1: t.v1 && s.screen !== 'recette', showTabsV2: t.v2 && s.screen !== 'recette', tabs,
+      goSearch: () => this.go('recherche'), goPrefs: () => this.go('prefs'), goFrigo: () => this.go('frigo'),
+      frigoCount: `${selCount} aliment${selCount > 1 ? 's' : ''}`, frigoSub2: `${selCount}/${CAT.length} · ` + (expiring ? `${expiring} à finir vite` : 'rien ne presse'),
+      resCount: `${doable.length} recette${doable.length > 1 ? 's' : ''}`,
+      ctxChips2: [{ n: `${selCount} ingrédients`, tap: () => this.go('frigo') }, { n: p.diet === 'Tout' ? 'Omnivore' : p.diet, tap: () => this.go('prefs') }, { n: p.allergies.length ? 'Sans ' + p.allergies.map(a => a.toLowerCase()).join(', ') : 'Aucune allergie', tap: () => this.go('prefs') }, { n: p.cuisines.length ? p.cuisines.join(' · ') : 'Toutes cuisines', tap: () => this.go('prefs') }],
+      showJump: !!this.props.showJump,
+      jumps: [['frigo', 'Mon frigo'], ['resultats', 'Résultats'], ['recette', 'Recette'], ['recherche', 'Recherche'], ['listes', 'Listes'], ['prefs', 'Préférences']].map(([k, n]) => ({ n, bg: s.screen === k ? '#1a1a1a' : 'rgba(255,255,255,.6)', fg: s.screen === k ? '#fff' : '#1a1a1a', tap: () => k === 'recette' ? (top[0] && this.setState({ screen: 'recette', prev: 'resultats', recipe: top[0].r.id, portions: p.portions, done: {}, sheet: null })) : this.go(k) })).concat(tKey === 'soir' || tKey === 'jour' ? [{ n: tKey === 'soir' ? 'Mode clair' : 'Mode sombre', bg: 'rgba(255,255,255,.6)', fg: '#1a1a1a', tap: () => this.setState({ mode: tKey === 'soir' ? 'jour' : 'soir' }) }] : []),
+      frigoSub: `${selCount}/${CAT.length} aliments` + (expiring ? ` · ${expiring} à finir vite` : ''),
+      rayons, noMatch: rayons.length === 0,
+      ctaCount: `${doable.length} idées`, goResults: () => this.go('resultats'),
+      ctxChips: ctx,
+      top: top.map((e, i) => this.card(e, i)), hasTop: top.length > 0,
+      tout: tout.map((e, i) => this.card(e, i)), hasTout: tout.length > 0, toutCount: `${tout.length} recette${tout.length > 1 ? 's' : ''}`,
+      presque: presque.map((e, i) => this.card(e, i)), hasPresque: presque.length > 0, presqueCount: `${presque.length} recette${presque.length > 1 ? 's' : ''}`,
+      noResults: top.length === 0,
+      sq: s.sq, onSq: e => this.setState({ sq: e.target.value }), sFilters, sResults: sRes.map((e, i) => this.card(e, i)),
+      sCount: sRes.length ? `${sRes.length} recette${sRes.length > 1 ? 's' : ''} pour toi` : 'Rien trouvé. Essaie un autre ingrédient.',
+      diets: DIETS.map(n => ({ n, ...this.chip(p.diet === n), tap: () => setP({ diet: n }) })),
+      allergies: ALLS.map(n => ({ n, ...this.chip(p.allergies.includes(n)), tap: togList('allergies', n) })),
+      cuisines: CUIS.map(n => ({ n, ...this.chip(p.cuisines.includes(n)), tap: togList('cuisines', n) })),
+      prefPortions: p.portions, prefPm: () => setP({ portions: Math.max(1, p.portions - 1) }), prefPp: () => setP({ portions: Math.min(12, p.portions + 1) }),
+      rec, portions: s.portions,
+      pm: () => this.setState(ss => ({ portions: Math.max(1, ss.portions - 1) })), pp: () => this.setState(ss => ({ portions: Math.min(12, ss.portions + 1) })),
+      back: () => this.go(s.prev || 'resultats'),
+      cook: () => {
+        const e = this._cookE; if (!e) return;
+        const f = { ...s.fridge }; let used = 0;
+        e.items.forEach(i => { const cur = f[i.id]; if (!cur) return; used++; const left = cur.qty * F[cur.unit] - i.need; if (left <= 1e-6) delete f[i.id]; else f[i.id] = { ...cur, qty: Math.round(left / F[cur.unit] * 100) / 100 }; });
+        this.setState({ fridge: f, screen: 'resultats', celebrate: { n: e.r.n, used, saved: e.items.filter(i => i.st !== 'missing' && i.exp != null && i.exp <= 3).map(i => i.c.n.toLowerCase()) } });
+      },
+      hasSheet: !!sheet, sheet: sheet || {}, closeSheet: () => this.setState({ sheet: null }), stop: e => e.stopPropagation(),
+      hasToast: !!s.toast, toast: s.toast,
+      ...(() => {
+        const favIds = REC.filter(r => s.liked[r.id]).map(r => r.id);
+        const allL = [{ id: 'fav', n: 'Coups de cœur', ids: favIds, isFav: true }, ...s.lists];
+        const cnt = n => `${n} recette${n > 1 ? 's' : ''}`;
+        const cur = allL.find(l => l.id === s.openList);
+        const rows = cur ? cur.ids.map(id => REC.find(r => r.id === id)).filter(Boolean).map((r, i) => this.card(this.evalR(r, r.p), i)) : [];
+        const rid = s.recipe;
+        const create = withRec => () => { const n = s.newList.trim(); if (!n) return; this.setState(ss => ({ lists: [...ss.lists, { id: 'l' + Date.now(), n, ids: withRec && rid ? [rid] : [] }], newList: '', creating: false })); };
+        return {
+          isListes: s.screen === 'listes', listOverview: !cur, listDetail: !!cur,
+          listsSub: `${allL.length} listes · ${favIds.length} coup${favIds.length > 1 ? 's' : ''} de cœur`,
+          listCards: allL.map(l => ({ n: l.n, isFav: !!l.isFav, count: cnt(l.ids.length), m: [0, 1, 2, 3].map(i => l.ids[i] ? this.imgBg(l.ids[i], true) : t.stripe), open: () => this.setState({ openList: l.id }) })),
+          curList: cur ? { n: cur.n, count: cnt(cur.ids.length) } : {}, listRows: rows, listEmpty: !!cur && rows.length === 0,
+          closeList: () => this.setState({ openList: null }),
+          creating: s.creating, notCreating: !s.creating, startCreate: () => this.setState({ creating: true }),
+          newList: s.newList, onNewList: e => this.setState({ newList: e.target.value }), createList: create(false), createListWithRec: create(true),
+          listSheet: s.listSheet && s.screen === 'recette', openListSheet: () => this.setState({ listSheet: true, newList: '' }), closeListSheet: () => this.setState({ listSheet: false }),
+          sheetRecName: rid ? REC.find(r => r.id === rid).n : '',
+          sheetLists: allL.map(l => { const on = !!rid && l.ids.includes(rid); return { n: l.n, count: cnt(l.ids.length), thumb: l.ids[0] ? this.imgBg(l.ids[0], true) : t.stripe, mark: on ? '✓' : '', bg: on ? t.accent : 'transparent', fg: t.accentInk, bd: on ? t.accent : t.line, tap: () => l.isFav ? this.toggleLike(rid) : this.toggleIn(l.id, rid) }; })
+        };
+      })(),
+      illu: rec ? mkIllu(this._illuKind, t, this._illuCount) : null,
+      hasCeleb: !!s.celebrate, celebIllu: s.celebrate ? mkIllu('done', t, 0, 2) : null,
+      celebTxt: s.celebrate ? `${s.celebrate.n} : ${s.celebrate.used} ingrédient${s.celebrate.used > 1 ? 's' : ''} de ton frigo utilisé${s.celebrate.used > 1 ? 's' : ''}. Zéro gâchis, t'assures.` : '',
+      celebHasSaved: !!(s.celebrate && s.celebrate.saved.length), celebSaved: s.celebrate && s.celebrate.saved.length ? 'Sauvés de la poubelle : ' + s.celebrate.saved.join(', ') : '',
+      closeCeleb: () => this.setState({ celebrate: null })
+    };
+  }
+}
+</script>
+</body>
+</html>
