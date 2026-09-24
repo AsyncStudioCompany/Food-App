@@ -39,8 +39,10 @@ describe('Mijote', () => {
 
     await user.click(screen.getByRole('button', { name: /Trouver des recettes/ }))
     expect(screen.getByRole('heading', { name: /recettes? avec ce que t'as/ })).toBeInTheDocument()
+    // A breakfast dish: listed under "Tu as tout", not in the Top 3 (meals only).
+    expect(screen.getByRole('heading', { name: 'Tu as tout' })).toBeInTheDocument()
     const card = screen.getAllByRole('link').find((l) => l.textContent?.includes('Œufs brouillés crémeux'))!
-    expect(within(card).getByText('Tu as tout !')).toBeInTheDocument()
+    expect(card).not.toHaveClass('topcard')
 
     await user.click(card)
     expect(screen.getByRole('heading', { name: 'Œufs brouillés crémeux' })).toBeInTheDocument()
@@ -81,6 +83,7 @@ describe('Mijote', () => {
     const draft = {
       name: 'Omelette aux épinards',
       cuisine: 'Française',
+      course: 'Plat',
       minutes: 10,
       servings: 2,
       ingredients: [{ id: 'oeufs', qty: 4 }, { id: 'epinards', qty: 100 }],

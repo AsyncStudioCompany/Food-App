@@ -10,6 +10,7 @@ const request = {
 const good = {
   name: 'Œufs brouillés',
   cuisine: 'Française',
+  course: 'Plat',
   minutes: 8,
   servings: 2,
   ingredients: [{ id: 'oeufs', qty: 4 }],

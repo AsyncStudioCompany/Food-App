@@ -1,8 +1,8 @@
 import { searchRecipes, type SearchFilters } from '../domain/search'
-import { CUISINES } from '../domain/types'
+import { COURSES, CUISINES } from '../domain/types'
 import { useRanking } from '../state/recipes'
 import { setState, useStore } from '../state/store'
-import { plural } from '../ui/labels'
+import { COURSE_LABEL, plural } from '../ui/labels'
 import { RecipeRow } from '../ui/RecipeCards'
 import { useDragScroll } from '../ui/useDragScroll'
 
@@ -17,6 +17,7 @@ export function SearchScreen() {
   const filters: [label: string, on: boolean, tap: () => void][] = [
     ['Faisable maintenant', f.now, () => set({ now: !f.now })],
     ['20 min max', f.quick, () => set({ quick: !f.quick })],
+    ...COURSES.map((c): [string, boolean, () => void] => [COURSE_LABEL[c], f.course === c, () => set({ course: f.course === c ? null : c })]),
     ...CUISINES.map((c): [string, boolean, () => void] => [c, f.cuisine === c, () => set({ cuisine: f.cuisine === c ? null : c })]),
   ]
 

@@ -1,7 +1,7 @@
 import { isEligible, recipeTraits } from './diet.ts'
 import { daysLeft } from './expiry.ts'
 import { round2, toBase } from './units.ts'
-import { CUISINES, type Cuisine, type Fridge, type Goal, type Ingredient, type Prefs, type Recipe } from './types.ts'
+import { COURSES, CUISINES, type Course, type Cuisine, type Fridge, type Goal, type Ingredient, type Prefs, type Recipe } from './types.ts'
 
 /** What the app sends to the recipe generator. */
 export interface AiRecipeRequest {
@@ -16,6 +16,7 @@ export interface AiRecipeRequest {
 export interface AiRecipeDraft {
   name: string
   cuisine: Cuisine
+  course: Course
   minutes: number
   servings: number
   ingredients: { id: string; qty: number }[]
@@ -37,6 +38,7 @@ export function checkDraft(draft: AiRecipeDraft, byId: Map<string, Ingredient>, 
   const errors: string[] = []
   if (!draft.name.trim()) errors.push('Le nom est vide.')
   if (!CUISINES.includes(draft.cuisine)) errors.push(`Cuisine inconnue : ${draft.cuisine}.`)
+  if (!COURSES.includes(draft.course)) errors.push(`Type de plat inconnu : ${draft.course}.`)
   if (!(draft.minutes > 0 && draft.minutes <= 240)) errors.push('Le temps doit être entre 1 et 240 minutes.')
   if (!(draft.servings >= 1 && draft.servings <= 12)) errors.push('Les portions doivent être entre 1 et 12.')
   if (draft.ingredients.length < 1) errors.push('Il faut au moins un ingrédient.')
@@ -58,6 +60,7 @@ export function draftToRecipe(draft: AiRecipeDraft, id: string): Recipe {
     id,
     name: draft.name.trim(),
     cuisine: draft.cuisine,
+    course: draft.course,
     minutes: Math.round(draft.minutes),
     servings: Math.round(draft.servings),
     ingredients: draft.ingredients.map((i) => ({ id: i.id, qty: i.qty })),

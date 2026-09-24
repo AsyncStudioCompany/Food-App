@@ -28,6 +28,11 @@ export const CUISINES = [
 ] as const
 export type Cuisine = (typeof CUISINES)[number]
 
+export const COURSES = ['Plat', 'Entrée', 'Soupe', 'Salade', 'Accompagnement', 'Petit-déj', 'Dessert'] as const
+export type Course = (typeof COURSES)[number]
+/** Courses that make a meal: the Top 3 only suggests these. */
+export const MAIN_COURSES: Course[] = ['Plat', 'Soupe', 'Salade']
+
 export const GOALS = ['Équilibré', 'Prise de masse', 'Protéines', 'Perte de poids'] as const
 export type Goal = (typeof GOALS)[number]
 
@@ -57,6 +62,8 @@ export interface Recipe {
   id: string
   name: string
   cuisine: Cuisine
+  /** Type of dish (main, starter, soup, dessert…). */
+  course: Course
   minutes: number
   servings: number
   ingredients: RecipeIngredient[]

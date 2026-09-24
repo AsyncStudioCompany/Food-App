@@ -1,4 +1,4 @@
-import type { AisleId, Ingredient, PhotoCredit, Recipe } from '../domain/types.ts'
+import type { AisleId, Course, Ingredient, PhotoCredit, Recipe } from '../domain/types.ts'
 import { MEALDB_RECIPES } from './mealdb.ts'
 import { NUTRITION } from './nutrition.ts'
 
@@ -45,6 +45,12 @@ export const INGREDIENTS: Ingredient[] = [
   I('chevre', 'Fromage de chèvre', 'frais', 'g', 150, { animal: 'dairy', allergens: ['Lactose'] }),
   I('ricotta', 'Ricotta', 'frais', 'g', 250, { animal: 'dairy', allergens: ['Lactose'] }),
   I('tofu', 'Tofu', 'frais', 'g', 400),
+  I('canard', 'Canard', 'frais', 'g', 400, { animal: 'meat' }),
+  I('veau', 'Veau', 'frais', 'g', 400, { animal: 'meat' }),
+  I('fruits_de_mer', 'Fruits de mer', 'frais', 'g', 400, { animal: 'fish' }),
+  I('mascarpone', 'Mascarpone', 'frais', 'g', 250, { animal: 'dairy', allergens: ['Lactose'] }),
+  I('fromage_frais', 'Fromage frais', 'frais', 'g', 200, { animal: 'dairy', allergens: ['Lactose'] }),
+  I('halloumi', 'Halloumi', 'frais', 'g', 225, { animal: 'dairy', allergens: ['Lactose'] }),
   I('champignons', 'Champignons', 'legumes', 'g', 250),
   I('oignon', 'Oignons', 'legumes', 'pc', 2),
   I('ail', 'Ail', 'legumes', 'pc', 3),
@@ -72,6 +78,12 @@ export const INGREDIENTS: Ingredient[] = [
   I('radis', 'Radis', 'legumes', 'pc', 10),
   I('betterave', 'Betteraves', 'legumes', 'pc', 2),
   I('courge', 'Courge', 'legumes', 'g', 800),
+  I('fenouil', 'Fenouil', 'legumes', 'pc', 1),
+  I('asperges', 'Asperges', 'legumes', 'g', 250),
+  I('navet', 'Navets', 'legumes', 'pc', 3),
+  I('panais', 'Panais', 'legumes', 'pc', 3),
+  I('gombo', 'Gombos', 'legumes', 'g', 250),
+  I('plantain', 'Bananes plantain', 'legumes', 'pc', 2),
   I('citron', 'Citron', 'fruits', 'pc', 1),
   I('citron_vert', 'Citron vert', 'fruits', 'pc', 2),
   I('banane', 'Bananes', 'fruits', 'pc', 3),
@@ -81,6 +93,11 @@ export const INGREDIENTS: Ingredient[] = [
   I('poire', 'Poires', 'fruits', 'pc', 3),
   I('fraises', 'Fraises', 'fruits', 'g', 250),
   I('mangue', 'Mangue', 'fruits', 'pc', 1),
+  I('fruits_rouges', 'Fruits rouges', 'fruits', 'g', 250),
+  I('ananas', 'Ananas', 'fruits', 'pc', 1),
+  I('peches', 'Pêches', 'fruits', 'pc', 4),
+  I('cerises', 'Cerises', 'fruits', 'g', 250),
+  I('abricots', 'Abricots', 'fruits', 'pc', 6),
   I('pates', 'Pâtes', 'epicerie', 'g', 500, { allergens: ['Gluten'] }),
   I('riz', 'Riz', 'epicerie', 'g', 500),
   I('farine', 'Farine', 'epicerie', 'g', 1000, { allergens: ['Gluten'] }),
@@ -104,6 +121,20 @@ export const INGREDIENTS: Ingredient[] = [
   I('amandes', 'Amandes', 'epicerie', 'g', 100, { allergens: ['Fruits à coque'] }),
   I('cacahuetes', 'Cacahuètes', 'epicerie', 'g', 100, { allergens: ['Arachides'] }),
   I('chocolat', 'Chocolat', 'epicerie', 'g', 200),
+  I('nouilles_oeufs', 'Nouilles aux œufs', 'epicerie', 'g', 250, { animal: 'egg', allergens: ['Gluten', 'Œufs'] }),
+  I('pate_brisee', 'Pâte brisée', 'epicerie', 'pc', 1, { animal: 'dairy', allergens: ['Gluten', 'Lactose'] }),
+  I('flocons_avoine', "Flocons d'avoine", 'epicerie', 'g', 500, { allergens: ['Gluten'] }),
+  I('biscuits', 'Biscuits', 'epicerie', 'g', 200, { animal: 'dairy', allergens: ['Gluten', 'Lactose'] }),
+  I('lait_concentre', 'Lait concentré sucré', 'epicerie', 'g', 397, { animal: 'dairy', allergens: ['Lactose'] }),
+  I('polenta', 'Polenta', 'epicerie', 'g', 500),
+  I('haricots_noirs', 'Haricots noirs', 'epicerie', 'g', 400),
+  I('raisins_secs', 'Raisins secs', 'epicerie', 'g', 250),
+  I('dattes', 'Dattes', 'epicerie', 'g', 250),
+  I('noix_coco', 'Noix de coco râpée', 'epicerie', 'g', 200),
+  I('noisettes', 'Noisettes', 'epicerie', 'g', 100, { allergens: ['Fruits à coque'] }),
+  I('pistaches', 'Pistaches', 'epicerie', 'g', 100, { allergens: ['Fruits à coque'] }),
+  I('pignons', 'Pignons de pin', 'epicerie', 'g', 100, { allergens: ['Fruits à coque'] }),
+  I('beurre_cacahuete', 'Beurre de cacahuète', 'epicerie', 'g', 350, { allergens: ['Arachides'] }),
 ]
 
 type Row = [id: string, qty: number]
@@ -148,10 +179,24 @@ const PHOTOS: Record<string, Photo> = {
   ),
 }
 
+/** Dish type of the house recipes that are not a main course. */
+const HOUSE_COURSE: Record<string, Course> = {
+  r5: 'Entrée',
+  r6: 'Soupe',
+  r12: 'Dessert',
+  r13: 'Accompagnement',
+  r15: 'Petit-déj',
+  r21: 'Salade',
+  r22: 'Entrée',
+  r23: 'Entrée',
+  r24: 'Entrée',
+}
+
 const R = (id: string, name: string, cuisine: Recipe['cuisine'], minutes: number, ingredients: Row[], steps: string[]): Recipe => ({
   id,
   name,
   cuisine,
+  course: HOUSE_COURSE[id] ?? 'Plat',
   minutes,
   servings: 2,
   ingredients: ingredients.map(([ingId, qty]) => ({ id: ingId, qty })),

@@ -9,6 +9,7 @@ const prefs: Prefs = { diet: 'Tout', allergies: [], cuisines: [], portions: 2, a
 const draft: AiRecipeDraft = {
   name: 'Omelette aux épinards',
   cuisine: 'Française',
+  course: 'Plat',
   minutes: 10,
   servings: 2,
   ingredients: [
