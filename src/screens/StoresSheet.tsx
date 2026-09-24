@@ -24,6 +24,7 @@ export function StoresSheet({ items, onClose }: { items: MissingItem[]; onClose:
   const place = useStore((s) => s.prefs.location)
   const [selected, setSelected] = useState(() => items.map((i) => i.id))
   const [sort, setSort] = useState<StoreSort>('near')
+  const [pricedOnly, setPricedOnly] = useState(false)
   const [attempt, setAttempt] = useState(0)
   const ids = items.map((i) => i.id).join(',')
   // The answer for the current place, ingredients and attempt; anything else means it's loading.
@@ -46,13 +47,15 @@ export function StoresSheet({ items, onClose }: { items: MissingItem[]; onClose:
   // At least one ingredient stays selected.
   const toggle = (id: string) => setSelected((s) => (s.includes(id) ? (s.length > 1 ? s.filter((x) => x !== id) : s) : [...s, id]))
   const chosen = items.filter((i) => selected.includes(i.id))
-  const rows =
+  const allRows =
     load.status === 'done'
       ? sortStores(
           load.result.stores.map((store) => ({ store, basket: basket(store, chosen, BY_ID) })),
           sort,
         )
       : []
+  const pricedRows = allRows.filter((r) => r.basket.known > 0)
+  const rows = pricedOnly ? pricedRows : allRows
 
   return (
     <Sheet onClose={onClose} gap={16} label="Où les trouver ?">
@@ -85,6 +88,14 @@ export function StoresSheet({ items, onClose }: { items: MissingItem[]; onClose:
               Le moins cher
             </button>
           </div>
+          <div className="wrap" role="group" aria-label="Afficher">
+            <button type="button" className="chip chip--filter" aria-pressed={!pricedOnly} onClick={() => setPricedOnly(false)}>
+              Tous{load.status === 'done' ? ` (${allRows.length})` : ''}
+            </button>
+            <button type="button" className="chip chip--filter" aria-pressed={pricedOnly} onClick={() => setPricedOnly(true)}>
+              Avec un prix{load.status === 'done' ? ` (${pricedRows.length})` : ''}
+            </button>
+          </div>
           {sort === 'cheap' && (
             <span className="muted" style={{ font: '13px/1.45 var(--font)' }}>
               On ne compare que les prix connus. Les relevés Open Prices sont partiels : un magasin sans prix n'est pas forcément plus cher.
@@ -114,8 +125,10 @@ export function StoresSheet({ items, onClose }: { items: MissingItem[]; onClose:
                 </span>
               )}
               {rows.length === 0 ? (
-                <span className="muted" style={{ font: '14px var(--font)' }}>
-                  Aucun supermarché ni épicerie à moins de 3 km.
+                <span className="muted" style={{ font: '14px/1.45 var(--font)' }}>
+                  {allRows.length
+                    ? "Aucun magasin autour de toi n'a encore de prix relevé pour ces ingrédients. Choisis « Tous » pour les voir quand même."
+                    : 'Aucun supermarché ni épicerie à moins de 3 km.'}
                 </span>
               ) : (
                 <div className="rows">
