@@ -18,6 +18,8 @@ describe('units', () => {
     expect(qtyLabel(20, 'cl')).toBe('20 cl')
     expect(qtyLabel(150, 'cl')).toBe('1,5 L')
     expect(qtyLabel(3, 'pc')).toBe('3')
+    expect(qtyLabel(13.333, 'g')).toBe('13 g')
+    expect(qtyLabel(2.667, 'cl')).toBe('2,7 cl')
   })
 })
 
@@ -72,6 +74,7 @@ describe('stepKind', () => {
     expect(stepKind('Cuis les pâtes.')).toBe('pot')
     expect(stepKind('Fais revenir oignon et poivron.')).toBe('pan')
     expect(stepKind('Sers bien frais.')).toBe('plate')
-    expect(stepKind('Bats les œufs avec la crème.')).toBe('mix')
+    expect(stepKind('Bats les œufs avec la crème.')).toBe('whisk')
+    expect(stepKind('Mélange la farine et le sucre.')).toBe('mix')
   })
 })

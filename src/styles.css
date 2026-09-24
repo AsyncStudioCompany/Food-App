@@ -808,6 +808,27 @@ button {
     box-shadow: 0 0 10px oklch(0.8 0.17 60);
   }
 }
+@keyframes mj-roll {
+  from {
+    transform: translateX(-6px);
+  }
+  to {
+    transform: translateX(6px);
+  }
+}
+@keyframes mj-fall {
+  0% {
+    opacity: 0;
+    transform: translateY(0);
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+}
 @keyframes mj-rise {
   from {
     opacity: 0;

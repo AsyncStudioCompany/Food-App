@@ -4,7 +4,8 @@ import { dietSuffix, recipeTraits } from '../domain/diet'
 import { expiryText, isSoon } from '../domain/expiry'
 import { cook, evaluate } from '../domain/matching'
 import { pantrySpices } from '../domain/pantry'
-import { stepKind } from '../domain/steps'
+import { ovenTemperature, stepKind, stepMinutes, utensils } from '../domain/steps'
+import { stepTechniques, type Technique } from '../domain/techniques'
 import { qtyLabel } from '../domain/units'
 import { deleteGenerated } from '../state/ai'
 import { photoBg, usePhotos } from '../state/photos'
@@ -13,8 +14,10 @@ import { setState, useStore } from '../state/store'
 import { LikeButton } from '../ui/Heart'
 import { MoodIllustration, StepIllustration, type MoodKind } from '../ui/Illustrations'
 import { missLabel, plural } from '../ui/labels'
+import { clock, durationLabel, useTimers } from '../ui/useTimers'
 import { ListSheet } from './ListSheet'
 import { StoresSheet } from './StoresSheet'
+import { TechniqueSheet } from './TechniqueSheet'
 
 export function RecipeScreen() {
   const { id } = useParams()
@@ -33,9 +36,15 @@ function RecipeView({ recipeId }: { recipeId: string }) {
   const [done, setDone] = useState<Record<number, boolean>>({})
   const [listOpen, setListOpen] = useState(false)
   const [storesOpen, setStoresOpen] = useState(false)
+  const [technique, setTechnique] = useState<Technique | null>(null)
+  const timers = useTimers()
 
   const e = useMemo(() => evaluate(recipe, portions, ctx), [recipe, portions, ctx])
   const traits = recipeTraits(recipe, BY_ID)
+  const oven = ovenTemperature(recipe.steps)
+  const tools = utensils(recipe.steps)
+  const stepTools = recipe.steps.map((txt) => ({ minutes: stepMinutes(txt), techniques: stepTechniques(txt) }))
+  const explained = new Set(stepTools.flatMap((t) => t.techniques.map((x) => x.id))).size
   const pantry = ['sel', 'poivre', "huile d'olive", ...(recipe.pantry ?? [])]
   // Only when you keep track of your spices (at least one in the fridge): otherwise every spice would be "lacking".
   const tracksSpices = Object.keys(ctx.fridge).some((id) => BY_ID.get(id)?.aisle === 'epices')
@@ -179,28 +188,83 @@ function RecipeView({ recipeId }: { recipeId: string }) {
           )}
         </div>
 
+        {(oven || tools.length > 0) && (
+          <>
+            <h2 className="section-title" style={{ margin: 0, padding: '18px 20px 8px' }}>
+              Avant de commencer
+            </h2>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10, padding: '0 20px' }}>
+              <div className="wrap" aria-label="Ustensiles">
+                {oven != null && (
+                  <span className="chip chip--filter" style={{ cursor: 'default', borderColor: 'var(--accent)', color: 'var(--accent)' }}>
+                    Four à {oven} °C
+                  </span>
+                )}
+                {tools
+                  .filter((t) => !(oven != null && t === 'Four'))
+                  .map((t) => (
+                    <span key={t} className="chip chip--filter" style={{ cursor: 'default' }}>
+                      {t}
+                    </span>
+                  ))}
+              </div>
+              <span className="muted" style={{ font: '13px/1.45 var(--font)' }}>
+                {plural(recipe.steps.length, 'étape')}
+                {explained > 0 && ` · ${plural(explained, 'technique')} expliquée${explained > 1 ? 's' : ''} : touche-les pour voir comment faire`}
+                .
+              </span>
+            </div>
+          </>
+        )}
+
         <h2 className="section-title" style={{ margin: 0, padding: '18px 20px 8px' }}>
           Étapes
         </h2>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8, padding: '0 20px' }}>
           {recipe.steps.map((txt, k) => {
             const on = !!done[k]
+            const { minutes, techniques } = stepTools[k]
+            const left = timers.left(k)
             return (
-              <button
-                key={k}
-                type="button"
-                aria-pressed={on}
-                onClick={() => setDone((d) => ({ ...d, [k]: !d[k] }))}
-                style={{ display: 'flex', gap: 12, alignItems: 'center', padding: '12px 12px 12px 14px', borderRadius: 'var(--r2)', background: on ? 'var(--bg)' : 'var(--surface)', border: '1px solid var(--line)', width: '100%' }}
-              >
-                <span style={{ width: 28, height: 28, flex: 'none', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', font: '700 13px var(--font)', background: on ? 'var(--ok)' : 'var(--soft)', color: on ? 'var(--accent-ink)' : 'var(--ink)' }}>
-                  {on ? '✓' : k + 1}
-                </span>
-                <span style={{ flex: 1, minWidth: 0, font: '15px/1.5 var(--font)', color: on ? 'var(--muted)' : 'var(--ink)', textDecoration: on ? 'line-through' : 'none', textWrap: 'pretty' }}>{txt}</span>
-                <div style={{ width: 68, height: 60, flex: 'none', borderRadius: 'var(--r3)', background: 'var(--soft)', position: 'relative', overflow: 'hidden', opacity: on ? 0.45 : 1, transition: 'opacity .3s' }}>
-                  <StepIllustration kind={stepKind(txt)} />
-                </div>
-              </button>
+              <div key={k} style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                <button
+                  type="button"
+                  aria-pressed={on}
+                  onClick={() => setDone((d) => ({ ...d, [k]: !d[k] }))}
+                  style={{ display: 'flex', gap: 12, alignItems: 'center', padding: '12px 12px 12px 14px', borderRadius: 'var(--r2)', background: on ? 'var(--bg)' : 'var(--surface)', border: '1px solid var(--line)', width: '100%' }}
+                >
+                  <span style={{ width: 28, height: 28, flex: 'none', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', font: '700 13px var(--font)', background: on ? 'var(--ok)' : 'var(--soft)', color: on ? 'var(--accent-ink)' : 'var(--ink)' }}>
+                    {on ? '✓' : k + 1}
+                  </span>
+                  <span style={{ flex: 1, minWidth: 0, font: '15px/1.5 var(--font)', color: on ? 'var(--muted)' : 'var(--ink)', textDecoration: on ? 'line-through' : 'none', textWrap: 'pretty' }}>{txt}</span>
+                  <div style={{ width: 68, height: 60, flex: 'none', borderRadius: 'var(--r3)', background: 'var(--soft)', position: 'relative', overflow: 'hidden', opacity: on ? 0.45 : 1, transition: 'opacity .3s' }}>
+                    <StepIllustration kind={stepKind(txt)} />
+                  </div>
+                </button>
+                {!on && (minutes != null || techniques.length > 0) && (
+                  <div className="wrap" style={{ paddingLeft: 14 }}>
+                    {minutes != null &&
+                      (left == null ? (
+                        <button type="button" className="chip chip--filter" onClick={() => timers.start(k, minutes)} aria-label={`Lancer un minuteur de ${durationLabel(minutes)}`}>
+                          Minuteur {durationLabel(minutes)}
+                        </button>
+                      ) : left > 0 ? (
+                        <button type="button" className="chip chip--filter" aria-pressed onClick={() => timers.stop(k)} aria-label={`Arrêter le minuteur, ${clock(left)} restantes`}>
+                          <span style={{ font: '600 13px var(--mono)' }}>{clock(left)}</span>&nbsp;· Arrêter
+                        </button>
+                      ) : (
+                        <button type="button" className="chip chip--filter" onClick={() => timers.stop(k)} style={{ background: 'var(--accent)', borderColor: 'var(--accent)', color: 'var(--accent-ink)' }}>
+                          Terminé !
+                        </button>
+                      ))}
+                    {techniques.map((t) => (
+                      <button key={t.id} type="button" className="chip chip--filter" onClick={() => setTechnique(t)} aria-label={`C'est quoi : ${t.name} ?`}>
+                        {t.name} ?
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
             )
           })}
         </div>
@@ -231,6 +295,7 @@ function RecipeView({ recipeId }: { recipeId: string }) {
       </div>
 
       {listOpen && <ListSheet recipeId={recipe.id} onClose={() => setListOpen(false)} />}
+      {technique && <TechniqueSheet technique={technique} onClose={() => setTechnique(null)} />}
       {storesOpen && (
         <StoresSheet
           items={e.missing.map((x) => ({ id: x.ingredient.id, name: x.ingredient.name, qty: Math.max(0, x.need - x.have) }))}
