@@ -22,10 +22,13 @@ function prices(url: URL) {
 }
 
 /** Simulated Overpass and Open Prices. */
-function fakeApis(opts: { overpassDown?: boolean; pricesDown?: boolean } = {}) {
+/** What Overpass answers when it gives up: HTTP 200, no element, and a remark. */
+const overpassGaveUp = { elements: [], remark: 'runtime error: Query timed out in "query" at line 1 after 26 seconds.' }
+
+function fakeApis(opts: { overpassDown?: boolean; pricesDown?: boolean; overpass?: (url: URL) => unknown } = {}) {
   const fetch = vi.fn(async (input: string | URL | Request, _init?: RequestInit) => {
     const url = new URL(String(input))
-    if (url.pathname === '/api/interpreter') return opts.overpassDown ? new Response('busy', { status: 504 }) : Response.json(overpass)
+    if (url.pathname === '/api/interpreter') return opts.overpassDown ? new Response('busy', { status: 504 }) : Response.json(opts.overpass ? opts.overpass(url) : overpass)
     if (url.host === 'prices.openfoodfacts.org') return opts.pricesDown ? new Response('oops', { status: 500 }) : Response.json(prices(url))
     return new Response(null, { status: 404 })
   })
@@ -81,8 +84,37 @@ describe('handleStores', () => {
     expect(noPrices.json).toMatchObject({ pricesComplete: false })
     const down = fakeApis({ overpassDown: true })
     expect(await handleStores(request, createStoresService({ fetch: down.fetch }))).toEqual({ status: 502, json: { error: 'stores_unavailable' } })
-    // Both Overpass servers were tried.
-    expect(down.calls.filter(([u]) => String(u).includes('/api/interpreter')).length).toBe(2)
+    // The main server twice, then both mirrors.
+    expect(down.calls.filter(([u]) => String(u).includes('/api/interpreter')).length).toBe(4)
+  })
+
+  it('does not take an Overpass that gave up for "no shop around"', async () => {
+    // The main server gives up (twice), a mirror answers.
+    const mirror = fakeApis({ overpass: (url) => (url.host === 'overpass-api.de' ? overpassGaveUp : overpass) })
+    const saved = await handleStores(request, createStoresService({ fetch: mirror.fetch }))
+    expect(saved.status).toBe(200)
+    expect((saved.json as { stores: unknown[] }).stores).toHaveLength(2)
+    // Both give up: an error the app can retry, not an empty list.
+    const both = fakeApis({ overpass: () => overpassGaveUp })
+    const service = createStoresService({ fetch: both.fetch })
+    expect(await handleStores(request, service)).toEqual({ status: 502, json: { error: 'stores_unavailable' } })
+    // Nothing kept in cache: the next try asks Overpass again.
+    const before = both.calls.filter(([u]) => String(u).includes('/api/interpreter')).length
+    await handleStores(request, service)
+    expect(both.calls.filter(([u]) => String(u).includes('/api/interpreter')).length).toBe(before + 4)
+  })
+
+  it('keeps a real empty answer only a few minutes', async () => {
+    let t = 0
+    const api = fakeApis({ overpass: () => ({ elements: [] }) })
+    const service = createStoresService({ fetch: api.fetch, now: () => t })
+    const overpassCalls = () => api.calls.filter(([u]) => String(u).includes('/api/interpreter')).length
+    expect(await handleStores(request, service)).toMatchObject({ status: 200, json: { stores: [] } })
+    await handleStores(request, service)
+    expect(overpassCalls()).toBe(1)
+    t += 11 * 60_000
+    await handleStores(request, service)
+    expect(overpassCalls()).toBe(2)
   })
 
   it('limits the calls to the open services', async () => {

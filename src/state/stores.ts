@@ -56,6 +56,8 @@ export async function fetchStores(place: GeoPoint, ids: string[]): Promise<Store
     throw new StoresError(res.status === 429 ? 'Trop de recherches en même temps. Réessaie dans une minute.' : 'Les magasins ne répondent pas pour le moment. Réessaie plus tard.')
   }
   const result = { stores: json.stores, pricesComplete: json.pricesComplete, updatedAt: json.updatedAt }
+  // An empty list is not worth keeping for the offline mode.
+  if (!result.stores.length) return { ...result, offline: false }
   const cached = (await loadSide<Cached>(CACHE)) ?? []
   await saveSide(CACHE, [{ key, result }, ...cached.filter((c) => c.key !== key)].slice(0, CACHE_SIZE))
   return { ...result, offline: false }

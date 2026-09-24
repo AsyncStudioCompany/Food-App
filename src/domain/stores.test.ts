@@ -8,6 +8,7 @@ import {
   directionsUrl,
   distanceLabel,
   distanceMeters,
+  overpassFailure,
   overpassQuery,
   parseOpenPrices,
   parseOverpass,
@@ -73,6 +74,13 @@ describe('parseOverpass', () => {
       { id: 'node/3', name: 'Primeur', brand: null, kind: 'greengrocer', lat: 48.85, lon: 2.34, hours: null },
     ])
     expect(parseOverpass(null)).toEqual([])
+  })
+  it('spots an Overpass answer that gave up', () => {
+    expect(overpassFailure({ elements: [], remark: 'runtime error: Query timed out in "query" at line 1 after 26 seconds.' })).toMatch(/timed out/)
+    expect(overpassFailure({ elements: [], remark: 'runtime error: Query run out of memory using about 2048 MB of RAM.' })).toMatch(/memory/)
+    expect(overpassFailure({ remark: 'oops' })).toBe('no elements')
+    expect(overpassFailure({ elements: [] })).toBeNull()
+    expect(overpassFailure({ elements: [{ type: 'node' }] })).toBeNull()
   })
 })
 

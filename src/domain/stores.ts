@@ -83,6 +83,17 @@ export function overpassQuery(p: GeoPoint, radius = SEARCH_RADIUS_M): string {
 
 const KIND_NAME: Record<StoreKind, string> = { supermarket: 'Supermarché', convenience: 'Épicerie', grocery: 'Épicerie', greengrocer: 'Primeur' }
 
+/**
+ * Overpass answers HTTP 200 even when it gives up (overloaded server, query timeout, memory):
+ * the list is then empty and a `remark` says why. Returns that reason, or null for a real answer.
+ */
+export function overpassFailure(json: unknown): string | null {
+  const j = json as { elements?: unknown; remark?: unknown } | null
+  if (!j || !Array.isArray(j.elements)) return 'no elements'
+  const remark = typeof j.remark === 'string' ? j.remark : ''
+  return /runtime error|timed out|out of memory|rate.?limit|dispatcher|error/i.test(remark) ? remark : null
+}
+
 type OverpassElement = { type?: string; id?: number; lat?: number; lon?: number; center?: { lat: number; lon: number }; tags?: Record<string, string> }
 
 /** Shops from an Overpass answer (`out center tags`), ways and relations placed at their center. */
