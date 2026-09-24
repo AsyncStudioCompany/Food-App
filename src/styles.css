@@ -927,3 +927,66 @@ button {
   background: var(--bg);
   transform: translateX(20px);
 }
+
+/* ——— Address map (Leaflet) ——— */
+.map {
+  border-radius: var(--r2);
+  border: 1px solid var(--line);
+  overflow: hidden;
+  background: var(--surface);
+  z-index: 0;
+}
+/* Plan IGN turned into a night map, like the rest of the "Soir" theme. */
+.map .leaflet-tile-pane {
+  filter: invert(1) hue-rotate(180deg) brightness(0.85) contrast(0.9) saturate(0.6);
+}
+.map .leaflet-control-zoom {
+  border: none;
+  box-shadow: none;
+}
+.map .leaflet-control-zoom a {
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  background: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  font: 600 20px var(--font);
+}
+.map .leaflet-control-zoom a:first-child {
+  border-radius: var(--r3) var(--r3) 0 0;
+}
+.map .leaflet-control-zoom a:last-child {
+  border-radius: 0 0 var(--r3) var(--r3);
+}
+.map .leaflet-control-attribution {
+  background: rgba(18, 17, 16, 0.75);
+  color: var(--muted);
+  font: 10px var(--font);
+}
+.map .leaflet-control-attribution a {
+  color: var(--muted);
+}
+/* Pin drawn in CSS: accent drop with a dark dot. */
+.map-pin {
+  position: absolute;
+  left: 2px;
+  top: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 50% 50% 50% 0;
+  background: var(--accent);
+  border: 2px solid var(--bg);
+  transform: rotate(-45deg);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+.map-pin::after {
+  content: '';
+  position: absolute;
+  left: 7px;
+  top: 7px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--bg);
+}

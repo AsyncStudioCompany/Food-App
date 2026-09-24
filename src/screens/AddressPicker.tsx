@@ -1,13 +1,19 @@
-import { useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import type { SavedPlace } from '../domain/types'
 import { placeFromDevice, PositionError, savePlace, searchAddresses, type AddressSuggestion } from '../state/geo'
+import { useStore } from '../state/store'
 
-/** Address field with autocomplete, and "Utiliser ma position". Saves the place in the prefs. */
+/** Leaflet is only downloaded when the map opens. */
+const AddressMap = lazy(() => import('./AddressMap'))
+
+/** Address field with autocomplete, "Utiliser ma position" and a map. Saves the place in the prefs. */
 export function AddressPicker({ onPicked }: { onPicked?: () => void }) {
   const [query, setQuery] = useState('')
   const [suggestions, setSuggestions] = useState<AddressSuggestion[]>([])
   const [locating, setLocating] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [mapOpen, setMapOpen] = useState(false)
+  const saved = useStore((s) => s.prefs.location)
 
   const searching = query.trim().length >= 3
   const shown = searching ? suggestions : []
@@ -34,6 +40,7 @@ export function AddressPicker({ onPicked }: { onPicked?: () => void }) {
     setQuery('')
     setSuggestions([])
     setError(null)
+    setMapOpen(false)
     onPicked?.()
   }
 
@@ -80,9 +87,25 @@ export function AddressPicker({ onPicked }: { onPicked?: () => void }) {
           ))}
         </div>
       )}
-      <button type="button" className="btn-line" style={{ height: 44, alignSelf: 'flex-start' }} disabled={locating} onClick={() => void locate()}>
-        {locating ? 'On te cherche…' : 'Utiliser ma position'}
-      </button>
+      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+        <button type="button" className="btn-line" style={{ height: 44 }} disabled={locating} onClick={() => void locate()}>
+          {locating ? 'On te cherche…' : 'Utiliser ma position'}
+        </button>
+        <button type="button" className="btn-line" style={{ height: 44 }} aria-expanded={mapOpen} onClick={() => setMapOpen((o) => !o)}>
+          {mapOpen ? 'Fermer la carte' : 'Choisir sur la carte'}
+        </button>
+      </div>
+      {mapOpen && (
+        <Suspense
+          fallback={
+            <span className="muted" role="status" style={{ font: '13px var(--font)' }}>
+              Chargement de la carte…
+            </span>
+          }
+        >
+          <AddressMap start={shown[0] ?? saved} onPick={pick} />
+        </Suspense>
+      )}
       {error && (
         <div role="status" style={{ font: '600 13px/1.4 var(--font)', color: 'var(--miss)' }}>
           {error}
@@ -92,20 +115,17 @@ export function AddressPicker({ onPicked }: { onPicked?: () => void }) {
   )
 }
 
-/** "Ton adresse", in the profile. */
+/** "Ton adresse" block of the profile (the group gives the title). */
 export function AddressSection({ location }: { location: SavedPlace | null }) {
   const [editing, setEditing] = useState(false)
   return (
     <section style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-      <h2 className="caps" style={{ margin: 0 }}>
-        Ton adresse
-      </h2>
       {location && !editing ? (
         <div className="panel-row" style={{ padding: '14px 16px', gap: 12, flexDirection: 'column', alignItems: 'stretch' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             <span style={{ font: '600 15px var(--font)', overflowWrap: 'anywhere' }}>{location.label}</span>
             <span className="muted" style={{ font: '13px var(--font)' }}>
-              Pour trouver les magasins autour de toi. Chiffrée comme le reste.
+              Utilisée pour « Où les trouver ? » sur les fiches recettes.
             </span>
           </div>
           <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
@@ -119,9 +139,6 @@ export function AddressSection({ location }: { location: SavedPlace | null }) {
         </div>
       ) : (
         <>
-          <span className="muted" style={{ font: '13px/1.45 var(--font)' }}>
-            Facultatif : pour trouver près de chez toi ce qui te manque. Chiffrée comme le reste de tes données.
-          </span>
           <AddressPicker onPicked={() => setEditing(false)} />
         </>
       )}

@@ -43,6 +43,13 @@ describe('generateRecipe', () => {
     expect(params.messages[0].content).toContain('Régime : Végétarien.')
   })
 
+  it('tells the AI which ingredients to avoid', async () => {
+    const { client, parse } = fakeClient(good)
+    await generateRecipe(client, { ...request, prefs: { ...request.prefs, avoid: ['champignons', 'poivron'] } })
+    expect(parse.mock.calls[0][0].messages[0].content).toContain("Ingrédients à éviter (n'en mets jamais) : Champignons, Poivron.")
+    expect(() => parseRequest({ ...request, prefs: { ...request.prefs, avoid: ['truffe'] } })).toThrow()
+  })
+
   it('asks once more when the draft breaks the diet, then gives up', async () => {
     const withBacon = { ...good, ingredients: [{ id: 'oeufs', qty: 4 }, { id: 'lardons', qty: 100 }] }
     const retry = fakeClient(withBacon, good)

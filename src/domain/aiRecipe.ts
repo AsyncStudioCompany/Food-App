@@ -7,7 +7,7 @@ import { COURSES, CUISINES, type Course, type Cuisine, type Fridge, type Goal, t
 export interface AiRecipeRequest {
   /** Fridge content in base units, with days before expiry. */
   fridge: { id: string; qty: number; days: number | null }[]
-  prefs: Pick<Prefs, 'diet' | 'allergies' | 'cuisines' | 'portions'> & { goal?: Goal }
+  prefs: Pick<Prefs, 'diet' | 'allergies' | 'cuisines' | 'portions'> & { goal?: Goal; avoid?: string[] }
   /** Free text: "un truc réconfortant", "sans four"… */
   wish: string
 }
@@ -34,7 +34,7 @@ export function fridgeSnapshot(fridge: Fridge, today: string): AiRecipeRequest['
 }
 
 /** Problems that make a draft unusable; empty when it is fine. */
-export function checkDraft(draft: AiRecipeDraft, byId: Map<string, Ingredient>, prefs: Pick<Prefs, 'diet' | 'allergies'>): string[] {
+export function checkDraft(draft: AiRecipeDraft, byId: Map<string, Ingredient>, prefs: Pick<Prefs, 'diet' | 'allergies'> & { avoid?: string[] }): string[] {
   const errors: string[] = []
   if (!draft.name.trim()) errors.push('Le nom est vide.')
   if (!CUISINES.includes(draft.cuisine)) errors.push(`Cuisine inconnue : ${draft.cuisine}.`)
@@ -52,6 +52,8 @@ export function checkDraft(draft: AiRecipeDraft, byId: Map<string, Ingredient>, 
   if (draft.steps.length < 2 || draft.steps.some((s) => !s.trim())) errors.push('Il faut au moins 2 étapes non vides.')
   if (errors.length === 0 && !isEligible(recipeTraits(draftToRecipe(draft, 'check'), byId), prefs))
     errors.push('La recette ne respecte pas le régime ou les allergies.')
+  const avoided = draft.ingredients.filter((i) => prefs.avoid?.includes(i.id)).map((i) => byId.get(i.id)?.name ?? i.id)
+  if (avoided.length) errors.push(`La recette contient un ingrédient à éviter : ${avoided.join(', ')}.`)
   return errors
 }
 

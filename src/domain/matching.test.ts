@@ -5,7 +5,7 @@ import type { Fridge, Prefs } from './types.ts'
 
 const byId = indexIngredients(INGREDIENTS)
 const TODAY = '2026-09-23'
-const prefs: Prefs = { diet: 'Tout', allergies: [], cuisines: [], portions: 2, ai: true, goal: 'Équilibré', onboarded: true, location: null }
+const prefs: Prefs = { diet: 'Tout', allergies: [], cuisines: [], portions: 2, ai: true, goal: 'Équilibré', onboarded: true, location: null, avoid: [] }
 const ctx = (fridge: Fridge, p: Partial<Prefs> = {}): MatchContext => ({ fridge, prefs: { ...prefs, ...p }, byId, today: TODAY })
 const recipe = (id: string) => RECIPES.find((r) => r.id === id)!
 
@@ -66,6 +66,14 @@ describe('rankAll and suggest', () => {
     expect(top[0].recipe.id).toBe('r2')
     expect(doable.every((e) => e.missing.length <= 2)).toBe(true)
     expect([...top, ...complete, ...almost]).toHaveLength(doable.length)
+  })
+
+  it('hides recipes with an ingredient to avoid', () => {
+    const all = rankAll(RECIPES, ctx(fridge)).map((e) => e.recipe)
+    expect(all.some((r) => r.ingredients.some((i) => i.id === 'champignons'))).toBe(true)
+    const without = rankAll(RECIPES, ctx(fridge, { avoid: ['champignons', 'lardons'] })).map((e) => e.recipe)
+    expect(without.length).toBeGreaterThan(0)
+    expect(without.some((r) => r.ingredients.some((i) => i.id === 'champignons' || i.id === 'lardons'))).toBe(false)
   })
 
   it('suggests nothing with an empty fridge, and only recipes that use the fridge', () => {
