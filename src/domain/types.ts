@@ -28,6 +28,11 @@ export const CUISINES = [
 ] as const
 export type Cuisine = (typeof CUISINES)[number]
 
+export const COURSES = ['Plat', 'Entrée', 'Soupe', 'Salade', 'Accompagnement', 'Petit-déj', 'Dessert'] as const
+export type Course = (typeof COURSES)[number]
+/** Courses that make a meal: the Top 3 only suggests these. */
+export const MAIN_COURSES: Course[] = ['Plat', 'Soupe', 'Salade']
+
 export const GOALS = ['Équilibré', 'Prise de masse', 'Protéines', 'Perte de poids'] as const
 export type Goal = (typeof GOALS)[number]
 
@@ -57,6 +62,8 @@ export interface Recipe {
   id: string
   name: string
   cuisine: Cuisine
+  /** Type of dish (main, starter, soup, dessert…). */
+  course: Course
   minutes: number
   servings: number
   ingredients: RecipeIngredient[]
@@ -103,6 +110,15 @@ export interface Prefs {
   goal: Goal
   /** Set once the welcome setup (diet, goal, fridge) is done. */
   onboarded: boolean
+  /** Where to look for shops ("Où les trouver ?"). Optional; encrypted with the rest of the data. */
+  location: SavedPlace | null
+}
+
+/** A position picked by the user: an address, or "Ma position". */
+export interface SavedPlace {
+  lat: number
+  lon: number
+  label: string
 }
 
 export interface RecipeList {

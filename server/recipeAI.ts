@@ -4,7 +4,7 @@ import { z } from 'zod'
 import { INGREDIENTS } from '../src/data/catalog.ts'
 import { checkDraft, type AiRecipeDraft, type AiRecipeRequest } from '../src/domain/aiRecipe.ts'
 import { indexIngredients } from '../src/domain/matching.ts'
-import { ALLERGENS, CUISINES, DIETS, GOALS } from '../src/domain/types.ts'
+import { ALLERGENS, COURSES, CUISINES, DIETS, GOALS } from '../src/domain/types.ts'
 import { qtyLabel } from '../src/domain/units.ts'
 
 const byId = indexIngredients(INGREDIENTS)
@@ -13,6 +13,7 @@ const ids = INGREDIENTS.map((i) => i.id) as [string, ...string[]]
 const DraftSchema = z.object({
   name: z.string().describe('Nom du plat en français, court et appétissant'),
   cuisine: z.enum(CUISINES),
+  course: z.enum(COURSES).describe('Type de plat ; « Plat » sauf si on demande autre chose'),
   minutes: z.number().int().describe('Temps total en minutes'),
   servings: z.number().int(),
   ingredients: z

@@ -5,10 +5,11 @@ import { indexIngredients } from './matching.ts'
 import type { Prefs } from './types.ts'
 
 const byId = indexIngredients(INGREDIENTS)
-const prefs: Prefs = { diet: 'Tout', allergies: [], cuisines: [], portions: 2, ai: true, goal: 'Équilibré', onboarded: true }
+const prefs: Prefs = { diet: 'Tout', allergies: [], cuisines: [], portions: 2, ai: true, goal: 'Équilibré', onboarded: true, location: null }
 const draft: AiRecipeDraft = {
   name: 'Omelette aux épinards',
   cuisine: 'Française',
+  course: 'Plat',
   minutes: 10,
   servings: 2,
   ingredients: [

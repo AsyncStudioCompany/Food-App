@@ -37,6 +37,8 @@ Mijote apparaît dans le Dock avec son icône et s'ouvre dans sa propre fenêtre
 
 Limites du mode local sur l'iPhone : le Mac doit être allumé avec Mijote lancée, et l'iPhone n'a pas de mode hors ligne (iOS l'exige en HTTPS).
 
+« Où les trouver ? » (magasins et prix autour de toi) marche sans clé, le Mac interroge OpenStreetMap et Open Prices. En `http://192.168…`, Safari refuse « Utiliser ma position » (il l'exige en HTTPS) : saisis ton adresse dans le Profil, c'est la même chose.
+
 ## Activer les comptes (synchro chiffrée entre tes appareils)
 
 Sans compte, tout marche, mais chaque appareil a son propre frigo. Avec un compte, tu retrouves les mêmes données sur l'iPhone et le Mac.

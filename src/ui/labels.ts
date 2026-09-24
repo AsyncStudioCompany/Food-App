@@ -1,4 +1,5 @@
 import type { Evaluation } from '../domain/matching'
+import type { Course } from '../domain/types'
 
 export const plural = (n: number, word: string) => `${n} ${word}${n > 1 ? 's' : ''}`
 
@@ -27,3 +28,14 @@ export const statusLabel = (e: Evaluation) =>
   e.missing.length === 0 ? 'Faisable maintenant' : `Il manque ${plural(e.missing.length, 'ingrédient')}`
 
 export const recipePath = (id: string) => `/recette/${id}`
+
+/** Filter pill of each dish type. */
+export const COURSE_LABEL: Record<Course, string> = {
+  Plat: 'Plats',
+  Entrée: 'Entrées',
+  Soupe: 'Soupes',
+  Salade: 'Salades',
+  Accompagnement: 'Accompagnements',
+  'Petit-déj': 'Petit-déj',
+  Dessert: 'Desserts',
+}

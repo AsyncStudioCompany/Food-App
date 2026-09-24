@@ -34,7 +34,7 @@ export type State = SavedState & UiState
 
 export const DEFAULT_SAVED: SavedState = {
   fridge: {},
-  prefs: { diet: 'Tout', allergies: [], cuisines: [], portions: 2, ai: true, goal: 'Équilibré', onboarded: false },
+  prefs: { diet: 'Tout', allergies: [], cuisines: [], portions: 2, ai: true, goal: 'Équilibré', onboarded: false, location: null },
   liked: {},
   lists: [],
   generated: [],

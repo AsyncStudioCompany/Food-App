@@ -2,7 +2,7 @@ import { isEligible, recipeTraits } from './diet.ts'
 import { daysLeft, isSoon } from './expiry.ts'
 import { goalBonus, recipeNutrition, type Nutrition } from './nutrition.ts'
 import { round2, toBase } from './units.ts'
-import type { Fridge, Ingredient, Prefs, Recipe } from './types.ts'
+import { MAIN_COURSES, type Fridge, type Ingredient, type Prefs, type Recipe } from './types.ts'
 
 export type ItemStatus = 'ok' | 'partial' | 'missing'
 
@@ -83,8 +83,10 @@ export interface Suggestions {
 export function suggest(ranked: Evaluation[]): Suggestions {
   const doable = ranked.filter((e) => e.missing.length <= MAX_MISSING)
   const fullyDoable = doable.filter((e) => e.missing.length === 0)
-  const top = fullyDoable.slice(0, 3)
-  if (top.length < 3) top.push(...doable.filter((e) => e.missing.length > 0).slice(0, 3 - top.length))
+  // The Top 3 suggests a meal: main courses, soups and salads (not a dessert or a side).
+  const isMain = (e: Evaluation) => MAIN_COURSES.includes(e.recipe.course)
+  const top = fullyDoable.filter(isMain).slice(0, 3)
+  if (top.length < 3) top.push(...doable.filter((e) => isMain(e) && e.missing.length > 0).slice(0, 3 - top.length))
   const inTop = new Set(top.map((e) => e.recipe.id))
   return {
     doable,

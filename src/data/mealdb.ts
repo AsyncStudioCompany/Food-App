@@ -1,4 +1,4 @@
-import type { Cuisine, Recipe } from '../domain/types.ts'
+import type { Course, Cuisine, Recipe } from '../domain/types.ts'
 
 /**
  * Recipes imported from TheMealDB (https://www.themealdb.com), with their real photo.
@@ -8,6 +8,29 @@ import type { Cuisine, Recipe } from '../domain/types.ts'
 const IMG = 'https://www.themealdb.com/images/media/meals/'
 
 type Row = [id: string, qty: number]
+
+/** Dish type when the name does not tell it (TheMealDB "Side", "Starter", "Breakfast", "Dessert"). */
+const COURSE: Record<string, Course> = {
+  '53282': 'Accompagnement',
+  '53288': 'Entrée',
+  '52914': 'Accompagnement',
+  '53076': 'Petit-déj',
+  '53473': 'Accompagnement',
+  '53092': 'Accompagnement',
+  '53436': 'Entrée',
+  '53357': 'Accompagnement',
+  '53364': 'Accompagnement',
+  '53038': 'Accompagnement',
+  '53417': 'Entrée',
+  '53259': 'Entrée',
+}
+
+function courseOf(mealId: string, name: string): Course {
+  if (COURSE[mealId]) return COURSE[mealId]
+  if (/soupe|velouté|bortsch|leblebi|phở|laksa|oukha|pistou/i.test(name)) return 'Soupe'
+  if (/^salade|\bsalade\b/i.test(name)) return 'Salade'
+  return 'Plat'
+}
 const M = (
   mealId: string,
   photo: string,
@@ -22,6 +45,7 @@ const M = (
   id: 'm' + mealId,
   name,
   cuisine,
+  course: courseOf(mealId, name),
   minutes,
   servings,
   ingredients: ingredients.map(([id, qty]) => ({ id, qty })),

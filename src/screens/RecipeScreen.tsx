@@ -11,8 +11,9 @@ import { BY_ID, useAllRecipes, useMatchContext } from '../state/recipes'
 import { setState, useStore } from '../state/store'
 import { LikeButton } from '../ui/Heart'
 import { MoodIllustration, StepIllustration, type MoodKind } from '../ui/Illustrations'
-import { plural } from '../ui/labels'
+import { missLabel, plural } from '../ui/labels'
 import { ListSheet } from './ListSheet'
+import { StoresSheet } from './StoresSheet'
 
 export function RecipeScreen() {
   const { id } = useParams()
@@ -30,6 +31,7 @@ function RecipeView({ recipeId }: { recipeId: string }) {
   const [portions, setPortions] = useState(defaultPortions)
   const [done, setDone] = useState<Record<number, boolean>>({})
   const [listOpen, setListOpen] = useState(false)
+  const [storesOpen, setStoresOpen] = useState(false)
 
   const e = useMemo(() => evaluate(recipe, portions, ctx), [recipe, portions, ctx])
   const traits = recipeTraits(recipe, BY_ID)
@@ -104,6 +106,19 @@ function RecipeView({ recipeId }: { recipeId: string }) {
             )}
           </div>
         </div>
+
+        {m > 0 && (
+          <div style={{ margin: '10px 20px 0', display: 'flex', alignItems: 'center', gap: 12 }}>
+            <span style={{ flex: 1, minWidth: 0, font: '600 13px/1.4 var(--font)', color: 'var(--miss)' }}>{missLabel(e)}</span>
+            <button
+              type="button"
+              onClick={() => setStoresOpen(true)}
+              style={{ flex: 'none', minHeight: 40, font: '600 14px var(--font)', color: 'var(--accent)', textDecoration: 'underline', textUnderlineOffset: 3 }}
+            >
+              Où les trouver ?
+            </button>
+          </div>
+        )}
 
         <div className="panel-row" style={{ margin: '20px 20px 0', padding: '12px 14px' }}>
           <span style={{ font: '600 15px var(--font)' }}>Portions</span>
@@ -206,6 +221,12 @@ function RecipeView({ recipeId }: { recipeId: string }) {
       </div>
 
       {listOpen && <ListSheet recipeId={recipe.id} onClose={() => setListOpen(false)} />}
+      {storesOpen && (
+        <StoresSheet
+          items={e.missing.map((x) => ({ id: x.ingredient.id, name: x.ingredient.name, qty: Math.max(0, x.need - x.have) }))}
+          onClose={() => setStoresOpen(false)}
+        />
+      )}
     </>
   )
 }
