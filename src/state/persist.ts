@@ -47,6 +47,34 @@ export async function initLocalData(): Promise<void> {
   if (localStorage.getItem(LEGACY_KEY)) await write(savedOf(getState()))
 }
 
+/**
+ * Other encrypted data kept on this device only, never synced (e.g. the last shops found: they tell where you live).
+ * Without a device key (tests, old browsers), kept in memory for the session.
+ */
+const SIDE_PREFIX = 'mijote:side:'
+const sideMemory = new Map<string, unknown>()
+
+export async function saveSide(name: string, value: unknown): Promise<void> {
+  sideMemory.set(name, value)
+  if (!deviceKey) return
+  try {
+    localStorage.setItem(SIDE_PREFIX + name, JSON.stringify(await encryptJson(deviceKey, value)))
+  } catch {
+    // Full storage: the memory copy is enough.
+  }
+}
+
+export async function loadSide<T>(name: string): Promise<T | null> {
+  if (sideMemory.has(name)) return sideMemory.get(name) as T
+  const raw = deviceKey && localStorage.getItem(SIDE_PREFIX + name)
+  if (!raw) return null
+  try {
+    return await decryptJson<T>(deviceKey!, JSON.parse(raw) as SealedBox)
+  } catch {
+    return null
+  }
+}
+
 /** Waits for pending writes (tests, sign-out). */
 export const flushLocalData = () => chain
 
@@ -54,4 +82,6 @@ export const flushLocalData = () => chain
 export function clearLocalData() {
   localStorage.removeItem(BLOB_KEY)
   localStorage.removeItem(LEGACY_KEY)
+  for (const k of Object.keys(localStorage)) if (k.startsWith(SIDE_PREFIX)) localStorage.removeItem(k)
+  sideMemory.clear()
 }

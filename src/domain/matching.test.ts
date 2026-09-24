@@ -5,7 +5,7 @@ import type { Fridge, Prefs } from './types.ts'
 
 const byId = indexIngredients(INGREDIENTS)
 const TODAY = '2026-09-23'
-const prefs: Prefs = { diet: 'Tout', allergies: [], cuisines: [], portions: 2, ai: true, goal: 'Équilibré', onboarded: true }
+const prefs: Prefs = { diet: 'Tout', allergies: [], cuisines: [], portions: 2, ai: true, goal: 'Équilibré', onboarded: true, location: null }
 const ctx = (fridge: Fridge, p: Partial<Prefs> = {}): MatchContext => ({ fridge, prefs: { ...prefs, ...p }, byId, today: TODAY })
 const recipe = (id: string) => RECIPES.find((r) => r.id === id)!
 

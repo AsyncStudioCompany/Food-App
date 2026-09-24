@@ -57,7 +57,19 @@ Un ingrédient est `ok` si la quantité du frigo couvre le besoin, `partial` s'i
 - La recette est gardée sur l'appareil, passe par le même classement que les autres, et reçoit une photo TheMealDB via son mot-clé. On peut la supprimer depuis sa fiche.
 - Déploiement : `supabase functions deploy generate-recipe` puis `supabase secrets set ANTHROPIC_API_KEY=…`, et au build `VITE_RECIPE_AI_URL` + `VITE_SUPABASE_ANON_KEY`. Prévoir une limite d'appels par utilisateur avant l'ouverture au public.
 
-## 5. Données
+## 5. Où trouver ce qui manque
+
+- Sur la fiche, sous « Manque : … », le lien **« Où les trouver ? »** ouvre un panneau : pastilles des ingrédients manquants (cochées par défaut), tri « Le plus proche » / « Le moins cher », une ligne par magasin (nom, distance, prix estimé du panier ou « prix inconnu », nombre de prix connus). Un appui ouvre l'itinéraire dans Plans (`https://maps.apple.com/?daddr=lat,lon&q=Nom`).
+- **Adresse** (Profil, « Ton adresse ») : facultative. Saisie avec autocomplétion par l'API Adresse, appelée depuis l'appareil (l'ancien `api-adresse.data.gouv.fr` a migré vers la Géoplateforme de l'IGN, `data.geopf.fr/geocodage`, même API), ou « Utiliser ma position » (le navigateur ne la donne qu'en https ou sur localhost). Les coordonnées sont dans `prefs.location`, donc chiffrées comme le reste, sur l'appareil et dans le compte. Sans adresse, le panneau propose de la renseigner.
+- **Serveur** : `POST /api/stores` (`server/stores.ts`, même modèle que l'IA : serveur Vite local, fonction Vercel `server/vercelStores.ts`, fonction Supabase `supabase/functions/stores`). Il reçoit une position arrondie à ~100 m et les identifiants catalogue des ingrédients manquants (12 au plus).
+  - Magasins : supermarchés, supérettes, épiceries et primeurs à moins de 3 km, via OpenStreetMap (Overpass, avec un miroir en secours) : nom, enseigne, coordonnées, horaires. Les 30 plus proches.
+  - Prix : Open Prices, en euros. Correspondance ingrédient → catégorie Open Food Facts dans `src/data/offCategories.ts` (catégorie de produit brut au kilo ou à la pièce, ou catégorie de produit emballé ; chaque étiquette vérifiée sur Open Prices). Pour chaque ingrédient, relevés autour de la position (5 km) et relevés récents partout, ramenés en €/g (poids d'une pièce pris dans `src/data/nutrition.ts`). Un magasin prend la médiane de ses propres relevés, sinon celle de son enseigne en France.
+  - Cache mémoire (magasins 24 h, prix 6 à 12 h), requêtes identiques partagées, budget de 60 appels par minute vers les services ouverts (au-delà : 429), User-Agent explicite, aucune clé.
+- Le prix affiché est celui des quantités qui manquent (pas d'un paquet entier), marqué « ≈ ». Les relevés Open Prices sont partiels : « Le moins cher » ne compare que les prix connus (d'abord les magasins qui connaissent le plus de prix, puis le moins cher), et le panneau le dit.
+- Hors ligne : le dernier résultat pour cet endroit est affiché depuis un cache chiffré sur l'appareil (`saveSide` / `loadSide` de `src/state/persist.ts`, jamais synchronisé).
+- Logique pure et testée dans `src/domain/stores.ts` : distance, lecture d'Overpass et d'Open Prices, conversion des prix, panier, tri.
+
+## 6. Données
 
 - Catalogue : `src/data/catalog.ts` (116 ingrédients, 357 recettes) :
   - 24 recettes maison (celles de la maquette et quelques ajouts) ;
@@ -65,10 +77,10 @@ Un ingrédient est `ok` si la quantité du frigo couvre le besoin, `partial` s'i
 - Les ingrédients comptés à la pièce sont arrondis au demi supérieur quand on change les portions (1,33 oignon → 1,5).
 - Cuisines : Française, Italienne, Asiatique, Mexicaine, Indienne, Moyen-Orient (maquette), plus Espagnole, Européenne, Maghreb, Africaine, Caribéenne, Sud-américaine, Américaine pour les recettes importées.
 - Chaque ingrédient a une unité de base, un rayon, une quantité proposée par défaut, et au besoin un type animal (porc, viande, poisson, laitier, œuf) et des allergènes. Régime et allergènes d'une recette se déduisent de ses ingrédients.
-- Sur l'appareil (`localStorage`) : frigo (quantité, unité, date de péremption), préférences, favoris, listes, recettes inventées. Photos TheMealDB résolues et mises en cache.
+- Sur l'appareil (`localStorage`, chiffré) : frigo (quantité, unité, date de péremption), préférences (dont l'adresse), favoris, listes, recettes inventées, derniers magasins trouvés. Photos TheMealDB résolues et mises en cache.
 - Photos : chaque recette du catalogue a une photo vérifiée à la main (celle de TheMealDB pour les recettes importées ; pour les recettes maison, le même plat sur TheMealDB ou une photo sous licence libre trouvée avec Openverse, créditée sur la fiche). Une recette de l'IA ne prend une photo TheMealDB que si le nom du plat contient tous les mots cherchés. Sinon, fond rayé : mieux vaut pas de photo qu'une photo d'un autre plat.
 
-## 6. Comptes et chiffrement
+## 7. Comptes et chiffrement
 
 - Comptes Supabase (e-mail + mot de passe), activés par `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY`. Sans eux, l'app fonctionne sans compte.
 - **Chiffrement de bout en bout** (`src/crypto/vault.ts`) : PBKDF2-SHA256 (600 000 itérations) puis HKDF dérivent du mot de passe un mot de passe de connexion (seul envoyé à Supabase) et une clé qui emballe une clé de données aléatoire (AES-GCM 256). Les données sauvegardées sont chiffrées avec cette clé ; la table `vaults` (une ligne par utilisateur, RLS) ne contient que du chiffré.
@@ -77,7 +89,7 @@ Un ingrédient est `ok` si la quantité du frigo couvre le besoin, `partial` s'i
 - Déconnexion : les données de l'appareil sont effacées (elles restent dans le compte). « Supprimer mes données » efface la ligne du serveur.
 - Limites : mot de passe oublié = données perdues ; pas encore de changement de mot de passe ni de suppression de l'utilisateur Supabase lui-même (à faire depuis le tableau de bord).
 
-## 7. Suite possible
+## 8. Suite possible
 
 - Changement de mot de passe (réemballer la clé de données) et suppression complète du compte.
 - Liste de courses à partir des ingrédients manquants.

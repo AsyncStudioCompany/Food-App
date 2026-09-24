@@ -28,7 +28,7 @@ describe('nutrition', () => {
   })
 
   it('reorders recipes by goal without hiding any', () => {
-    const prefs = (goal: Prefs['goal']): Prefs => ({ diet: 'Tout', allergies: [], cuisines: [], portions: 2, ai: true, goal, onboarded: true })
+    const prefs = (goal: Prefs['goal']): Prefs => ({ diet: 'Tout', allergies: [], cuisines: [], portions: 2, ai: true, goal, onboarded: true, location: null })
     // Everything in the fridge: every recipe is doable, so the goal decides the order.
     const fridge = Object.fromEntries(INGREDIENTS.map((i) => [i.id, { qty: 10_000, unit: i.unit, expiresOn: null }]))
     const ctx = (goal: Prefs['goal']) => ({ fridge, prefs: prefs(goal), byId, today: '2026-09-23' })

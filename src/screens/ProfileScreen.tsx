@@ -1,6 +1,7 @@
 import { ALLERGENS, CUISINES, DIETS, GOALS, type Prefs } from '../domain/types'
 import { setState, useStore } from '../state/store'
 import { AccountSection } from './AccountSection'
+import { AddressSection } from './AddressPicker'
 
 export function ProfileScreen() {
   const p = useStore((s) => s.prefs)
@@ -64,6 +65,7 @@ export function ProfileScreen() {
           ))}
         </div>
       </section>
+      <AddressSection location={p.location} />
       <div className="panel-row" style={{ padding: '14px 16px' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
           <span style={{ font: '600 15px var(--font)' }}>Portions par défaut</span>

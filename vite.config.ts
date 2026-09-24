@@ -2,15 +2,25 @@
 import react from '@vitejs/plugin-react'
 import { defineConfig, loadEnv, type Plugin } from 'vite'
 import { VitePWA } from 'vite-plugin-pwa'
-import { recipeHandler } from './server/nodeHandler.ts'
+import { recipeHandler, storesHandler } from './server/nodeHandler.ts'
 
-/** Serves POST /api/generate-recipe from `npm run dev` / `npm start`, with ANTHROPIC_API_KEY from .env.local. */
-function recipeApi(apiKey: string | undefined): Plugin {
-  const handler = recipeHandler(() => apiKey)
+/**
+ * Serves the API from `npm run dev` / `npm start`: POST /api/generate-recipe (with ANTHROPIC_API_KEY
+ * from .env.local) and POST /api/stores (no key).
+ */
+function mijoteApi(apiKey: string | undefined): Plugin {
+  const recipe = recipeHandler(() => apiKey)
+  const stores = storesHandler()
   return {
-    name: 'mijote-recipe-api',
-    configureServer: (server) => void server.middlewares.use('/api/generate-recipe', handler),
-    configurePreviewServer: (server) => void server.middlewares.use('/api/generate-recipe', handler),
+    name: 'mijote-api',
+    configureServer: (server) => {
+      server.middlewares.use('/api/generate-recipe', recipe)
+      server.middlewares.use('/api/stores', stores)
+    },
+    configurePreviewServer: (server) => {
+      server.middlewares.use('/api/generate-recipe', recipe)
+      server.middlewares.use('/api/stores', stores)
+    },
   }
 }
 
@@ -19,7 +29,7 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [
       react(),
-      recipeApi(env.ANTHROPIC_API_KEY),
+      mijoteApi(env.ANTHROPIC_API_KEY),
       VitePWA({
         registerType: 'autoUpdate',
         includeAssets: ['favicon.svg', 'apple-touch-icon.png'],

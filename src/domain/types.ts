@@ -110,6 +110,15 @@ export interface Prefs {
   goal: Goal
   /** Set once the welcome setup (diet, goal, fridge) is done. */
   onboarded: boolean
+  /** Where to look for shops ("Où les trouver ?"). Optional; encrypted with the rest of the data. */
+  location: SavedPlace | null
+}
+
+/** A position picked by the user: an address, or "Ma position". */
+export interface SavedPlace {
+  lat: number
+  lon: number
+  label: string
 }
 
 export interface RecipeList {
