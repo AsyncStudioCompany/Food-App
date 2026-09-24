@@ -14,6 +14,10 @@ create table if not exists public.vaults (
 
 alter table public.vaults enable row level security;
 
+-- Only signed-in users reach the table through the Data API (needed when "Automatically expose new tables" is off).
+revoke all on public.vaults from anon;
+grant select, insert, update, delete on public.vaults to authenticated;
+
 -- Each user can only read and write their own vault.
 create policy "Own vault: read" on public.vaults for select to authenticated using ((select auth.uid()) = user_id);
 create policy "Own vault: create" on public.vaults for insert to authenticated with check ((select auth.uid()) = user_id);
