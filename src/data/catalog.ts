@@ -1,5 +1,6 @@
 import type { AisleId, Course, Ingredient, PhotoCredit, Recipe } from '../domain/types.ts'
 import { MEALDB_RECIPES } from './mealdb.ts'
+import { MEALDB_MORE } from './mealdb2.ts'
 import { NUTRITION } from './nutrition.ts'
 
 export const AISLES: [AisleId, string][] = [
@@ -342,4 +343,4 @@ const HOUSE_RECIPES: Recipe[] = [
   ]),
 ]
 
-export const RECIPES: Recipe[] = [...HOUSE_RECIPES, ...MEALDB_RECIPES]
+export const RECIPES: Recipe[] = [...HOUSE_RECIPES, ...MEALDB_RECIPES, ...MEALDB_MORE]

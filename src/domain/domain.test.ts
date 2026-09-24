@@ -52,14 +52,14 @@ describe('diet', () => {
 describe('search', () => {
   const ranked = rankAll(RECIPES, { fridge: {}, prefs: { diet: 'Tout', allergies: [], cuisines: [], portions: 2, ai: true, goal: 'Équilibré', onboarded: true }, byId, today: '2026-09-23' })
   it('finds by recipe or ingredient name, without accents', () => {
-    expect(searchRecipes(ranked, 'crepes', NO_FILTERS).map((e) => e.recipe.id)).toEqual(['r12'])
+    expect(searchRecipes(ranked, 'crepes', NO_FILTERS).map((e) => e.recipe.id)).toEqual(['r12', 'm52854'])
     const chickpeas = searchRecipes(ranked, 'pois chiche', NO_FILTERS)
     expect(chickpeas.map((e) => e.recipe.id)).toContain('r8')
     expect(chickpeas.every((e) => e.recipe.ingredients.some((i) => i.id === 'pois_chiches'))).toBe(true)
   })
   it('applies the filter pills', () => {
     expect(searchRecipes(ranked, '', { ...NO_FILTERS, quick: true }).every((e) => e.recipe.minutes <= 20)).toBe(true)
-    expect(searchRecipes(ranked, '', { ...NO_FILTERS, cuisine: 'Mexicaine' }).map((e) => e.recipe.id).sort()).toEqual(['m52870', 'r16', 'r22'])
+    expect(searchRecipes(ranked, '', { ...NO_FILTERS, cuisine: 'Mexicaine' }).map((e) => e.recipe.id).sort()).toEqual(['m52870', 'm53067', 'r16', 'r22'])
     expect(searchRecipes(ranked, '', { ...NO_FILTERS, now: true })).toEqual([])
   })
 })

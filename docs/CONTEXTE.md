@@ -59,9 +59,9 @@ Un ingrédient est `ok` si la quantité du frigo couvre le besoin, `partial` s'i
 
 ## 5. Données
 
-- Catalogue : `src/data/catalog.ts` (85 ingrédients, 112 recettes) :
+- Catalogue : `src/data/catalog.ts` (116 ingrédients, 357 recettes) :
   - 24 recettes maison (celles de la maquette et quelques ajouts) ;
-  - 88 recettes importées de **TheMealDB** (`src/data/mealdb.ts`), avec leur vraie photo. `scripts/mealdb-candidates.mjs` télécharge l'API et liste les recettes dont tous les ingrédients (hors placard) existent dans le catalogue ; noms, étapes (au tutoiement) et quantités sont ensuite traduits et vérifiés à la main. Pour en ajouter : compléter la table `MAP` du script (et le catalogue), relancer, traduire.
+  - 333 recettes importées de **TheMealDB** (`src/data/mealdb.ts` pour les 88 premières, `src/data/mealdb2.ts` pour les 245 suivantes), avec leur vraie photo : plats, soupes, salades, entrées, accompagnements, petits-déj et desserts de 13 cuisines. `scripts/mealdb-candidates.mjs` télécharge l'API et liste les recettes dont tous les ingrédients (hors placard) existent dans le catalogue ; noms, étapes (au tutoiement) et quantités sont ensuite traduits et vérifiés à la main. Pour en ajouter : compléter la table `MAP` du script (et le catalogue), relancer, traduire.
 - Les ingrédients comptés à la pièce sont arrondis au demi supérieur quand on change les portions (1,33 oignon → 1,5).
 - Cuisines : Française, Italienne, Asiatique, Mexicaine, Indienne, Moyen-Orient (maquette), plus Espagnole, Européenne, Maghreb, Africaine, Caribéenne, Sud-américaine, Américaine pour les recettes importées.
 - Chaque ingrédient a une unité de base, un rayon, une quantité proposée par défaut, et au besoin un type animal (porc, viande, poisson, laitier, œuf) et des allergènes. Régime et allergènes d'une recette se déduisent de ses ingrédients.
