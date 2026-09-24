@@ -158,9 +158,15 @@ export function StepIllustration({ kind }: { kind: StepKind }) {
   if (kind === 'rest')
     k = (
       <>
-        <A s={{ left: 31, top: 6, width: 6, height: 6, borderRadius: 2, background: PAN }} />
-        <A s={{ left: 18, top: 11, width: 26, height: 26, borderRadius: '50%', border: '3px solid ' + PAN, background: PLATE }}>
-          <A s={{ left: 11.5, top: 1, width: 3, height: 12, borderRadius: 2, background: ACCENT, transformOrigin: 'bottom center', animation: 'mj-spin 3s linear infinite' }} />
+        {/* Stopwatch centred in the 68 × 60 tile: 36 px dial with a 3 px border, so its inner centre is (15, 15). */}
+        <A s={{ left: 30, top: 5, width: 8, height: 6, borderRadius: 2, background: PAN }} />
+        <A s={{ left: 45, top: 10, width: 5, height: 7, borderRadius: 2, background: PAN, transform: 'rotate(40deg)' }} />
+        <A s={{ left: 16, top: 11, width: 36, height: 36, borderRadius: '50%', border: '3px solid ' + PAN, background: PLATE }}>
+          {([[14, 2, 2, 4], [14, 24, 2, 4], [2, 14, 4, 2], [24, 14, 4, 2]] as const).map(([x, y, w, h], i) => (
+            <A key={'t' + i} s={{ left: x, top: y, width: w, height: h, borderRadius: 1, background: 'rgba(0,0,0,.28)' }} />
+          ))}
+          <A s={{ left: 13.5, top: 4, width: 3, height: 11, borderRadius: 2, background: ACCENT, transformOrigin: '50% 100%', animation: 'mj-spin 3s linear infinite' }} />
+          <A s={{ left: 12, top: 12, width: 6, height: 6, borderRadius: '50%', background: PAN }} />
         </A>
       </>
     )
