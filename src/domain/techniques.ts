@@ -1,0 +1,297 @@
+import type { StepKind } from './steps.ts'
+
+/**
+ * Cooking techniques explained on the recipe page: when a step uses one of these words,
+ * a "C'est quoi ?" pill opens its explanation. Texts are in French, "tu" form.
+ */
+export interface Technique {
+  id: string
+  /** As shown on the pill and as the sheet title. */
+  name: string
+  /** Matched against the step text, lowercased, accents kept. */
+  pattern: RegExp
+  what: string
+  tip: string
+  kind: StepKind
+}
+
+export const TECHNIQUES: Technique[] = [
+  {
+    id: 'emincer',
+    name: 'Émincer',
+    pattern: /émince/,
+    what: "Couper en tranches fines et régulières, pour que tout cuise en même temps.",
+    tip: 'Pose l\'aliment sur son côté plat pour qu\'il ne roule pas, et replie le bout des doigts en griffe : la lame glisse contre tes phalanges, jamais sur tes ongles.',
+    kind: 'cut',
+  },
+  {
+    id: 'ciseler',
+    name: 'Ciseler',
+    pattern: /cisèle/,
+    what: "Couper très finement, en tout petits dés (oignon, échalote) ou en fines lanières (herbes).",
+    tip: "Pour un oignon, garde la racine : fais des entailles dans la longueur puis dans l'épaisseur, et tranche ensuite. Les herbes se ciselent roulées en petit paquet, avec un couteau bien aiguisé ou des ciseaux.",
+    kind: 'cut',
+  },
+  {
+    id: 'hacher',
+    name: 'Hacher',
+    pattern: /\bhache\b|hache-/,
+    what: 'Couper en morceaux très petits, sans chercher la régularité.',
+    tip: "Tiens la pointe du couteau posée sur la planche et bascule la lame de haut en bas, en balayant d'un côté à l'autre.",
+    kind: 'cut',
+  },
+  {
+    id: 'blanchir',
+    name: 'Blanchir',
+    pattern: /blanchi[rst]?\b|blanchisse/,
+    what: "Deux sens : plonger un légume quelques minutes dans l'eau bouillante puis le refroidir, ou fouetter des jaunes avec du sucre jusqu'à ce que le mélange pâlisse et mousse.",
+    tip: "Pour les légumes, plonge-les ensuite dans de l'eau glacée : ils gardent leur couleur et leur croquant.",
+    kind: 'pot',
+  },
+  {
+    id: 'deglacer',
+    name: 'Déglacer',
+    pattern: /déglace/,
+    what: 'Verser un liquide (vin, bouillon, eau) dans la poêle chaude pour décoller les sucs caramélisés au fond. Ils donnent tout le goût à la sauce.',
+    tip: 'Gratte le fond avec une cuillère en bois pendant que le liquide bouillonne.',
+    kind: 'pan',
+  },
+  {
+    id: 'reduire',
+    name: 'Réduire',
+    pattern: /rédui[rst]e?\b|laisse réduire|réduction/,
+    what: "Laisser bouillir un liquide à découvert pour qu'il s'évapore en partie : la sauce épaissit et son goût se concentre.",
+    tip: 'Une sauce est assez réduite quand elle nappe le dos d\'une cuillère et qu\'un trait fait au doigt reste net.',
+    kind: 'pot',
+  },
+  {
+    id: 'fremir',
+    name: 'Frémir, mijoter',
+    pattern: /frémi|mijote/,
+    what: 'Cuire doucement, juste sous l\'ébullition : de petites bulles montent à la surface sans que ça bouillonne fort.',
+    tip: 'Baisse le feu dès que ça bout, puis ajuste jusqu\'à voir juste quelques bulles.',
+    kind: 'pot',
+  },
+  {
+    id: 'revenir',
+    name: 'Faire revenir',
+    pattern: /revenir|fais dorer|faire dorer/,
+    what: 'Cuire à feu moyen dans un peu de matière grasse en remuant, jusqu\'à ce que ça colore légèrement.',
+    tip: "Ne surcharge pas la poêle : trop d'aliments rendent de l'eau et cuisent à la vapeur au lieu de dorer.",
+    kind: 'pan',
+  },
+  {
+    id: 'suer',
+    name: 'Faire suer, faire fondre',
+    pattern: /\bsuer\b|fais (doucement )?fondre (l'|les |le )(oignon|poireau|échalote)/,
+    what: "Cuire doucement des légumes (oignon, poireau) dans un peu de matière grasse, sans les colorer, jusqu'à ce qu'ils deviennent tendres et translucides.",
+    tip: 'Feu doux et une pincée de sel : le sel les aide à rendre leur eau.',
+    kind: 'pan',
+  },
+  {
+    id: 'saisir',
+    name: 'Saisir',
+    pattern: /saisi[rst]?\b/,
+    what: "Cuire à feu très vif quelques instants pour colorer l'extérieur d'une viande ou d'un poisson.",
+    tip: "Sèche bien la viande avec du papier absorbant et attends que la poêle soit très chaude avant de la poser. Ne la bouge pas pendant la première minute.",
+    kind: 'pan',
+  },
+  {
+    id: 'caramel',
+    name: 'Caraméliser',
+    pattern: /caramélis/,
+    what: 'Cuire jusqu\'à ce que les sucres de l\'aliment dorent et prennent un goût légèrement grillé.',
+    tip: 'Des oignons bien caramélisés demandent 20 à 30 min à feu doux : ne te presse pas.',
+    kind: 'pan',
+  },
+  {
+    id: 'neige',
+    name: 'Monter en neige',
+    pattern: /en neige|monte les blancs|monter les blancs/,
+    what: "Fouetter des blancs d'œufs jusqu'à ce qu'ils deviennent une mousse blanche et ferme.",
+    tip: "Bol propre et sec, pas une trace de jaune. Ils sont prêts quand le bol retourné ne les fait pas glisser.",
+    kind: 'whisk',
+  },
+  {
+    id: 'incorporer',
+    name: 'Incorporer délicatement',
+    pattern: /incorpore/,
+    what: "Mélanger doucement un élément léger (blancs en neige, crème fouettée) à une préparation, sans le faire retomber.",
+    tip: 'Avec une maryse, soulève la pâte du fond vers le haut en tournant le bol, plutôt que de tourner en rond.',
+    kind: 'mix',
+  },
+  {
+    id: 'fouetter',
+    name: 'Fouetter, battre',
+    pattern: /fouette|\bbats\b|bats les|bats le/,
+    what: "Mélanger vivement pour rendre une préparation lisse et y faire entrer de l'air.",
+    tip: 'Pose le bol sur un torchon humide : il ne glissera pas pendant que tu fouettes.',
+    kind: 'whisk',
+  },
+  {
+    id: 'sabler',
+    name: 'Sabler',
+    pattern: /\bsable\b|sablé|sabler/,
+    what: "Frotter la farine et le beurre froid du bout des doigts jusqu'à obtenir une texture de sable. C'est la base des pâtes à tarte et des crumbles.",
+    tip: 'Travaille vite et avec un beurre bien froid : la pâte sera plus friable.',
+    kind: 'dough',
+  },
+  {
+    id: 'petrir',
+    name: 'Pétrir',
+    pattern: /pétri/,
+    what: 'Travailler une pâte en la repliant et en l\'écrasant avec la paume, pour la rendre lisse et élastique.',
+    tip: "La pâte est prête quand elle ne colle plus et qu'elle reprend doucement sa forme si tu l'enfonces du doigt.",
+    kind: 'dough',
+  },
+  {
+    id: 'foncer',
+    name: 'Foncer',
+    pattern: /\bfonce\b|foncer/,
+    what: 'Garnir un moule avec une pâte étalée, en la plaquant bien contre le fond et les bords.',
+    tip: 'Enroule la pâte autour du rouleau pour la transporter jusqu\'au moule sans la déchirer.',
+    kind: 'dough',
+  },
+  {
+    id: 'blanc',
+    name: 'Cuire à blanc',
+    pattern: /à blanc/,
+    what: 'Précuire un fond de tarte sans garniture, pour qu\'il reste croustillant.',
+    tip: 'Couvre la pâte de papier cuisson et de légumes secs (ou billes de cuisson) pour qu\'elle ne gonfle pas.',
+    kind: 'oven',
+  },
+  {
+    id: 'bain_marie',
+    name: 'Bain-marie',
+    pattern: /bain-marie/,
+    what: "Chauffer doucement un récipient posé dans (ou sur) une casserole d'eau chaude, pour faire fondre ou cuire sans brûler.",
+    tip: "Le fond du bol ne doit pas toucher l'eau : la vapeur suffit pour faire fondre le chocolat.",
+    kind: 'pot',
+  },
+  {
+    id: 'al_dente',
+    name: 'Al dente',
+    pattern: /al dente/,
+    what: 'Cuit mais encore légèrement ferme sous la dent, surtout pour les pâtes.',
+    tip: 'Goûte une minute avant le temps du paquet. Garde un peu d\'eau de cuisson : elle aide la sauce à napper.',
+    kind: 'pot',
+  },
+  {
+    id: 'egoutter',
+    name: 'Égoutter',
+    pattern: /égoutte/,
+    what: "Retirer l'eau de cuisson ou le jus, dans une passoire.",
+    tip: "Pour les pâtes, ne les rince pas : l'amidon aide la sauce à accrocher.",
+    kind: 'drain',
+  },
+  {
+    id: 'pocher',
+    name: 'Pocher',
+    pattern: /poche\b|pocher|poché/,
+    what: 'Cuire doucement dans un liquide frémissant (eau, bouillon, lait), sans bouillir.',
+    tip: 'Le liquide doit à peine frémir : une ébullition forte durcit le poulet et abîme les œufs.',
+    kind: 'pot',
+  },
+  {
+    id: 'mariner',
+    name: 'Mariner',
+    pattern: /marine\b|mariner|marinade/,
+    what: "Laisser tremper un aliment dans un mélange assaisonné pour qu'il prenne du goût et devienne plus tendre.",
+    tip: 'Couvre et garde au frais. Retourne la viande à mi-temps pour que tout soit bien imprégné.',
+    kind: 'chill',
+  },
+  {
+    id: 'napper',
+    name: 'Napper',
+    pattern: /nappe/,
+    what: 'Recouvrir un aliment d\'une couche de sauce ou de crème.',
+    tip: 'Verse à la cuillère en partant du centre, pour une couche régulière.',
+    kind: 'plate',
+  },
+  {
+    id: 'zester',
+    name: 'Zester',
+    pattern: /zeste/,
+    what: "Prélever la peau colorée d'un agrume, très parfumée, sans la partie blanche qui est amère.",
+    tip: "Lave bien le fruit (bio si possible) et râpe-le au-dessus du plat : les huiles parfumées tombent dedans.",
+    kind: 'cut',
+  },
+  {
+    id: 'gratiner',
+    name: 'Gratiner',
+    pattern: /gratine|sous le gril/,
+    what: 'Passer un plat sous le gril du four pour dorer et rendre croustillant le dessus.',
+    tip: 'Reste devant le four : ça peut brûler en une minute.',
+    kind: 'oven',
+  },
+  {
+    id: 'flamber',
+    name: 'Flamber',
+    pattern: /flambe/,
+    what: "Enflammer un alcool chaud versé sur un plat, pour garder son arôme sans l'amertume de l'alcool.",
+    tip: "Coupe la hotte, éloigne tout ce qui peut brûler et allume avec une longue allumette, jamais au-dessus du visage.",
+    kind: 'pan',
+  },
+  {
+    id: 'delayer',
+    name: 'Délayer, lier',
+    pattern: /délay|\blie\b|lier la sauce/,
+    what: 'Mélanger une poudre (fécule, farine) à un peu de liquide froid avant de l\'ajouter, pour épaissir une sauce sans grumeaux.',
+    tip: 'Verse le mélange en filet dans la sauce frémissante en remuant : elle épaissit en une minute.',
+    kind: 'mix',
+  },
+  {
+    id: 'roux',
+    name: 'Roux',
+    pattern: /fais un roux|farine au beurre fondu|farine dans le beurre fondu/,
+    what: 'Beurre fondu et farine cuits ensemble une minute : c\'est la base de la béchamel et des sauces liées.',
+    tip: 'Ajoute ensuite le lait froid petit à petit en fouettant : pas de grumeaux.',
+    kind: 'pan',
+  },
+  {
+    id: 'reposer',
+    name: 'Laisser reposer',
+    pattern: /repos/,
+    what: 'Attendre sans toucher : une pâte se détend et lève, une viande garde son jus, une crème prend.',
+    tip: 'Couvre la pâte d\'un torchon pour qu\'elle ne sèche pas.',
+    kind: 'rest',
+  },
+  {
+    id: 'vif',
+    name: 'Peler à vif',
+    pattern: /à vif/,
+    what: "Retirer la peau et toute la partie blanche d'un agrume au couteau, pour n'en garder que la chair.",
+    tip: 'Coupe les deux bouts pour que le fruit tienne debout, puis suis l\'arrondi de haut en bas.',
+    kind: 'cut',
+  },
+  {
+    id: 'epepiner',
+    name: 'Épépiner',
+    pattern: /épépin/,
+    what: 'Retirer les pépins ou les graines (tomate, poivron, concombre).',
+    tip: 'Pour un poivron, coupe-le en quatre : les graines et les parties blanches partent d\'un coup de couteau.',
+    kind: 'cut',
+  },
+  {
+    id: 'assaisonner',
+    name: 'Assaisonner',
+    pattern: /assaisonne|rectifie/,
+    what: 'Ajouter sel, poivre et épices, et goûter pour ajuster.',
+    tip: 'Goûte à la fin : une sauce qui a réduit est souvent déjà assez salée.',
+    kind: 'season',
+  },
+  {
+    id: 'frire',
+    name: 'Frire',
+    pattern: /\bfri(re|s|t|ts|te|tes)\b|friture/,
+    what: 'Cuire dans un bain d\'huile très chaude (170 à 180 °C) : l\'extérieur devient croustillant.',
+    tip: 'Sans thermomètre : un morceau de pain doit dorer en 20 secondes. Fais frire en petites quantités, et ne laisse jamais l\'huile sans surveillance.',
+    kind: 'fry',
+  },
+]
+
+/** Techniques a step uses, in the order of the list. */
+export function stepTechniques(text: string): Technique[] {
+  const s = text.toLowerCase()
+  return TECHNIQUES.filter((t) => t.pattern.test(s))
+}

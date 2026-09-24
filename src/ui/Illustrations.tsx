@@ -158,9 +158,15 @@ export function StepIllustration({ kind }: { kind: StepKind }) {
   if (kind === 'rest')
     k = (
       <>
-        <A s={{ left: 31, top: 6, width: 6, height: 6, borderRadius: 2, background: PAN }} />
-        <A s={{ left: 18, top: 11, width: 26, height: 26, borderRadius: '50%', border: '3px solid ' + PAN, background: PLATE }}>
-          <A s={{ left: 11.5, top: 1, width: 3, height: 12, borderRadius: 2, background: ACCENT, transformOrigin: 'bottom center', animation: 'mj-spin 3s linear infinite' }} />
+        {/* Stopwatch centred in the 68 × 60 tile: 36 px dial with a 3 px border, so its inner centre is (15, 15). */}
+        <A s={{ left: 30, top: 5, width: 8, height: 6, borderRadius: 2, background: PAN }} />
+        <A s={{ left: 45, top: 10, width: 5, height: 7, borderRadius: 2, background: PAN, transform: 'rotate(40deg)' }} />
+        <A s={{ left: 16, top: 11, width: 36, height: 36, borderRadius: '50%', border: '3px solid ' + PAN, background: PLATE }}>
+          {([[14, 2, 2, 4], [14, 24, 2, 4], [2, 14, 4, 2], [24, 14, 4, 2]] as const).map(([x, y, w, h], i) => (
+            <A key={'t' + i} s={{ left: x, top: y, width: w, height: h, borderRadius: 1, background: 'rgba(0,0,0,.28)' }} />
+          ))}
+          <A s={{ left: 13.5, top: 4, width: 3, height: 11, borderRadius: 2, background: ACCENT, transformOrigin: '50% 100%', animation: 'mj-spin 3s linear infinite' }} />
+          <A s={{ left: 12, top: 12, width: 6, height: 6, borderRadius: '50%', background: PAN }} />
         </A>
       </>
     )
@@ -171,6 +177,112 @@ export function StepIllustration({ kind }: { kind: StepKind }) {
         <A s={{ left: 24, top: 20, width: 16, height: 16, borderRadius: '50%', background: TOMATO }} />
         <A s={{ left: 34, top: 25, width: 11, height: 11, borderRadius: '50%', background: YOLK }} />
         {sparkles([[6, 8, 0], [56, 14, 0.6], [52, 46, 1.1]], 6)}
+      </>
+    )
+  if (kind === 'whisk')
+    k = (
+      <>
+        {[0, 1, 2].map((i) => (
+          <A key={'f' + i} s={{ left: 18 + i * 11, top: 22, width: 7, height: 7, borderRadius: '50%', background: PLATE, animation: `mj-bob 1s ease-in-out ${i * 0.25}s infinite` }} />
+        ))}
+        <A s={{ left: 30, top: 0, width: 12, height: 34, transformOrigin: 'bottom center', animation: 'mj-stir .7s ease-in-out infinite alternate' }}>
+          <A s={{ left: 4, top: 0, width: 4, height: 12, borderRadius: 2, background: PAN }} />
+          <A s={{ left: 0, top: 11, width: 12, height: 22, borderRadius: '50% 50% 45% 45%', border: '2px solid #e4e1db' }} />
+          <A s={{ left: 3, top: 11, width: 6, height: 22, borderRadius: '50%', border: '2px solid #e4e1db' }} />
+        </A>
+        <A s={{ left: 12, top: 29, width: 44, height: 22, borderRadius: '0 0 22px 22px', background: ACCENT }} />
+        <A s={{ left: 9, top: 26, width: 50, height: 5, borderRadius: 3, background: PAN }} />
+      </>
+    )
+  if (kind === 'blend')
+    k = (
+      <>
+        <A s={{ left: 20, top: 4, width: 28, height: 38, borderRadius: '4px 4px 8px 8px', background: 'rgba(255,255,255,.18)', border: '2px solid rgba(255,255,255,.45)', overflow: 'hidden' }}>
+          <A s={{ left: -2, top: 14, width: 28, height: 24, background: ACCENT }} />
+          <A s={{ left: 6, top: 22, width: 12, height: 3, borderRadius: 2, background: PAN, animation: 'mj-spin .5s linear infinite' }} />
+        </A>
+        <A s={{ left: 16, top: 42, width: 36, height: 14, borderRadius: 4, background: PAN }} />
+        <A s={{ left: 31, top: 46, width: 6, height: 6, borderRadius: '50%', background: FLAME, animation: 'mj-glow 1s ease-in-out infinite alternate' }} />
+      </>
+    )
+  if (kind === 'fry')
+    k = (
+      <>
+        {[0, 1, 2].map((i) => (
+          <A key={'o' + i} s={{ left: 20 + i * 10, top: 16, width: 5, height: 5, borderRadius: '50%', border: '1.5px solid ' + YOLK, opacity: 0, animation: `mj-bubble 1.1s ease-out ${i * 0.35}s infinite` }} />
+        ))}
+        <A s={{ left: 12, top: 24, width: 44, height: 26, borderRadius: '4px 4px 16px 16px', background: PAN, overflow: 'hidden' }}>
+          <A s={{ left: 0, top: 0, width: 44, height: 9, background: YOLK, opacity: 0.85 }} />
+          <A s={{ left: 12, top: -2, width: 14, height: 9, borderRadius: 5, background: 'oklch(0.7 0.13 65)', animation: 'mj-bob 1s ease-in-out infinite' }} />
+        </A>
+        {flames(23, 9, 51, 6, 7)}
+      </>
+    )
+  if (kind === 'grill')
+    k = (
+      <>
+        {steam(20, 0, false, sc)}
+        <A s={{ left: 16, top: 22, width: 34, height: 12, borderRadius: 6, background: TOMATO, animation: 'mj-bob 1.4s ease-in-out infinite' }}>
+          {[8, 16, 24].map((x) => (
+            <A key={'m' + x} s={{ left: x, top: 2, width: 2, height: 8, borderRadius: 1, background: PAN, transform: 'rotate(20deg)' }} />
+          ))}
+        </A>
+        {[0, 1, 2].map((i) => (
+          <A key={'g' + i} s={{ left: 8, top: 36 + i * 5, width: 52, height: 2, borderRadius: 1, background: PAN }} />
+        ))}
+        {flames(18, 12, 50, 8, 8)}
+      </>
+    )
+  if (kind === 'chill')
+    k = (
+      <>
+        <A s={{ left: 18, top: 4, width: 32, height: 52, borderRadius: 7, background: PLATE }}>
+          <A s={{ left: 0, top: 17, width: 32, height: 2, background: 'rgba(0,0,0,.15)' }} />
+          <A s={{ left: 25, top: 6, width: 3, height: 8, borderRadius: 2, background: PAN }} />
+          <A s={{ left: 25, top: 24, width: 3, height: 12, borderRadius: 2, background: PAN }} />
+        </A>
+        {([[6, 10, 0], [54, 20, 0.5], [8, 40, 1]] as const).map(([x, y, d], i) => (
+          <A key={'sn' + i} s={{ left: x, top: y, width: 6, height: 6, background: 'oklch(0.85 0.06 230)', animation: `mj-twinkle 1.8s ease-in-out ${d}s infinite` }} />
+        ))}
+      </>
+    )
+  if (kind === 'dough')
+    k = (
+      <>
+        <A s={{ left: 4, top: 40, width: 60, height: 12, borderRadius: 4, background: WOOD }} />
+        <A s={{ left: 14, top: 33, width: 40, height: 9, borderRadius: '50%', background: ONION }} />
+        <A s={{ left: 8, top: 22, width: 52, height: 10, animation: 'mj-roll 1.4s ease-in-out infinite alternate' }}>
+          <A s={{ left: 0, top: 3, width: 8, height: 4, borderRadius: 2, background: PAN }} />
+          <A s={{ left: 8, top: 0, width: 36, height: 10, borderRadius: 5, background: 'oklch(0.8 0.07 70)' }} />
+          <A s={{ left: 44, top: 3, width: 8, height: 4, borderRadius: 2, background: PAN }} />
+        </A>
+      </>
+    )
+  if (kind === 'season')
+    k = (
+      <>
+        <A s={{ left: 26, top: 2, width: 16, height: 28, transformOrigin: 'bottom center', animation: 'mj-stir .9s ease-in-out infinite alternate' }}>
+          <A s={{ left: 0, top: 0, width: 16, height: 8, borderRadius: '8px 8px 2px 2px', background: PAN }} />
+          <A s={{ left: 1, top: 8, width: 14, height: 20, borderRadius: 3, background: PLATE }} />
+        </A>
+        {[0, 1, 2].map((i) => (
+          <A key={'gr' + i} s={{ left: 28 + i * 5, top: 32, width: 3, height: 3, borderRadius: 1, background: PLATE, animation: `mj-fall 1s ease-in ${i * 0.3}s infinite` }} />
+        ))}
+        <A s={{ left: 12, top: 46, width: 44, height: 8, borderRadius: '50%', background: ACCENT }} />
+      </>
+    )
+  if (kind === 'drain')
+    k = (
+      <>
+        <A s={{ left: 12, top: 12, width: 44, height: 24, borderRadius: '0 0 22px 22px', background: ACCENT }}>
+          {[8, 16, 24, 32].map((x) => (
+            <A key={'h' + x} s={{ left: x, top: 12, width: 3, height: 3, borderRadius: '50%', background: PAN }} />
+          ))}
+        </A>
+        <A s={{ left: 8, top: 9, width: 52, height: 5, borderRadius: 3, background: PAN }} />
+        {[0, 1, 2].map((i) => (
+          <A key={'d' + i} s={{ left: 22 + i * 10, top: 38, width: 4, height: 6, borderRadius: '50% 50% 50% 50% / 60% 60% 40% 40%', background: 'oklch(0.75 0.1 230)', animation: `mj-fall 1.1s ease-in ${i * 0.35}s infinite` }} />
+        ))}
       </>
     )
   return (

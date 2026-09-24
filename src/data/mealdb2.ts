@@ -498,7 +498,7 @@ export const MEALDB_MORE: Recipe[] = [
     "Garnis les poivrons et parsème d'herbes.",
   ]),
   N('52779', 'wurrux1468416624.jpg', "Tarte au fromage frais et tomates cerises", 'Américaine', 'Plat', 60, 6, [['farine', 250], ['beurre', 125], ['oeufs', 4], ['lait', 10], ['fromage', 100], ['fromage_frais', 300], ['tomate', 6]], ["vinaigre blanc", "miel", "basilic", "muscade"], [
-    "Mélange la farine, 125 g de beurre, 1 œuf et une pincée de sel, foncé un moule et mets au frais.",
+    "Mélange la farine, 125 g de beurre, 1 œuf et une pincée de sel, fonce un moule et mets au frais.",
     "Lisse le fromage frais avec le lait, ajoute 3 œufs et le parmesan, sale, poivre et muscade.",
     "Pique le fond, verse la garniture et enfourne 25 min à 175 °C.",
     "Fais chauffer l'huile, le vinaigre et le miel, ajoute les tomates en tranches.",
@@ -564,7 +564,7 @@ export const MEALDB_MORE: Recipe[] = [
     "Mixe la farine, 150 g de sucre, le sel, un jaune et le beurre en une pâte ferme, puis mets 30 min au frais.",
     "Préchauffe le four à 170 °C et beurre un moule de 22 cm.",
     "Mélange les pommes en dés, les raisins, le reste du sucre et la cannelle.",
-    "Foncé le moule avec les deux tiers de la pâte, garnis et couvre de bandes de pâte.",
+    "Fonce le moule avec les deux tiers de la pâte, garnis et couvre de bandes de pâte.",
     "Dore à l'œuf et enfourne environ 1 h.",
   ]),
   N('53393', 'cz1d6v1777627421.jpg', "Oliebollen, beignets hollandais", 'Européenne', 'Dessert', 90, 12, [['farine', 500], ['lait', 50]], ["levure boulangère", "sucre", "huile de friture", "sucre glace"], [
@@ -636,7 +636,7 @@ export const MEALDB_MORE: Recipe[] = [
   ]),
   N('52906', 'wssvvs1511785879.jpg', "Flamiche aux poireaux", 'Française', 'Plat', 90, 6, [['beurre', 135], ['poireau', 6], ['creme', 30], ['oeufs', 4], ['farine', 225], ['cheddar', 50]], ["muscade", "saindoux"], [
     "Sable la farine, le sel, 60 g de beurre et le saindoux, ajoute le fromage et un peu d'eau.",
-    "Foncé un moule de 23 cm, pique le fond et mets 20 min au frais.",
+    "Fonce un moule de 23 cm, pique le fond et mets 20 min au frais.",
     "Fais fondre les poireaux 10 min à couvert dans 75 g de beurre, puis évapore le jus.",
     "Mélange la crème, l'œuf et les jaunes, la muscade, puis les poireaux.",
     "Verse sur la pâte et enfourne 35 à 40 min à 190 °C.",
@@ -976,7 +976,7 @@ export const MEALDB_MORE: Recipe[] = [
     "Fais griller le cumin à sec et réserve.",
     "Fais revenir l'oignon, l'ail, le piment et le poivron 8 min, puis ajoute les épices. Laisse refroidir.",
     "Mélange l'agneau haché, la coriandre fraîche et les oignons épicés.",
-    "Prépare une pâte chaude avec la farine, le saindoux fondu et le lait, et foncé un moule de 20 cm.",
+    "Prépare une pâte chaude avec la farine, le saindoux fondu et le lait, et fonce un moule de 20 cm.",
     "Garnis, couvre de pâte, dore à l'œuf et enfourne 1 h à 200 °C puis 180 °C.",
   ]),
   N('52777', 'wvqpwt1468339226.jpg', "Salade de pâtes méditerranéenne", 'Italienne', 'Salade', 45, 4, [['mozzarella', 200], ['tomate', 2], ['pates', 350], ['olives', 40], ['thon', 200]], ["basilic", "huile d'olive"], [
@@ -1122,7 +1122,7 @@ export const MEALDB_MORE: Recipe[] = [
   ]),
   N('53046', 'vmz7gl1614350221.jpg', "Pastéis de nata", 'Européenne', 'Dessert', 60, 12, [['farine', 15], ['pate_feuilletee', 1], ['citron', 1], ['oeufs', 6], ['lait', 50]], ["sucre glace", "sucre", "cannelle", "fécule de maïs", "vanille"], [
     "Roule la pâte feuilletée en boudin serré et coupe 24 rondelles.",
-    "Étale chaque rondelle et foncé des moules à petits gâteaux. Mets au frais.",
+    "Étale chaque rondelle et fonce des moules à petits gâteaux. Mets au frais.",
     "Préchauffe le four à 220 °C. Fais un sirop avec le sucre, 20 cl d'eau, le zeste de citron et la cannelle.",
     "Fouette les œufs, les jaunes et la fécule, puis le lait chaud et le sirop filtré, et fais épaissir à feu doux avec la vanille.",
     "Remplis les fonds et enfourne 20 min, jusqu'à ce que le dessus soit tacheté de brun.",
@@ -1177,7 +1177,7 @@ export const MEALDB_MORE: Recipe[] = [
   ]),
   N('52857', 'usuqtp1511385394.jpg', "Tarte au potiron", 'Américaine', 'Dessert', 120, 10, [['courge', 750], ['pate_brisee', 1], ['oeufs', 2], ['beurre', 25], ['lait', 18]], ["sucre", "muscade", "cannelle", "sucre glace"], [
     "Cuis la courge en morceaux 15 min à l'eau et égoutte-la.",
-    "Foncé un moule de 22 cm et cuis la pâte à blanc 15 min à 180 °C, puis 10 min sans les billes.",
+    "Fonce un moule de 22 cm et cuis la pâte à blanc 15 min à 180 °C, puis 10 min sans les billes.",
     "Passe la courge au tamis, ajoute le sucre, le sel, les épices, le beurre fondu, les œufs et le lait.",
     "Verse sur le fond et enfourne 10 min à 220 °C, puis 35 à 40 min à 180 °C.",
     "Laisse refroidir et saupoudre de sucre glace.",
@@ -1577,12 +1577,12 @@ export const MEALDB_MORE: Recipe[] = [
     "Préchauffe le four à 200 °C. Cuis la pomme de terre et écrase-la.",
     "Fais dorer le porc et l'oignon, ajoute l'ail, les épices et le bouillon.",
     "Mélange avec la purée et laisse refroidir.",
-    "Foncé un moule de 20 à 23 cm, garnis et couvre de pâte en soudant les bords.",
+    "Fonce un moule de 20 à 23 cm, garnis et couvre de pâte en soudant les bords.",
     "Pique le dessus, dore à l'œuf et enfourne 40 à 45 min.",
   ]),
   N('52892', 'wprvrw1511641295.jpg', "Tarte à la mélasse", 'Européenne', 'Dessert', 60, 8, [['farine', 250], ['beurre', 135], ['citron', 1], ['oeufs', 1]], ["sirop de sucre", "chapelure"], [
     "Sable la farine et le beurre, ajoute 3 c. à soupe d'eau froide et mets 20 min au frais.",
-    "Préchauffe le four à 200 °C. Foncé un moule de 18 cm en gardant 150 g de pâte.",
+    "Préchauffe le four à 200 °C. Fonce un moule de 18 cm en gardant 150 g de pâte.",
     "Chauffe le sirop, ajoute la chapelure, le zeste et le jus de citron, puis l'œuf battu.",
     "Verse dans le fond et couvre d'un croisillon de pâte.",
     "Enfourne 10 min, puis 25 à 30 min à 180 °C.",
@@ -1704,7 +1704,7 @@ export const MEALDB_MORE: Recipe[] = [
   N('53005', '178z5o1585514569.jpg', "Tarte fraises et rhubarbe", 'Européenne', 'Dessert', 120, 8, [['farine', 350], ['beurre', 260], ['rhubarbe', 450], ['fraises', 450], ['citron', 0.5], ['lait', 3]], ["sucre", "fécule de maïs", "cannelle"], [
     "Mixe la farine, une pincée de sel et un peu de sucre, puis 230 g de beurre froid. Ajoute 6 cl d'eau froide jusqu'à ce que la pâte se tienne.",
     "Partage la pâte en deux disques, filme-les et mets-les 1 h au frais.",
-    "Étale un disque et foncé un moule de 23 cm. Découpe l'autre en bandes.",
+    "Étale un disque et fonce un moule de 23 cm. Découpe l'autre en bandes.",
     "Mélange la rhubarbe en tronçons, les fraises coupées, le sucre, la fécule, la cannelle et le jus de citron, et verse sur la pâte.",
     "Parsème de dés de beurre, couvre d'un croisillon de bandes, badigeonne de lait et saupoudre de sucre.",
     "Enfourne 15 min à 220 °C, puis 40 à 45 min à 180 °C, jusqu'à ce que le jus bouillonne. Laisse refroidir.",

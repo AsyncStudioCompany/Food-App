@@ -23,7 +23,8 @@ export function qtyLabel(qty: number, unit: BaseUnit): string {
   if (unit === 'g' && qty >= 1000) return fmt(qty / 1000) + ' kg'
   if (unit === 'cl' && qty >= 100) return fmt(qty / 100) + ' L'
   if (unit === 'pc') return fmt(qty)
-  return fmt(qty) + ' ' + unit
+  // Grams and centiliters scaled to the portions: 13,33 g reads 13 g, 2,67 cl reads 2,7 cl.
+  return fmt(qty >= 10 ? Math.round(qty) : Math.round(qty * 10) / 10) + ' ' + unit
 }
 
 /** Label shown in the quantity sheet, in the unit the user picked. */

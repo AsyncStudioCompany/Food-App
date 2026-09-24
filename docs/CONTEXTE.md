@@ -26,6 +26,9 @@ Public : 18–35 ans et familles. Ton familier (tutoiement), usage rapide.
 - Photo, cœur, « + Liste ». Carte d'humeur animée (prête / il manque / en cuisson / c'est prêt).
 - Portions ajustables : les quantités se recalculent.
 - Ingrédients avec statut (dans ton frigo, pas assez, à acheter), étapes cochables illustrées.
+- « Du placard » (sel, poivre, épices de la recette) : si tu suis tes épices dans le frigo, la fiche dit lesquelles te manquent (`src/domain/pantry.ts`). Elles ne comptent jamais comme ingrédients manquants.
+- « Avant de commencer » : température du four et ustensiles, repérés dans les étapes (`src/domain/steps.ts`).
+- Chaque étape a son illustration animée (15 sortes : four, frigo, friture, gril, mixeur, fouet, pâte, découpe, passoire, repos, casserole, poêle, assaisonnement, assiette, bol). Sous l'étape : un minuteur quand elle donne une durée (« 10 min », « 1 h 30 » ; vibre et prévient à la fin), et une pastille par technique employée (déglacer, monter en neige, sabler, foncer, pocher…), qui ouvre son explication illustrée avec une astuce (`src/domain/techniques.ts`, 34 techniques).
 - « J'ai cuisiné » retire les quantités du frigo et ouvre l'écran « Bon appétit ! », avec les aliments sauvés de la poubelle (ceux qui périmaient dans 3 jours ou moins).
 
 ### Chercher (`/chercher`)
@@ -71,11 +74,12 @@ Un ingrédient est `ok` si la quantité du frigo couvre le besoin, `partial` s'i
 
 ## 6. Données
 
-- Catalogue : `src/data/catalog.ts` (116 ingrédients, 357 recettes) :
-  - 24 recettes maison (celles de la maquette et quelques ajouts) ;
-  - 333 recettes importées de **TheMealDB** (`src/data/mealdb.ts` pour les 88 premières, `src/data/mealdb2.ts` pour les 245 suivantes), avec leur vraie photo : plats, soupes, salades, entrées, accompagnements, petits-déj et desserts de 13 cuisines. `scripts/mealdb-candidates.mjs` télécharge l'API et liste les recettes dont tous les ingrédients (hors placard) existent dans le catalogue ; noms, étapes (au tutoiement) et quantités sont ensuite traduits et vérifiés à la main. Pour en ajouter : compléter la table `MAP` du script (et le catalogue), relancer, traduire.
+- Catalogue : `src/data/catalog.ts` (148 ingrédients, 370 recettes) :
+  - 33 recettes maison (celles de la maquette, aux étapes détaillées, et des recettes aux fruits) ;
+  - 337 recettes importées de **TheMealDB** (`src/data/mealdb.ts` pour les 88 premières, `src/data/mealdb2.ts` pour les 249 suivantes), avec leur vraie photo : plats, soupes, salades, entrées, accompagnements, petits-déj et desserts de 13 cuisines. `scripts/mealdb-candidates.mjs` télécharge l'API et liste les recettes dont tous les ingrédients (hors placard) existent dans le catalogue ; noms, étapes (au tutoiement) et quantités sont ensuite traduits et vérifiés à la main. Pour en ajouter : compléter la table `MAP` du script (et le catalogue), relancer, traduire.
 - Les ingrédients comptés à la pièce sont arrondis au demi supérieur quand on change les portions (1,33 oignon → 1,5).
 - Cuisines : Française, Italienne, Asiatique, Mexicaine, Indienne, Moyen-Orient (maquette), plus Espagnole, Européenne, Maghreb, Africaine, Caribéenne, Sud-américaine, Américaine pour les recettes importées.
+- Rayons (`AISLES`) : Crèmerie & œufs, Viandes & charcuterie, Poissons & fruits de mer, Légumes, Fruits, Pâtes, riz & céréales, Légumineuses & tofu, Conserves & bocaux, Fruits secs & graines, Pâtisserie, Épices & condiments. Les épices et condiments (sel, poivre, huiles, vinaigre, épices…) sont au placard : aucune recette ne les liste comme ingrédient, et l'IA ne peut pas les utiliser comme tels. Les rayons qui se gardent longtemps n'ont pas de date de péremption par défaut (`keepsLong`).
 - Chaque ingrédient a une unité de base, un rayon, une quantité proposée par défaut, et au besoin un type animal (porc, viande, poisson, laitier, œuf) et des allergènes. Régime et allergènes d'une recette se déduisent de ses ingrédients.
 - Sur l'appareil (`localStorage`, chiffré) : frigo (quantité, unité, date de péremption), préférences (dont l'adresse), favoris, listes, recettes inventées, derniers magasins trouvés. Photos TheMealDB résolues et mises en cache.
 - Photos : chaque recette du catalogue a une photo vérifiée à la main (celle de TheMealDB pour les recettes importées ; pour les recettes maison, le même plat sur TheMealDB ou une photo sous licence libre trouvée avec Openverse, créditée sur la fiche). Une recette de l'IA ne prend une photo TheMealDB que si le nom du plat contient tous les mots cherchés. Sinon, fond rayé : mieux vaut pas de photo qu'une photo d'un autre plat.
