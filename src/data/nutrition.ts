@@ -7,7 +7,7 @@
 export type Macros = [kcal: number, protein: number, carbs: number, fat: number]
 
 export const NUTRITION: Record<string, { per100: Macros; g?: number }> = {
-  // Crèmerie & frais
+  // Crèmerie, viandes, poissons
   oeufs: { per100: [143, 12.6, 0.7, 9.5], g: 55 },
   creme: { per100: [292, 2.4, 3, 30] },
   beurre: { per100: [745, 0.7, 0.6, 82] },
@@ -89,7 +89,21 @@ export const NUTRITION: Record<string, { per100: Macros; g?: number }> = {
   peches: { per100: [39, 0.9, 10, 0.3], g: 150 },
   cerises: { per100: [63, 1, 16, 0.2] },
   abricots: { per100: [48, 1.4, 11, 0.4], g: 45 },
-  // Épicerie
+  kiwi: { per100: [61, 1.1, 15, 0.5], g: 75 },
+  raisin: { per100: [69, 0.7, 18, 0.2] },
+  melon: { per100: [34, 0.8, 8, 0.2], g: 900 },
+  pasteque: { per100: [30, 0.6, 8, 0.2] },
+  prune: { per100: [46, 0.7, 11, 0.3], g: 40 },
+  figue: { per100: [74, 0.8, 19, 0.3], g: 50 },
+  clementine: { per100: [47, 0.9, 12, 0.2], g: 70 },
+  pamplemousse: { per100: [42, 0.8, 11, 0.1], g: 300 },
+  grenade: { per100: [83, 1.7, 19, 1.2], g: 250 },
+  fruit_passion: { per100: [97, 2.2, 23, 0.7], g: 35 },
+  papaye: { per100: [43, 0.5, 11, 0.3], g: 500 },
+  litchi: { per100: [66, 0.8, 17, 0.4] },
+  rhubarbe: { per100: [21, 0.9, 4.5, 0.2] },
+  kaki: { per100: [70, 0.6, 19, 0.2], g: 180 },
+  // Placard
   pates: { per100: [355, 12.5, 71, 1.5] },
   riz: { per100: [350, 7, 78, 0.6] },
   farine: { per100: [364, 10, 76, 1] },
@@ -127,4 +141,23 @@ export const NUTRITION: Record<string, { per100: Macros; g?: number }> = {
   pistaches: { per100: [560, 20, 28, 45] },
   pignons: { per100: [673, 14, 13, 68] },
   beurre_cacahuete: { per100: [588, 25, 20, 50] },
+  // Épices & condiments (in small amounts: never counted in recipes)
+  sel: { per100: [0, 0, 0, 0] },
+  poivre: { per100: [250, 10, 64, 3] },
+  huile_olive: { per100: [900, 0, 0, 100] },
+  huile: { per100: [900, 0, 0, 100] },
+  vinaigre: { per100: [20, 0, 1, 0] },
+  sauce_soja: { per100: [55, 8, 5, 0] },
+  moutarde: { per100: [150, 7, 5, 11] },
+  miel: { per100: [304, 0.3, 82, 0] },
+  sucre: { per100: [400, 0, 100, 0] },
+  cumin: { per100: [375, 18, 44, 22] },
+  paprika: { per100: [282, 14, 54, 13] },
+  curry: { per100: [325, 14, 58, 14] },
+  cannelle: { per100: [247, 4, 81, 1.2] },
+  herbes_provence: { per100: [270, 9, 60, 5] },
+  piment: { per100: [282, 13, 50, 14] },
+  levure: { per100: [53, 0, 28, 0] },
+  bouillon: { per100: [250, 10, 20, 15], g: 10 },
+  concentre_tomate: { per100: [82, 4.3, 19, 0.5] },
 }

@@ -3,6 +3,7 @@ import { Navigate, useLocation, useNavigate, useParams } from 'react-router'
 import { dietSuffix, recipeTraits } from '../domain/diet'
 import { expiryText, isSoon } from '../domain/expiry'
 import { cook, evaluate } from '../domain/matching'
+import { pantrySpices } from '../domain/pantry'
 import { stepKind } from '../domain/steps'
 import { qtyLabel } from '../domain/units'
 import { deleteGenerated } from '../state/ai'
@@ -35,6 +36,10 @@ function RecipeView({ recipeId }: { recipeId: string }) {
 
   const e = useMemo(() => evaluate(recipe, portions, ctx), [recipe, portions, ctx])
   const traits = recipeTraits(recipe, BY_ID)
+  const pantry = ['sel', 'poivre', "huile d'olive", ...(recipe.pantry ?? [])]
+  // Only when you keep track of your spices (at least one in the fridge): otherwise every spice would be "lacking".
+  const tracksSpices = Object.keys(ctx.fridge).some((id) => BY_ID.get(id)?.aisle === 'epices')
+  const lacking = tracksSpices ? pantrySpices(pantry).filter((id) => !ctx.fridge[id]) : []
   const m = e.missing.length
   const total = recipe.steps.length
   const doneCount = recipe.steps.filter((_, k) => done[k]).length
@@ -165,8 +170,13 @@ function RecipeView({ recipeId }: { recipeId: string }) {
             )
           })}
           <div className="muted" style={{ font: '13px var(--font)', padding: '10px 0' }}>
-            Du placard : {['sel', 'poivre', "huile d'olive", ...(recipe.pantry ?? [])].join(', ')}.
+            Du placard : {pantry.join(', ')}.
           </div>
+          {lacking.length > 0 && (
+            <div style={{ font: '600 13px/1.4 var(--font)', color: 'var(--warn-ink)', paddingBottom: 10 }}>
+              Pas dans tes épices : {lacking.map((id) => BY_ID.get(id)!.name.toLowerCase()).join(', ')}.
+            </div>
+          )}
         </div>
 
         <h2 className="section-title" style={{ margin: 0, padding: '18px 20px 8px' }}>

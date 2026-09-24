@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router'
 import { AISLES, INGREDIENTS } from '../data/catalog'
-import { addDays } from '../domain/expiry'
+import { addDays, keepsLong } from '../domain/expiry'
 import { normalize } from '../domain/search'
 import { ALLERGENS, CUISINES, DIETS, GOALS, type Goal, type Prefs } from '../domain/types'
 import { today } from '../state/recipes'
@@ -43,7 +43,7 @@ export function Onboarding() {
       const f = { ...s.fridge }
       const ing = INGREDIENTS.find((i) => i.id === id)!
       if (f[id]) delete f[id]
-      else f[id] = { qty: ing.defaultQty, unit: ing.unit, expiresOn: ing.aisle === 'epicerie' ? null : addDays(today(), 7) }
+      else f[id] = { qty: ing.defaultQty, unit: ing.unit, expiresOn: keepsLong(ing) ? null : addDays(today(), 7) }
       return { fridge: f }
     })
 

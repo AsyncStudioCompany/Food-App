@@ -1,3 +1,5 @@
+import type { AisleId, Ingredient } from './types.ts'
+
 /** Local calendar day as YYYY-MM-DD. */
 export function isoDay(d: Date): string {
   const m = String(d.getMonth() + 1).padStart(2, '0')
@@ -40,3 +42,10 @@ export const EXPIRY_CHOICES: [label: string, days: number | null][] = [
   ['1 semaine', 7],
   ['Pas de date', null],
 ]
+
+/** Aisles of food that keeps for months: no expiry date proposed when it goes into the fridge. */
+const LONG_KEEPING: AisleId[] = ['feculents', 'legumineuses', 'conserves', 'fruits_secs', 'patisserie', 'epices']
+/** Fresh food shelved with long-keeping food. */
+const FRESH = new Set(['tofu', 'pate_feuilletee', 'pate_brisee'])
+
+export const keepsLong = (ing: Ingredient) => LONG_KEEPING.includes(ing.aisle) && !FRESH.has(ing.id)

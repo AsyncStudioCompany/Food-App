@@ -19,7 +19,7 @@ export function ResultsScreen() {
   const [generating, setGenerating] = useState(false)
 
   const context: [string, string][] = [
-    [`${count} ingrédients`, '/'],
+    [plural(count, 'ingrédient'), '/'],
     [prefs.diet === 'Tout' ? 'Omnivore' : prefs.diet, '/profil'],
     ...(prefs.goal !== 'Équilibré' ? ([[prefs.goal, '/profil']] as [string, string][]) : []),
     [prefs.allergies.length ? 'Sans ' + prefs.allergies.map((a) => a.toLowerCase()).join(', ') : 'Aucune allergie', '/profil'],
