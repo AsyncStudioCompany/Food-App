@@ -68,6 +68,13 @@ describe('rankAll and suggest', () => {
     expect([...top, ...complete, ...almost]).toHaveLength(doable.length)
   })
 
+  it('suggests nothing with an empty fridge, and only recipes that use the fridge', () => {
+    expect(suggest(rankAll(RECIPES, ctx({}))).doable).toEqual([])
+    const { doable } = suggest(rankAll(RECIPES, ctx({ pates: { qty: 500, unit: 'g', expiresOn: null } })))
+    expect(doable.length).toBeGreaterThan(0)
+    expect(doable.every((e) => e.items.some((i) => i.ingredient.id === 'pates'))).toBe(true)
+  })
+
   it('fills the top 3 with almost-doable recipes when needed', () => {
     const { top } = suggest(rankAll(RECIPES, ctx({ pates: { qty: 500, unit: 'g', expiresOn: null } })))
     expect(top.length).toBe(3)

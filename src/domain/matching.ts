@@ -81,7 +81,10 @@ export interface Suggestions {
 }
 
 export function suggest(ranked: Evaluation[]): Suggestions {
-  const doable = ranked.filter((e) => e.missing.length <= MAX_MISSING)
+  // "Avec ce que t'as": at most 2 missing, and at least one ingredient taken from the fridge
+  // (otherwise a 2-ingredient recipe would show up with an empty fridge).
+  const usesFridge = (e: Evaluation) => e.items.some((i) => i.have > 0)
+  const doable = ranked.filter((e) => e.missing.length <= MAX_MISSING && usesFridge(e))
   const fullyDoable = doable.filter((e) => e.missing.length === 0)
   // The Top 3 suggests a meal: main courses, soups and salads (not a dessert or a side).
   const isMain = (e: Evaluation) => MAIN_COURSES.includes(e.recipe.course)

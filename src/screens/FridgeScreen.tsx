@@ -90,7 +90,7 @@ export function FridgeScreen() {
       <div className="cta-dock" style={{ bottom: 'calc(96px + var(--safe-bottom))' }}>
         <button type="button" className="cta" style={{ justifyContent: 'space-between' }} onClick={() => navigate('/recettes')}>
           <span>Trouver des recettes</span>
-          <span style={{ font: '600 14px var(--font)', opacity: 0.85 }}>{doable.length} idées</span>
+          <span style={{ font: '600 14px var(--font)', opacity: 0.85 }}>{plural(doable.length, 'idée')}</span>
         </button>
       </div>
       {editing && <QuantitySheet ingredientId={editing} onClose={() => setEditing(null)} />}
