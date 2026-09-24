@@ -104,6 +104,13 @@ const MAP = {
   peaches: 'peches', peach: 'peches', nectarines: 'peches',
   cherries: 'cerises', 'glace cherries': 'cerises',
   apricots: 'abricots', 'dried apricots': 'abricots', apricot: 'abricots',
+  kiwi: 'kiwi', kiwis: 'kiwi', 'kiwi fruit': 'kiwi',
+  grapes: 'raisin', 'red grapes': 'raisin', 'green grapes': 'raisin', 'seedless grapes': 'raisin',
+  melon: 'melon', cantaloupe: 'melon', 'honeydew melon': 'melon', watermelon: 'pasteque',
+  plums: 'prune', plum: 'prune', figs: 'figue', fig: 'figue', 'dried figs': 'figue',
+  clementines: 'clementine', clementine: 'clementine', mandarin: 'clementine', mandarins: 'clementine', satsumas: 'clementine', tangerine: 'clementine',
+  grapefruit: 'pamplemousse', pomegranate: 'grenade', 'pomegranate seeds': 'grenade', 'passion fruit': 'fruit_passion',
+  papaya: 'papaye', lychees: 'litchi', rhubarb: 'rhubarbe', persimmon: 'kaki',
   'bramley apples': 'pomme', 'granny smith apples': 'pomme', 'cooking apples': 'pomme', 'green apple': 'pomme', 'apple juice': null,
   lemons: 'citron', limes: 'citron_vert', 'lime zest': 'citron_vert',
   // Épicerie

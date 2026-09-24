@@ -1681,4 +1681,32 @@ export const MEALDB_MORE: Recipe[] = [
     "Roule chaque boule en boudin et enroule-le en spirale.",
     "Laisse lever 30 min et enfourne 12 à 15 min à 200 °C.",
   ]),
+  N('53406', 'dokbyt1779645030.jpg', "Figues farcies aux noix, sirop de figue", 'Européenne', 'Dessert', 25, 4, [['figue', 8], ['noix', 40]], ["sucre"], [
+    "Coupe le bout dur des figues et coupe-les en deux dans la longueur.",
+    "Pose-les dans une poêle, côté coupé vers le haut, et verse un fond d'eau autour.",
+    "Cuis 10 à 15 min à feu moyen jusqu'à ce qu'elles soient fondantes, puis dépose-les sur un plat.",
+    "Ajoute le sucre au jus rouge resté dans la poêle et remue 2 min jusqu'à obtenir un sirop épais.",
+    "Enfonce un cerneau de noix dans chaque demi-figue et nappe de sirop. Sers tiède ou froid.",
+  ]),
+  N('53297', 'fqpqml1764359125.jpg', "Salade à la grenade et à la feta", 'Européenne', 'Salade', 15, 4, [['citron', 1], ['tomate', 2], ['oignon_vert', 3], ['grenade', 1], ['feta', 50], ['salade', 1]], ["huile d'olive", "miel", "thym", "piment rouge"], [
+    "Mélange l'huile, le jus de citron, le miel et le thym dans un saladier, sale et poivre.",
+    "Ajoute la salade, les tomates cerises coupées en deux, l'oignon nouveau et le piment, et mélange.",
+    "Égrène la grenade au-dessus d'un bol en retirant les petites peaux blanches.",
+    "Dresse la salade sur un plat, parsème de grains de grenade et de feta émiettée.",
+  ]),
+  N('53432', 't1hg8s1780087329.jpg', "Poitrine de porc confite aux agrumes", 'Caribéenne', 'Plat', 300, 6, [['orange', 2], ['citron_vert', 2], ['pamplemousse', 1], ['ail', 8], ['porc', 1500]], ["huile d'olive", "coriandre", "persil", "origan", "menthe", "piment rouge", "piment vert", "cumin", "piment de la Jamaïque"], [
+    "Mixe les zestes et les jus d'orange, de citron vert et de pamplemousse avec l'ail, les herbes, les piments, les épices, l'huile, le sel et le poivre.",
+    "Enrobe bien la poitrine de porc de cette marinade, couvre et laisse une nuit au frais.",
+    "Le lendemain, préchauffe le four à 140 °C. Mets la viande dans un plat, couvre d'aluminium et enfourne 4 h 30.",
+    "Arrose la viande de son jus trois ou quatre fois pendant la cuisson.",
+    "Retire l'aluminium, monte le four à 180 °C et laisse dorer 15 à 20 min : la viande doit se couper à la cuillère.",
+  ]),
+  N('53005', '178z5o1585514569.jpg', "Tarte fraises et rhubarbe", 'Européenne', 'Dessert', 120, 8, [['farine', 350], ['beurre', 260], ['rhubarbe', 450], ['fraises', 450], ['citron', 0.5], ['lait', 3]], ["sucre", "fécule de maïs", "cannelle"], [
+    "Mixe la farine, une pincée de sel et un peu de sucre, puis 230 g de beurre froid. Ajoute 6 cl d'eau froide jusqu'à ce que la pâte se tienne.",
+    "Partage la pâte en deux disques, filme-les et mets-les 1 h au frais.",
+    "Étale un disque et foncé un moule de 23 cm. Découpe l'autre en bandes.",
+    "Mélange la rhubarbe en tronçons, les fraises coupées, le sucre, la fécule, la cannelle et le jus de citron, et verse sur la pâte.",
+    "Parsème de dés de beurre, couvre d'un croisillon de bandes, badigeonne de lait et saupoudre de sucre.",
+    "Enfourne 15 min à 220 °C, puis 40 à 45 min à 180 °C, jusqu'à ce que le jus bouillonne. Laisse refroidir.",
+  ]),
 ]

@@ -8,7 +8,9 @@ import { ALLERGENS, COURSES, CUISINES, DIETS, GOALS } from '../src/domain/types.
 import { qtyLabel } from '../src/domain/units.ts'
 
 const byId = indexIngredients(INGREDIENTS)
-const ids = INGREDIENTS.map((i) => i.id) as [string, ...string[]]
+// Spices and condiments are pantry items: recipes never list them (they are never "missing").
+const COOKING = INGREDIENTS.filter((i) => i.aisle !== 'epices')
+const ids = COOKING.map((i) => i.id) as [string, ...string[]]
 
 const DraftSchema = z.object({
   name: z.string().describe('Nom du plat en français, court et appétissant'),
@@ -35,7 +37,7 @@ const GOAL_TEXT = {
 const SYSTEM = `Tu es le cuisinier de Mijote, une app anti-gaspillage en français. Tu inventes une recette maison, simple et réaliste, à partir du frigo de l'utilisateur.
 
 Catalogue (identifiant : nom, unité des quantités) :
-${INGREDIENTS.map((i) => `- ${i.id} : ${i.name}, en ${UNIT_WORD[i.unit]}`).join('\n')}
+${COOKING.map((i) => `- ${i.id} : ${i.name}, en ${UNIT_WORD[i.unit]}`).join('\n')}
 
 Règles :
 - N'utilise que des identifiants du catalogue. Sel, poivre, huile, eau, épices et herbes sèches sont supposés au placard : ne les liste pas.

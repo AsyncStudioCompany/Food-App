@@ -3,7 +3,18 @@ export type BaseUnit = 'g' | 'cl' | 'pc'
 /** Units the user can pick in the quantity sheet. */
 export type Unit = 'g' | 'kg' | 'cl' | 'L' | 'pc'
 
-export type AisleId = 'frais' | 'legumes' | 'fruits' | 'epicerie'
+export type AisleId =
+  | 'cremerie'
+  | 'viandes'
+  | 'poissons'
+  | 'legumes'
+  | 'fruits'
+  | 'feculents'
+  | 'legumineuses'
+  | 'conserves'
+  | 'fruits_secs'
+  | 'patisserie'
+  | 'epices'
 
 export const ALLERGENS = ['Gluten', 'Lactose', 'Arachides', 'Œufs', 'Fruits à coque'] as const
 export type Allergen = (typeof ALLERGENS)[number]

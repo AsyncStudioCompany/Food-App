@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { addDays, daysLeft, EXPIRY_CHOICES } from '../domain/expiry'
+import { addDays, daysLeft, EXPIRY_CHOICES, keepsLong } from '../domain/expiry'
 import type { FridgeItem } from '../domain/types'
 import { convert, round2, sheetQtyLabel, STEP, UNITS } from '../domain/units'
 import { BY_ID, today } from '../state/recipes'
@@ -17,7 +17,7 @@ export function QuantitySheet({ ingredientId, onClose }: { ingredientId: string;
         qty: ing.defaultQty,
         unit: ing.unit,
         // Pantry food keeps; fresh food gets a week by default.
-        expiresOn: ing.aisle === 'epicerie' ? null : addDays(day, 7),
+        expiresOn: keepsLong(ing) ? null : addDays(day, 7),
       },
   )
   const isNew = !existing

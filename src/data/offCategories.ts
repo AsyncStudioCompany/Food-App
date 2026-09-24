@@ -11,7 +11,7 @@ const c = (tag: string): OffMatch => ({ kind: 'category', tag })
 const p = (tag: string): OffMatch => ({ kind: 'product', tag })
 
 export const OFF_CATEGORIES: Record<string, OffMatch> = {
-  // Crèmerie & frais
+  // Crèmerie, viandes, poissons
   oeufs: p('en:eggs'),
   creme: p('fr:cremes-fraiches'),
   beurre: p('en:butters'),
@@ -93,7 +93,21 @@ export const OFF_CATEGORIES: Record<string, OffMatch> = {
   peches: c('en:peaches'),
   cerises: c('en:cherries'),
   abricots: c('en:apricots'),
-  // Épicerie
+  kiwi: c('en:kiwis'),
+  raisin: c('en:grapes'),
+  melon: c('en:melons'),
+  pasteque: c('en:watermelons'),
+  prune: c('en:plums'),
+  figue: p('en:figs'),
+  clementine: c('en:clementines'),
+  pamplemousse: c('en:grapefruits'),
+  grenade: c('en:pomegranates'),
+  fruit_passion: c('en:passion-fruits'),
+  papaye: c('en:papayas'),
+  litchi: p('en:lychees'),
+  rhubarbe: c('en:rhubarb'),
+  kaki: c('en:kakis'),
+  // Placard
   pates: p('en:dry-pastas'),
   riz: p('en:rices'),
   farine: p('en:wheat-flours'),
@@ -131,4 +145,23 @@ export const OFF_CATEGORIES: Record<string, OffMatch> = {
   pistaches: p('en:pistachios'),
   pignons: p('en:pine-nuts'),
   beurre_cacahuete: p('en:peanut-butters'),
+  // Épices & condiments
+  sel: p('en:salts'),
+  poivre: p('en:black-peppers'),
+  huile_olive: p('en:olive-oils'),
+  huile: p('en:sunflower-oils'),
+  vinaigre: p('en:vinegars'),
+  sauce_soja: p('en:soy-sauces'),
+  moutarde: p('en:mustards'),
+  miel: p('en:honeys'),
+  sucre: p('en:sugars'),
+  cumin: p('en:cumin'),
+  paprika: p('en:paprika'),
+  curry: p('en:curry-powders'),
+  cannelle: p('en:cinnamon'),
+  herbes_provence: p('en:herbes-de-provence'),
+  piment: p('en:chili-powders'),
+  levure: p('en:baking-powders'),
+  bouillon: p('en:bouillon-cubes'),
+  concentre_tomate: p('en:tomato-pastes'),
 }
