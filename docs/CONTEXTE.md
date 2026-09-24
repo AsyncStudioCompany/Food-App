@@ -38,11 +38,18 @@ Recherche par recette ou ingrédient, et filtres : Faisable maintenant, 20 min m
 « Coups de cœur » (rempli automatiquement par les recettes aimées), listes perso, et « Inventées pour toi » dès que l'IA a créé une recette. Le panneau « Ajouter à une liste » s'ouvre depuis la fiche.
 
 ### Profil (`/profil`)
-Régime (Tout, Végétarien, Vegan, Sans porc), allergies (Gluten, Lactose, Arachides, Œufs, Fruits à coque), cuisines préférées, portions par défaut, et un interrupteur **Recettes inventées par l'IA** (coupé, la tuile « Invente-moi une recette » disparaît). Les changements s'appliquent immédiatement.
+Rangé en groupes, chacun avec une ligne qui dit à quoi il sert, et ce qui est choisi à droite de chaque réglage :
+- **Ce que tu ne manges pas** (filtres stricts) : régime (Tout, Végétarien, Vegan, Sans porc), allergies (Gluten, Lactose, Arachides, Œufs, Fruits à coque), **ingrédients à éviter** (`prefs.avoid`, identifiants du catalogue : recherche ou suggestions ; toute recette qui en contient un est cachée, et l'IA ne peut pas en utiliser).
+- **Ce qui te fait envie** (bonus de tri) : objectif, cuisines préférées.
+- **En cuisine** : portions par défaut, interrupteur **Recettes inventées par l'IA** (coupé, la tuile « Invente-moi une recette » disparaît).
+- **Ton adresse** : voir « Où trouver ce qui manque ».
+- **Ton compte**.
+
+Les changements s'appliquent immédiatement.
 
 ## 3. Classement
 
-Pour chaque recette compatible avec le régime et les allergies, évaluée aux portions par défaut :
+Pour chaque recette compatible avec le régime, les allergies et les ingrédients à éviter, évaluée aux portions par défaut :
 
 ```
 score = −100 × manquants + 20 si cuisine préférée + 15 × aliments qui périment dans ≤ 2 jours − minutes / 5
@@ -62,8 +69,8 @@ Un ingrédient est `ok` si la quantité du frigo couvre le besoin, `partial` s'i
 
 ## 5. Où trouver ce qui manque
 
-- Sur la fiche, sous « Manque : … », le lien **« Où les trouver ? »** ouvre un panneau : pastilles des ingrédients manquants (cochées par défaut), tri « Le plus proche » / « Le moins cher », affichage « Tous » / « Avec un prix » (magasins dont au moins un prix est connu), une ligne par magasin (nom, distance, prix estimé du panier ou « prix inconnu », nombre de prix connus). Un appui ouvre l'itinéraire dans Plans (`https://maps.apple.com/?daddr=lat,lon&q=Nom`).
-- **Adresse** (Profil, « Ton adresse ») : facultative. Saisie avec autocomplétion par l'API Adresse, appelée depuis l'appareil (l'ancien `api-adresse.data.gouv.fr` a migré vers la Géoplateforme de l'IGN, `data.geopf.fr/geocodage`, même API), ou « Utiliser ma position » (le navigateur ne la donne qu'en https ou sur localhost). Les coordonnées sont dans `prefs.location`, donc chiffrées comme le reste, sur l'appareil et dans le compte. Sans adresse, le panneau propose de la renseigner.
+- Sur la fiche, sous « Manque : … », le lien **« Où les trouver ? »** ouvre un panneau : pastilles des ingrédients manquants (cochées par défaut), tri « Le plus proche » / « Le moins cher », affichage « Avec un prix » (magasins dont au moins un prix est connu, par défaut ; si aucun n'en a, tous sont montrés avec une phrase qui le dit) / « Tous », une ligne par magasin (nom, distance, prix estimé du panier ou « prix inconnu », nombre de prix connus). Un appui ouvre l'itinéraire dans Plans (`https://maps.apple.com/?daddr=lat,lon&q=Nom`).
+- **Adresse** (Profil, « Ton adresse ») : facultative. Saisie avec autocomplétion par l'API Adresse, appelée depuis l'appareil (l'ancien `api-adresse.data.gouv.fr` a migré vers la Géoplateforme de l'IGN, `data.geopf.fr/geocodage`, même API), ou « Utiliser ma position » (le navigateur ne la donne qu'en https ou sur localhost), ou « Choisir sur la carte » : carte Leaflet (chargée seulement à l'ouverture) sur le fond Plan IGN de la Géoplateforme, assombri en CSS ; on touche la carte ou on fait glisser le repère, l'adresse du point est retrouvée puis « Choisir cet endroit ». Pas de zoom à la molette, pour que la page défile. Les coordonnées sont dans `prefs.location`, donc chiffrées comme le reste, sur l'appareil et dans le compte. Sans adresse, le panneau propose de la renseigner.
 - **Serveur** : `POST /api/stores` (`server/stores.ts`, même modèle que l'IA : serveur Vite local, fonction Vercel `server/vercelStores.ts`, fonction Supabase `supabase/functions/stores`). Il reçoit une position arrondie à ~100 m et les identifiants catalogue des ingrédients manquants (12 au plus).
   - Magasins : supermarchés, supérettes, épiceries et primeurs à moins de 3 km, via OpenStreetMap (Overpass : le serveur principal, puis s'il échoue le principal et deux miroirs en parallèle ; une réponse « 200 mais abandonnée » d'Overpass compte comme un échec, jamais comme « aucun magasin », et une liste vide n'est gardée que 10 min) : nom, enseigne, coordonnées, horaires. Les 30 plus proches.
   - Prix : Open Prices, en euros. Correspondance ingrédient → catégorie Open Food Facts dans `src/data/offCategories.ts` (catégorie de produit brut au kilo ou à la pièce, ou catégorie de produit emballé ; chaque étiquette vérifiée sur Open Prices). Pour chaque ingrédient, relevés autour de la position (5 km) et relevés récents partout, ramenés en €/g (poids d'une pièce pris dans `src/data/nutrition.ts`). Un magasin prend la médiane de ses propres relevés, sinon celle de son enseigne en France.

@@ -42,7 +42,7 @@ ${COOKING.map((i) => `- ${i.id} : ${i.name}, en ${UNIT_WORD[i.unit]}`).join('\n'
 Règles :
 - N'utilise que des identifiants du catalogue. Sel, poivre, huile, eau, épices et herbes sèches sont supposés au placard : ne les liste pas.
 - Pars de ce qu'il y a dans le frigo et utilise en priorité ce qui périme bientôt. Tu peux ajouter au plus 2 ingrédients du catalogue absents du frigo, seulement s'ils rendent le plat nettement meilleur.
-- Respecte strictement le régime et les allergies : ils sont non négociables.
+- Respecte strictement le régime, les allergies et les ingrédients à éviter : ils sont non négociables.
 - Donne les quantités pour le nombre de portions demandé, dans l'unité du catalogue.
 - Écris les étapes au tutoiement, en phrases courtes qui commencent par un verbe (« Émince… », « Fais revenir… », « Mijote… »), comme un ami qui cuisine avec toi.
 - Le nom du plat est en français, sans emoji.`
@@ -63,6 +63,7 @@ function userPrompt(req: AiRecipeRequest): string {
     `Régime : ${p.diet === 'Tout' ? 'aucun' : p.diet}.`,
     `Allergies : ${p.allergies.length ? p.allergies.join(', ') : 'aucune'}.`,
     `Cuisines que j'aime : ${p.cuisines.length ? p.cuisines.join(', ') : 'toutes'}.`,
+    p.avoid?.length ? `Ingrédients à éviter (n'en mets jamais) : ${p.avoid.map((id) => byId.get(id)?.name ?? id).join(', ')}.` : '',
     `Portions : ${p.portions}.`,
     p.goal && p.goal !== 'Équilibré' ? `Mon objectif : ${GOAL_TEXT[p.goal]}.` : '',
     req.wish.trim() ? `Mon envie : ${req.wish.trim()}` : '',
@@ -81,6 +82,7 @@ export function parseRequest(body: unknown): AiRecipeRequest {
       cuisines: z.array(z.enum(CUISINES)),
       portions: z.number().int().min(1).max(12),
       goal: z.enum(GOALS).optional(),
+      avoid: z.array(z.enum(ids)).max(100).optional(),
     }),
     wish: z.string().max(200),
   })

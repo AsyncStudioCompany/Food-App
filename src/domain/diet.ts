@@ -29,5 +29,9 @@ export function isEligible(traits: RecipeTraits, prefs: Pick<Prefs, 'diet' | 'al
   return !traits.allergens.some((a) => prefs.allergies.includes(a))
 }
 
+/** Ingredients to avoid are a strict filter too: the recipe must use none of them. */
+export const usesAvoided = (recipe: Pick<Recipe, 'ingredients'>, avoid: readonly string[] = []) =>
+  avoid.length > 0 && recipe.ingredients.some((i) => avoid.includes(i.id))
+
 /** " · Vegan" / " · Végétarien" suffix of the recipe meta line. */
 export const dietSuffix = (t: RecipeTraits) => (t.vegan ? ' · Vegan' : t.vegetarian ? ' · Végétarien' : '')

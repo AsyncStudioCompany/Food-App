@@ -4,16 +4,13 @@ import { Sheet } from '../ui/Sheet'
 
 const time = (iso: string) => new Date(iso).toLocaleString('fr-FR', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })
 
-/** "Ton compte" block at the top of the profile. */
+/** "Ton compte" block of the profile (the group gives the title). */
 export function AccountSection() {
   const a = useAccount()
   const [confirmDelete, setConfirmDelete] = useState(false)
 
   return (
     <section style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-      <h2 className="caps" style={{ margin: 0 }}>
-        Ton compte
-      </h2>
       {a.status === 'unavailable' && (
         <div className="panel-row" style={{ padding: '14px 16px' }}>
           <span className="muted" style={{ font: '13px/1.45 var(--font)' }}>

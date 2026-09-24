@@ -5,7 +5,7 @@ import { indexIngredients } from './matching.ts'
 import type { Prefs } from './types.ts'
 
 const byId = indexIngredients(INGREDIENTS)
-const prefs: Prefs = { diet: 'Tout', allergies: [], cuisines: [], portions: 2, ai: true, goal: 'Équilibré', onboarded: true, location: null }
+const prefs: Prefs = { diet: 'Tout', allergies: [], cuisines: [], portions: 2, ai: true, goal: 'Équilibré', onboarded: true, location: null, avoid: [] }
 const draft: AiRecipeDraft = {
   name: 'Omelette aux épinards',
   cuisine: 'Française',
@@ -27,6 +27,9 @@ describe('checkDraft', () => {
   it('rejects ingredients outside the catalog and duplicates', () => {
     const bad = { ...draft, ingredients: [{ id: 'truffe', qty: 1 }, { id: 'oeufs', qty: 2 }, { id: 'oeufs', qty: 2 }] }
     expect(checkDraft(bad, byId, prefs)).toEqual(['Ingrédient hors catalogue : truffe.', 'Ingrédient en double : oeufs.'])
+  })
+  it('rejects a draft with an ingredient to avoid', () => {
+    expect(checkDraft(draft, byId, { ...prefs, avoid: ['epinards'] })).toEqual(['La recette contient un ingrédient à éviter : Épinards.'])
   })
   it('rejects a draft that breaks the diet or allergies', () => {
     expect(checkDraft(draft, byId, { ...prefs, diet: 'Vegan' })).toEqual(['La recette ne respecte pas le régime ou les allergies.'])

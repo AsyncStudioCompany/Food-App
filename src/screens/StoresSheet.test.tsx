@@ -89,6 +89,9 @@ describe('Où les trouver ?', () => {
     expect(within(sheet).getByText(`Autour de ${home.label}`)).toBeInTheDocument()
 
     const franprix = await within(sheet).findByRole('link', { name: 'Itinéraire vers Franprix' })
+    // Shops with a price come by default: show them all to compare.
+    expect(within(sheet).queryByRole('link', { name: 'Itinéraire vers Chez Paul' })).not.toBeInTheDocument()
+    await user.click(within(sheet).getByRole('button', { name: 'Tous (2)' }))
     expect(franprix).toHaveAttribute('href', 'https://maps.apple.com/?daddr=48.86,2.36&q=Franprix')
     expect(franprix).toHaveTextContent('850 m')
     expect(franprix).toHaveTextContent('2 prix connus sur 4')
@@ -110,7 +113,7 @@ describe('Où les trouver ?', () => {
     expect(franprix).toHaveTextContent("1 prix connu sur 3 · prix de l'enseigne")
   })
 
-  it('shows every shop, or only those with a known price', async () => {
+  it('shows the shops with a price by default, or every shop', async () => {
     stubFetch(apis)
     resetState({ prefs: { onboarded: true, location: home } })
     const user = userEvent.setup()
@@ -118,17 +121,28 @@ describe('Où les trouver ?', () => {
     await user.click(screen.getByRole('button', { name: 'Où les trouver ?' }))
     const sheet = screen.getByRole('dialog', { name: 'Où les trouver ?' })
     await within(sheet).findByRole('link', { name: 'Itinéraire vers Franprix' })
-    expect(within(sheet).getByRole('button', { name: 'Tous (2)' })).toHaveAttribute('aria-pressed', 'true')
-
-    await user.click(within(sheet).getByRole('button', { name: 'Avec un prix (1)' }))
+    expect(within(sheet).getByRole('button', { name: 'Avec un prix (1)' })).toHaveAttribute('aria-pressed', 'true')
     expect(within(sheet).queryByRole('link', { name: 'Itinéraire vers Chez Paul' })).not.toBeInTheDocument()
-    expect(within(sheet).getByRole('link', { name: 'Itinéraire vers Franprix' })).toBeInTheDocument()
 
-    // Only the bacon ticked: no shop knows its price.
+    await user.click(within(sheet).getByRole('button', { name: 'Tous (2)' }))
+    expect(within(sheet).getAllByRole('link', { name: /^Itinéraire vers/ })).toHaveLength(2)
+
+    // Only the bacon ticked, and "Avec un prix" chosen: no shop knows its price.
+    await user.click(within(sheet).getByRole('button', { name: 'Avec un prix (1)' }))
     for (const name of ['Pâtes', 'Œufs', 'Parmesan']) await user.click(within(sheet).getByRole('button', { name }))
     expect(within(sheet).getByRole('button', { name: 'Avec un prix (0)' })).toBeInTheDocument()
     expect(within(sheet).getByText(/Choisis « Tous » pour les voir/)).toBeInTheDocument()
-    await user.click(within(sheet).getByRole('button', { name: 'Tous (2)' }))
+  })
+
+  it('shows every shop when none has a price', async () => {
+    stubFetch((url, init) => (url.pathname === '/api/stores' ? Response.json({ ...storesAnswer, stores: storesAnswer.stores.map((s) => ({ ...s, prices: {} })) }) : apis(url, init)))
+    resetState({ prefs: { onboarded: true, location: home } })
+    const user = userEvent.setup()
+    openCarbonara()
+    await user.click(screen.getByRole('button', { name: 'Où les trouver ?' }))
+    const sheet = screen.getByRole('dialog', { name: 'Où les trouver ?' })
+    await within(sheet).findByRole('link', { name: 'Itinéraire vers Franprix' })
+    expect(within(sheet).getByText(/voici tous les magasins/)).toBeInTheDocument()
     expect(within(sheet).getAllByRole('link', { name: /^Itinéraire vers/ })).toHaveLength(2)
   })
 

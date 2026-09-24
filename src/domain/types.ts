@@ -123,6 +123,8 @@ export interface Prefs {
   onboarded: boolean
   /** Where to look for shops ("Où les trouver ?"). Optional; encrypted with the rest of the data. */
   location: SavedPlace | null
+  /** Catalog ids of ingredients you don't want: recipes using them are hidden (strict filter). */
+  avoid: string[]
 }
 
 /** A position picked by the user: an address, or "Ma position". */

@@ -1,4 +1,4 @@
-import { isEligible, recipeTraits } from './diet.ts'
+import { isEligible, recipeTraits, usesAvoided } from './diet.ts'
 import { daysLeft, isSoon } from './expiry.ts'
 import { goalBonus, recipeNutrition, type Nutrition } from './nutrition.ts'
 import { round2, toBase } from './units.ts'
@@ -61,10 +61,10 @@ export function evaluate(recipe: Recipe, portions: number, ctx: MatchContext): E
   return { recipe, items, missing, saving, favoriteCuisine, nutrition, score }
 }
 
-/** Recipes compatible with diet and allergies, evaluated at the default portions, best first. */
+/** Recipes compatible with diet, allergies and ingredients to avoid, evaluated at the default portions, best first. */
 export function rankAll(recipes: Recipe[], ctx: MatchContext): Evaluation[] {
   return recipes
-    .filter((r) => isEligible(recipeTraits(r, ctx.byId), ctx.prefs))
+    .filter((r) => isEligible(recipeTraits(r, ctx.byId), ctx.prefs) && !usesAvoided(r, ctx.prefs.avoid))
     .map((r) => evaluate(r, ctx.prefs.portions, ctx))
     .sort((a, b) => b.score - a.score)
 }

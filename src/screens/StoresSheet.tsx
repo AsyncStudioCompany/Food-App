@@ -24,7 +24,8 @@ export function StoresSheet({ items, onClose }: { items: MissingItem[]; onClose:
   const place = useStore((s) => s.prefs.location)
   const [selected, setSelected] = useState(() => items.map((i) => i.id))
   const [sort, setSort] = useState<StoreSort>('near')
-  const [pricedOnly, setPricedOnly] = useState(false)
+  /** Null until the user picks: shops with a price by default, all of them when none has one. */
+  const [pricedChoice, setPricedOnly] = useState<boolean | null>(null)
   const [attempt, setAttempt] = useState(0)
   const ids = items.map((i) => i.id).join(',')
   // The answer for the current place, ingredients and attempt; anything else means it's loading.
@@ -55,6 +56,7 @@ export function StoresSheet({ items, onClose }: { items: MissingItem[]; onClose:
         )
       : []
   const pricedRows = allRows.filter((r) => r.basket.known > 0)
+  const pricedOnly = pricedChoice ?? pricedRows.length > 0
   const rows = pricedOnly ? pricedRows : allRows
 
   return (
@@ -122,6 +124,11 @@ export function StoresSheet({ items, onClose }: { items: MissingItem[]; onClose:
               {load.result.offline && (
                 <span role="status" style={{ font: '600 13px/1.4 var(--font)', color: 'var(--warn-ink)' }}>
                   Hors connexion : résultats du {time(load.result.updatedAt)}.
+                </span>
+              )}
+              {pricedChoice == null && !pricedOnly && allRows.length > 0 && (
+                <span className="muted" style={{ font: '13px/1.45 var(--font)' }}>
+                  Aucun prix relevé près de chez toi pour ces ingrédients : voici tous les magasins.
                 </span>
               )}
               {rows.length === 0 ? (
